@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111111"/>
+      <stop offset="50%" stop-color="#0A0A0A"/>
+      <stop offset="100%" stop-color="#0E0E0E"/>
+    </linearGradient>
+    <linearGradient id="goldA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7E07D"/>
+      <stop offset="35%" stop-color="#D4A843"/>
+      <stop offset="65%" stop-color="#F5D76E"/>
+      <stop offset="100%" stop-color="#B8860B"/>
+    </linearGradient>
+    <linearGradient id="goldB" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFE8A1"/>
+      <stop offset="50%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </linearGradient>
+    <linearGradient id="goldC" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDE0"/>
+      <stop offset="30%" stop-color="#F5D76E"/>
+      <stop offset="70%" stop-color="#D4A843"/>
+      <stop offset="100%" stop-color="#6B4F0A"/>
+    </linearGradient>
+    <linearGradient id="facetL" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7E07D" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#8B6914" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="facetR" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D4A843" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#6B4F0A" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="facetTop" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDE0" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#F5D76E" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="facetInnerL" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE8A1" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#B8860B" stop-opacity="0.65"/>
+    </linearGradient>
+    <linearGradient id="facetInnerR" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C9A84C" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#7A5F1A" stop-opacity="0.55"/>
+    </linearGradient>
+    <linearGradient id="facetCenter" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDE0"/>
+      <stop offset="50%" stop-color="#F5D76E"/>
+      <stop offset="100%" stop-color="#9A7B2F"/>
+    </linearGradient>
+    <linearGradient id="facetBottomL" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B8860B" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#4A3808" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="facetBottomR" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9A7B2F" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#3D2E06" stop-opacity="0.45"/>
+    </linearGradient>
+    <radialGradient id="centerGlow" cx="50%" cy="38%" r="40%">
+      <stop offset="0%" stop-color="#FFFDE0" stop-opacity="0.5"/>
+      <stop offset="40%" stop-color="#F5D76E" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bigGlow" cx="50%" cy="42%" r="55%">
+      <stop offset="0%" stop-color="#D4A843" stop-opacity="0.2"/>
+      <stop offset="60%" stop-color="#B8860B" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#0A0A0A" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="iconClip">
+      <rect x="0" y="0" width="512" height="512" rx="112"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#iconClip)">
+    <!-- Deep black background -->
+    <rect width="512" height="512" fill="url(#bgGrad)"/>
+
+    <!-- Ambient glow behind diamond -->
+    <ellipse cx="256" cy="225" rx="280" ry="250" fill="url(#bigGlow)"/>
+    <ellipse cx="256" cy="210" rx="150" ry="130" fill="url(#centerGlow)"/>
+
+    <!-- Subtle radial light rays from diamond center -->
+    <g opacity="0.12">
+      <line x1="256" y1="200" x2="60" y2="60" stroke="#D4A843" stroke-width="0.8"/>
+      <line x1="256" y1="200" x2="452" y2="60" stroke="#D4A843" stroke-width="0.8"/>
+      <line x1="256" y1="200" x2="50" y2="200" stroke="#F5D76E" stroke-width="0.6"/>
+      <line x1="256" y1="200" x2="462" y2="200" stroke="#F5D76E" stroke-width="0.6"/>
+      <line x1="256" y1="200" x2="80" y2="130" stroke="#B8860B" stroke-width="0.5"/>
+      <line x1="256" y1="200" x2="432" y2="130" stroke="#B8860B" stroke-width="0.5"/>
+      <line x1="256" y1="200" x2="100" y2="40" stroke="#C9A84C" stroke-width="0.4"/>
+      <line x1="256" y1="200" x2="412" y2="40" stroke="#C9A84C" stroke-width="0.4"/>
+      <line x1="256" y1="200" x2="160" y2="30" stroke="#D4A843" stroke-width="0.4"/>
+      <line x1="256" y1="200" x2="352" y2="30" stroke="#D4A843" stroke-width="0.4"/>
+      <line x1="256" y1="200" x2="40" y2="280" stroke="#B8860B" stroke-width="0.4"/>
+      <line x1="256" y1="200" x2="472" y2="280" stroke="#B8860B" stroke-width="0.4"/>
+    </g>
+
+    <!-- ============================================ -->
+    <!--        MAIN DIAMOND — Brilliant Cut          -->
+    <!-- ============================================ -->
+    <!-- Crown (top section) girdle at y=230 -->
+
+    <!-- Crown outline - top triangular shape -->
+    <!-- Table (top flat facet) -->
+    <polygon points="206,160 306,160 330,200 182,200" fill="url(#facetTop)" stroke="#F7E07D" stroke-width="0.5"/>
+
+    <!-- Crown left star facet -->
+    <polygon points="130,230 206,160 182,200" fill="url(#facetL)" stroke="#D4A843" stroke-width="0.4"/>
+    <!-- Crown right star facet -->
+    <polygon points="382,230 306,160 330,200" fill="url(#facetR)" stroke="#D4A843" stroke-width="0.4"/>
+
+    <!-- Crown upper left kite -->
+    <polygon points="130,230 182,200 220,230" fill="url(#facetInnerL)" stroke="#C9A84C" stroke-width="0.3"/>
+    <!-- Crown upper right kite -->
+    <polygon points="382,230 330,200 292,230" fill="url(#facetInnerR)" stroke="#C9A84C" stroke-width="0.3"/>
+
+    <!-- Crown center left -->
+    <polygon points="182,200 256,200 220,230" fill="url(#facetInnerL)" stroke="#B8860B" stroke-width="0.3" opacity="0.9"/>
+    <!-- Crown center right -->
+    <polygon points="330,200 256,200 292,230" fill="url(#facetInnerR)" stroke="#B8860B" stroke-width="0.3" opacity="0.9"/>
+
+    <!-- Crown center bottom facet -->
+    <polygon points="220,230 256,200 292,230" fill="url(#facetCenter)" stroke="#F5D76E" stroke-width="0.3"/>
+
+    <!-- Girdle line -->
+    <line x1="125" y1="232" x2="387" y2="232" stroke="#F7E07D" stroke-width="1.2" opacity="0.7"/>
+
+    <!-- ============================================ -->
+    <!--     Pavilion (bottom section of diamond)     -->
+    <!-- ============================================ -->
+
+    <!-- Pavilion main left facet -->
+    <polygon points="130,230 220,230 256,400" fill="url(#facetBottomL)" stroke="#B8860B" stroke-width="0.4"/>
+    <!-- Pavilion main right facet -->
+    <polygon points="382,230 292,230 256,400" fill="url(#facetBottomR)" stroke="#B8860B" stroke-width="0.4"/>
+
+    <!-- Pavilion center left -->
+    <polygon points="220,230 256,230 256,400" fill="url(#facetL)" stroke="#9A7B2F" stroke-width="0.3" opacity="0.7"/>
+    <!-- Pavilion center right -->
+    <polygon points="292,230 256,230 256,400" fill="url(#facetR)" stroke="#9A7B2F" stroke-width="0.3" opacity="0.7"/>
+
+    <!-- Inner refraction lines in pavilion -->
+    <line x1="256" y1="235" x2="175" y2="300" stroke="#F5D76E" stroke-width="0.4" opacity="0.25"/>
+    <line x1="256" y1="235" x2="337" y2="300" stroke="#F5D76E" stroke-width="0.4" opacity="0.25"/>
+    <line x1="256" y1="235" x2="200" y2="340" stroke="#D4A843" stroke-width="0.3" opacity="0.2"/>
+    <line x1="256" y1="235" x2="312" y2="340" stroke="#D4A843" stroke-width="0.3" opacity="0.2"/>
+
+    <!-- Highlight shimmer on table -->
+    <polygon points="225,165 260,165 250,185 220,185" fill="#FFFDE0" opacity="0.25"/>
+
+    <!-- Small phone silhouette reflected INSIDE the diamond center -->
+    <g opacity="0.35">
+      <rect x="241" y="250" width="30" height="54" rx="4" fill="none" stroke="#FFE8A1" stroke-width="0.8"/>
+      <rect x="244" y="254" width="24" height="46" rx="2" fill="#F5D76E" opacity="0.1"/>
+      <!-- Tiny wallpaper glow in phone -->
+      <ellipse cx="256" cy="272" rx="6" ry="6" fill="#FFFDE0" opacity="0.2"/>
+      <ellipse cx="256" cy="272" rx="3" ry="3" fill="#FFE8A1" opacity="0.3"/>
+    </g>
+
+    <!-- ============================================ -->
+    <!--          Sparkle / brilliance effects         -->
+    <!-- ============================================ -->
+
+    <!-- Large sparkle top-right -->
+    <g transform="translate(390, 100)" opacity="0.7">
+      <line x1="0" y1="-14" x2="0" y2="14" stroke="#F7E07D" stroke-width="1.8"/>
+      <line x1="-14" y1="0" x2="14" y2="0" stroke="#F7E07D" stroke-width="1.8"/>
+      <line x1="-8" y1="-8" x2="8" y2="8" stroke="#F7E07D" stroke-width="0.8"/>
+      <line x1="8" y1="-8" x2="-8" y2="8" stroke="#F7E07D" stroke-width="0.8"/>
+    </g>
+
+    <!-- Medium sparkle top-left -->
+    <g transform="translate(105, 130)" opacity="0.5">
+      <line x1="0" y1="-10" x2="0" y2="10" stroke="#D4A843" stroke-width="1.4"/>
+      <line x1="-10" y1="0" x2="10" y2="0" stroke="#D4A843" stroke-width="1.4"/>
+      <line x1="-6" y1="-6" x2="6" y2="6" stroke="#D4A843" stroke-width="0.6"/>
+      <line x1="6" y1="-6" x2="-6" y2="6" stroke="#D4A843" stroke-width="0.6"/>
+    </g>
+
+    <!-- Small sparkle mid-left -->
+    <g transform="translate(82, 250)" opacity="0.4">
+      <line x1="0" y1="-7" x2="0" y2="7" stroke="#FFE8A1" stroke-width="1"/>
+      <line x1="-7" y1="0" x2="7" y2="0" stroke="#FFE8A1" stroke-width="1"/>
+    </g>
+
+    <!-- Small sparkle mid-right -->
+    <g transform="translate(430, 240)" opacity="0.45">
+      <line x1="0" y1="-8" x2="0" y2="8" stroke="#F5D76E" stroke-width="1.1"/>
+      <line x1="-8" y1="0" x2="8" y2="0" stroke="#F5D76E" stroke-width="1.1"/>
+      <line x1="-5" y1="-5" x2="5" y2="5" stroke="#F5D76E" stroke-width="0.5"/>
+      <line x1="5" y1="-5" x2="-5" y2="5" stroke="#F5D76E" stroke-width="0.5"/>
+    </g>
+
+    <!-- Tiny sparkle bottom-left -->
+    <g transform="translate(140, 400)" opacity="0.3">
+      <line x1="0" y1="-5" x2="0" y2="5" stroke="#C9A84C" stroke-width="0.8"/>
+      <line x1="-5" y1="0" x2="5" y2="0" stroke="#C9A84C" stroke-width="0.8"/>
+    </g>
+
+    <!-- Tiny sparkle bottom-right -->
+    <g transform="translate(385, 380)" opacity="0.35">
+      <line x1="0" y1="-6" x2="0" y2="6" stroke="#D4A843" stroke-width="0.9"/>
+      <line x1="-6" y1="0" x2="6" y2="0" stroke="#D4A843" stroke-width="0.9"/>
+    </g>
+
+    <!-- Floating gold particles -->
+    <circle cx="88" cy="180" r="2.5" fill="#F5D76E" opacity="0.45"/>
+    <circle cx="425" cy="170" r="2" fill="#D4A843" opacity="0.4"/>
+    <circle cx="70" cy="320" r="1.8" fill="#FFE8A1" opacity="0.3"/>
+    <circle cx="445" cy="310" r="2.2" fill="#C9A84C" opacity="0.35"/>
+    <circle cx="160" cy="60" r="1.5" fill="#F7E07D" opacity="0.4"/>
+    <circle cx="350" cy="55" r="2" fill="#D4A843" opacity="0.35"/>
+    <circle cx="100" cy="70" r="1.2" fill="#FFE8A1" opacity="0.3"/>
+    <circle cx="415" cy="70" r="1.8" fill="#F5D76E" opacity="0.35"/>
+    <circle cx="180" cy="440" r="2" fill="#D4A843" opacity="0.25"/>
+    <circle cx="330" cy="448" r="1.5" fill="#F5D76E" opacity="0.28"/>
+    <circle cx="256" cy="470" r="2.2" fill="#FFE8A1" opacity="0.22"/>
+    <circle cx="70" cy="420" r="1.5" fill="#C9A84C" opacity="0.2"/>
+    <circle cx="440" cy="430" r="1.8" fill="#D4A843" opacity="0.22"/>
+
+    <!-- Decorative corner accents (luxury framing) -->
+    <path d="M28 78 Q28 28 78 28" fill="none" stroke="url(#goldA)" stroke-width="1.6" opacity="0.4"/>
+    <path d="M484 78 Q484 28 434 28" fill="none" stroke="url(#goldA)" stroke-width="1.6" opacity="0.4"/>
+    <path d="M28 434 Q28 484 78 484" fill="none" stroke="url(#goldA)" stroke-width="1.6" opacity="0.4"/>
+    <path d="M484 434 Q484 484 434 484" fill="none" stroke="url(#goldA)" stroke-width="1.6" opacity="0.4"/>
+
+    <!-- Thin gold icon border -->
+    <rect x="2" y="2" width="508" height="508" rx="110" fill="none" stroke="url(#goldA)" stroke-width="1.8" opacity="0.4"/>
+  </g>
+</svg>
