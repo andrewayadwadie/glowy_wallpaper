@@ -1,81 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'routes.dart';
-import '../../features/splash/splash_screen.dart';
-import '../../features/onboarding/onboarding_screen.dart';
-import '../../features/home/views/home_screen.dart';
+import '../../features/splash/presentation/pages/splash_page.dart';
+import '../../features/home/presentation/pages/home_page.dart';
 
-/// Application Router
-class AppRouter {
-  AppRouter._();
-
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case Routes.splash:
-        return _buildRoute(const SplashScreen(), settings);
-      case Routes.onboarding:
-        return _buildRoute(const OnboardingScreen(), settings);
-      case Routes.home:
-        return _buildRoute(const HomeScreen(), settings);
-      default:
-        return _buildRoute(
-          Scaffold(
-            body: Center(child: Text('No route defined for ${settings.name}')),
-          ),
-          settings,
-        );
-    }
-  }
-
-  static PageRouteBuilder _buildRoute(Widget page, RouteSettings settings) {
-    return PageRouteBuilder(
-      settings: settings,
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.easeInOutCubic;
-
-        var tween = Tween(
-          begin: begin,
-          end: end,
-        ).chain(CurveTween(curve: curve));
-
-        return SlideTransition(position: animation.drive(tween), child: child);
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
-
-  static void navigateTo(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    Navigator.pushNamed(context, routeName, arguments: arguments);
-  }
-
-  static void navigateAndReplace(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    Navigator.pushReplacementNamed(context, routeName, arguments: arguments);
-  }
-
-  static void navigateAndRemoveUntil(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      routeName,
-      (route) => false,
-      arguments: arguments,
-    );
-  }
-
-  static void goBack(BuildContext context) {
-    Navigator.pop(context);
-  }
+abstract class AppRouter {
+  static final GoRouter router = GoRouter(
+    initialLocation: AppRoutes.splash,
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(
+        child: AutoSizeText('Page not found: ${state.uri}'),
+      ),
+    ),
+    routes: [
+      GoRoute(
+        path: AppRoutes.splash,
+        builder: (context, state) => const SplashPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.home,
+        builder: (context, state) => const HomePage(),
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: login'))),
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: register'))),
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: profile'))),
+      ),
+      GoRoute(
+        path: AppRoutes.favorites,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: favorites'))),
+      ),
+      GoRoute(
+        path: AppRoutes.downloads,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: downloads'))),
+      ),
+      GoRoute(
+        path: AppRoutes.wallpaperDetail,
+        builder: (context, state) => Scaffold(
+          body: Center(child: AutoSizeText('Route: wallpaperDetail')),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.classificationDetail,
+        builder: (context, state) => Scaffold(
+          body: Center(child: AutoSizeText('Route: classificationDetail')),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.premium,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: premium'))),
+      ),
+      GoRoute(
+        path: AppRoutes.settings,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: settings'))),
+      ),
+      GoRoute(
+        path: AppRoutes.about,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: about'))),
+      ),
+      GoRoute(
+        path: AppRoutes.onboarding,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: onboarding'))),
+      ),
+    ],
+  );
 }

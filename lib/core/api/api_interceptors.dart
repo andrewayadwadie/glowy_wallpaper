@@ -1,66 +1,67 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/// API Interceptor for handling requests, responses, and errors
-/// Provides centralized logging and error handling
-class ApiInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // Log request details
-    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    debugPrint('📤 REQUEST[${options.method}] => PATH: ${options.path}');
-    debugPrint('Headers: ${options.headers}');
-    debugPrint('Query Parameters: ${options.queryParameters}');
-    debugPrint('Body: ${options.data}');
-    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+class AuthInterceptor extends QueuedInterceptor {
+  final FlutterSecureStorage secureStorage;
 
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    // Log response details
-    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    debugPrint(
-      '📥 RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}',
-    );
-    debugPrint('Data: ${response.data}');
-    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    // Log error details
-    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    debugPrint(
-      '❌ ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}',
-    );
-    debugPrint('Message: ${err.message}');
-    debugPrint('Response: ${err.response?.data}');
-    debugPrint('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
-    super.onError(err, handler);
-  }
-}
-
-/// Authentication Interceptor
-/// Automatically adds authentication token to requests
-class AuthInterceptor extends Interceptor {
-  final Future<String?> Function() getToken;
-
-  AuthInterceptor({required this.getToken});
+  AuthInterceptor(this.secureStorage);
 
   @override
   void onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final token = await getToken();
-    if (token != null && token.isNotEmpty) {
+    final token = await secureStorage.read(key: 'auth_token');
+    if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
     }
-    super.onRequest(options, handler);
+    handler.next(options);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401) {
+      await secureStorage.delete(key: 'auth_token');
+    }
+    handler.next(err);
+  }
+}
+
+class LoggingInterceptor extends Interceptor {
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    if (kDebugMode) {
+      debugPrint('┌────────────────────────────────────────────');
+      debugPrint('│ ${options.method} ${options.uri}');
+      debugPrint('│ Headers: ${options.headers}');
+      if (options.data != null) {
+        debugPrint('│ Body: ${options.data}');
+      }
+      debugPrint('└────────────────────────────────────────────');
+    }
+    handler.next(options);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (kDebugMode) {
+      debugPrint('┌────────────────────────────────────────────');
+      debugPrint('│ ${response.statusCode} ${response.requestOptions.uri}');
+      debugPrint('│ Data: ${response.data}');
+      debugPrint('└────────────────────────────────────────────');
+    }
+    handler.next(response);
+  }
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    if (kDebugMode) {
+      debugPrint('┌────────────────────────────────────────────');
+      debugPrint('│ ERROR ${err.response?.statusCode} ${err.requestOptions.uri}');
+      debugPrint('│ Message: ${err.message}');
+      debugPrint('└────────────────────────────────────────────');
+    }
+    handler.next(err);
   }
 }

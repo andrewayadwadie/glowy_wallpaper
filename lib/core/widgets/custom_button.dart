@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/colors.dart';
+import '../utils/app_dimens.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -25,6 +27,8 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttonColor = color ?? AppColors.primary;
+
     return SizedBox(
       width: width ?? double.infinity,
       height: height,
@@ -32,38 +36,36 @@ class CustomButton extends StatelessWidget {
           ? OutlinedButton(
               onPressed: isLoading ? null : onPressed,
               style: OutlinedButton.styleFrom(
-                side: BorderSide(color: color ?? AppColors.primary, width: 2),
+                side: BorderSide(color: buttonColor, width: 2),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius),
                 ),
               ),
-              child: _buildChild(),
+              child: _buildChild(buttonColor, isOutlined: true),
             )
           : ElevatedButton(
               onPressed: isLoading ? null : onPressed,
               style: ElevatedButton.styleFrom(
-                backgroundColor: color ?? AppColors.primary,
-                foregroundColor: AppColors.primary,
+                backgroundColor: buttonColor,
+                foregroundColor: AppColors.onPrimary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(borderRadius),
                 ),
                 elevation: 4,
-                shadowColor: (color ?? AppColors.primary).withValues(
-                  alpha: 0.4,
-                ),
+                shadowColor: buttonColor.withAlpha(102),
               ),
-              child: _buildChild(),
+              child: _buildChild(buttonColor, isOutlined: false),
             ),
     );
   }
 
-  Widget _buildChild() {
+  Widget _buildChild(Color buttonColor, {required bool isOutlined}) {
     if (isLoading) {
-      return const SizedBox(
-        width: 24,
-        height: 24,
+      return SizedBox(
+        width: AppDimens.iconM,
+        height: AppDimens.iconM,
         child: CircularProgressIndicator(
-          color: AppColors.primary,
+          color: isOutlined ? buttonColor : AppColors.onPrimary,
           strokeWidth: 2.5,
         ),
       );
@@ -71,9 +73,9 @@ class CustomButton extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w900,
-        color: AppColors.primary,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w600,
+        color: isOutlined ? buttonColor : AppColors.onPrimary,
       ),
     );
   }
