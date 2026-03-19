@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(for feature:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/Dell/Documents/claude/glowy_wallpaper/**)",
+      "Bash(dart analyze:*)"
+    ]
+  }
+}
