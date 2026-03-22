@@ -11,7 +11,15 @@
       "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''auth-user-profile'' ''Phase'' ''2'' ''Auth'' ''and'' ''User'' ''Profile''\")",
       "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''auth-user-profile'' ''Auth and User Profile feature''\")",
       "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''auth-user-profile'' -Number 0 ''Auth and User Profile feature''\")",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(cp \"c:/Users/Dell/Documents/claude/glowy_wallpaper/engineering-code-reviewer.md\" ~/.claude/agents/)",
+      "Bash(cp \"c:/Users/Dell/Documents/claude/glowy_wallpaper/engineering-software-architect.md\" ~/.claude/agents/)",
+      "Bash(find C:UsersDellDocumentsclaudeglowy_wallpaperlibfeaturesauthpresentation -type f -name *.dart)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\Dell\\.claude"
     ]
   }
 }

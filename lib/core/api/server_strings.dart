@@ -9,4 +9,5 @@ abstract class ServerStrings {
   static const String wallpapers = '/wallpapers';
   static const String favorites = '/favorites';
   static const String subscriptionStatus = '/subscription/status';
+  static const String unsubscribe = '/subscription/unsubscribe';
 }
