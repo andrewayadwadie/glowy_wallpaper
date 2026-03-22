@@ -1,15 +1,24 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:glowy_wallpaper/core/utils/app_dimens.dart';
-import 'package:glowy_wallpaper/core/utils/app_strings.dart';
-import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_cubit.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/utils/app_strings.dart';
+import '../../../../core/routes/routes.dart';
+import '../../../auth/presentation/cubit/subscription_cubit.dart';
+import '../cubit/home_cubit.dart';
+import '../cubit/home_state.dart';
+import '../widgets/category_selector.dart';
+import '../widgets/content_switcher.dart';
+import '../widgets/home_drawer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isPremium = context.watch<SubscriptionCubit>().isPremium;
+
     return Scaffold(
       appBar: AppBar(
         title: AutoSizeText(AppStrings.appName, maxLines: 1),
@@ -21,25 +30,70 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(AppDimens.paddingM),
-          child: AutoSizeText(
-            AppStrings.emptyContent,
-            style: Theme.of(context).textTheme.bodyLarge,
-            textAlign: TextAlign.center,
-          ),
-        ),
+      drawer: const HomeDrawer(),
+      body: BlocBuilder<HomeCubit, HomeState>(
+        builder: (context, state) {
+          final homeCubit = context.read<HomeCubit>();
+
+          return Column(
+            children: [
+              if (state.categoriesStatus == Status.success)
+                CategorySelector(
+                  categories: state.categories,
+                  selectedIndex: state.selectedCategoryIndex,
+                  onCategorySelected: (index) =>
+                      homeCubit.selectCategory(index),
+                ),
+              Expanded(
+                child: ContentSwitcher(
+                  categoryType: homeCubit.selectedCategory?.type,
+                  wallpapers: state.wallpapers,
+                  classifications: state.classifications,
+                  contentStatus: state.contentStatus,
+                  isLoadingMore: state.isLoadingMore,
+                  hasReachedEnd: state.hasReachedEnd,
+                  onLoadMore: () => homeCubit.loadMore(),
+                  onWallpaperTapped: (wallpaper) {},
+                  onClassificationTapped: (classification) {
+                    context.push(
+                      '/classification/${classification.id}',
+                      extra: classification,
+                    );
+                  },
+                  onRetry: () => homeCubit.retry(),
+                  errorMessage: state.errorMessage,
+                  isPremium: isPremium,
+                ),
+              ),
+            ],
+          );
+        },
       ),
+      bottomNavigationBar: isPremium
+          ? null
+          : SizedBox(
+              height: 50.h,
+              child: Container(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                child: Center(
+                  child: AutoSizeText(
+                    AppStrings.adPlaceholder,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ),
+            ),
     );
   }
 
   void _onProfileTapped(BuildContext context) {
     final subscriptionCubit = context.read<SubscriptionCubit>();
     if (subscriptionCubit.isPremium) {
-      // TODO: Navigate to profile page - will be implemented in Phase 7
+      context.push(AppRoutes.profile);
     } else {
-      // TODO: Show guest profile bottom sheet - will be implemented in Phase 7
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: AutoSizeText(AppStrings.premiumActionPrompt)),
+      );
     }
   }
 }

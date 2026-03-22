@@ -1,0 +1,22 @@
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import '../../../../core/errors/failure.dart';
+import '../../data/models/paginated_response.dart';
+import '../entities/wallpaper_entity.dart';
+
+abstract class WallpaperRepository {
+  Future<Either<Failure, PaginatedResponse<WallpaperEntity>>>
+  getWallpapersByCategory({
+    required String categoryId,
+    required int page,
+    int perPage = 20,
+    CancelToken? cancelToken,
+  });
+
+  Future<Either<Failure, PaginatedResponse<WallpaperEntity>>>
+  getWallpapersByClassification({
+    required String classificationId,
+    required int page,
+    int perPage = 20,
+  });
+}

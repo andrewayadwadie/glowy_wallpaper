@@ -52,4 +52,19 @@ abstract class AppStrings {
   static const String priorityDownloads = 'Priority downloads';
   static const String loginLockedOut = 'Too many attempts. Try again in';
   static const String seconds = 'seconds';
+
+  static const String categories = 'Categories';
+  static const String noCategories = 'No categories available';
+  static const String noWallpapers = 'No wallpapers in this category';
+  static const String noClassifications = 'No classifications available';
+  static const String classificationDetail = 'Classification Detail';
+  static const String myDownloads = 'My Downloads';
+  static const String about = 'About';
+  static const String rateApp = 'Rate App';
+  static const String shareApp = 'Share App';
+  static const String sendFeedback = 'Send Feedback';
+  static const String comingSoon = 'Coming Soon';
+  static const String offlineMode = 'Showing cached data';
+  static const String loadingMore = 'Loading more...';
+  static const String adPlaceholder = 'Ad Space';
 }
