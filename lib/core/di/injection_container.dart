@@ -4,6 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../network/network_info.dart';
 import '../api/api_interceptors.dart';
 import '../config/app_config.dart';
@@ -17,6 +18,7 @@ Future<void> init() async {
 
   //! External
   sl.registerLazySingleton(() => InternetConnectionChecker.createInstance());
+  sl.registerLazySingleton(() => const FlutterSecureStorage());
 
   sl.registerLazySingleton(() {
     final dio = Dio(
@@ -31,7 +33,7 @@ Future<void> init() async {
       ),
     );
 
-    dio.interceptors.add(ApiInterceptor());
+    dio.interceptors.add(AuthInterceptor(sl()));
 
     // Add pretty logger in debug mode
     if (AppConfig.enableLogging) {

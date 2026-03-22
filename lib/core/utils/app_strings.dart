@@ -1,29 +1,17 @@
-/// Application String Constants
-class AppStrings {
-  AppStrings._();
-
-  // General
-  static const String appName = 'Glowy Wallpaper';
-  static const String ok = 'OK';
-  static const String cancel = 'Cancel';
-  static const String yes = 'Yes';
-  static const String no = 'No';
-  static const String save = 'Save';
-  static const String delete = 'Delete';
-  static const String edit = 'Edit';
-  static const String loading = 'Loading...';
+abstract class AppStrings {
+  static const String appName = 'Glowy Wallpapers';
   static const String retry = 'Retry';
-
-  // Errors
-  static const String errorOccurred = 'An error occurred';
-  static const String noInternetConnection = 'No internet connection';
-  static const String serverError = 'Server error';
-  static const String unauthorized = 'Unauthorized';
-
-  // Validation
-  static const String fieldRequired = 'This field is required';
-  static const String invalidEmail = 'Invalid email address';
-  static const String invalidPassword = 'Invalid password';
-
-  // Add your custom strings here
+  static const String error = 'Something went wrong';
+  static const String noInternet = 'No internet connection';
+  static const String cacheError = 'Cache error occurred';
+  static const String serverError = 'Server error occurred';
+  static const String unauthorized = 'Unauthorized access';
+  static const String emptyContent = 'No content available';
+  static const String loading = 'Loading...';
+  static const String home = 'Home';
+  static const String favorites = 'Favorites';
+  static const String downloads = 'Downloads';
+  static const String settings = 'Settings';
+  static const String profile = 'Profile';
+  static const String premium = 'Get Premium';
 }

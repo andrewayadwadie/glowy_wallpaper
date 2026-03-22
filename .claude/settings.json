@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(for feature:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/Dell/Documents/claude/glowy_wallpaper/**)",
+      "Bash(dart analyze:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 \"Phase 2 Auth and User Profile\" -Json -ShortName \"auth-user-profile\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"auth-user-profile\" \"Phase 2 Auth and User Profile\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''auth-user-profile'' ''Phase'' ''2'' ''Auth'' ''and'' ''User'' ''Profile''\")"
+    ]
+  }
+}

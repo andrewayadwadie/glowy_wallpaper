@@ -31,26 +31,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
-  # Firebase core
   firebase_core: ^3.13.0
-
-  # Firebase Analytics
   firebase_analytics: ^11.4.5
-
-  # Firebase Cloud Messaging (Push Notifications)
   firebase_messaging: ^15.2.5
-
-  # Flutter Local Notifications (for displaying foreground notifications)
   flutter_local_notifications: ^18.0.1
-
-  # Google Mobile Ads (AdMob)
   google_mobile_ads: ^5.3.0
-
-  # Firebase Crashlytics
   firebase_crashlytics: ^4.3.5
 
   dio: ^5.9.2
@@ -76,16 +63,34 @@ dependencies:
   go_router: ^17.1.0
   get_it: ^9.2.1
 
+  freezed_annotation: ^3.0.0
+  injectable: ^2.5.0
+  retrofit: ^4.4.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.2.4
+  auto_size_text: ^3.0.0
+  loader_overlay: ^4.0.3
+  flutter_spinkit: ^5.2.1
+  gap: ^3.0.1
+  envied: ^1.1.1
+  flutter_native_splash: ^2.4.6
+  flutter_launcher_icons: ^0.14.3
+  json_annotation: ^4.9.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  freezed: ^3.0.0
+  build_runner: ^2.4.15
+  injectable_generator: ^2.7.0
+  retrofit_generator: ^10.2.3
+  json_serializable: ^6.9.5
+  mocktail: ^1.0.4
+  bloc_test: ^10.0.0
+  envied_generator: ^1.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -99,6 +104,7 @@ flutter:
 
   assets:
     - assets/lang/
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
