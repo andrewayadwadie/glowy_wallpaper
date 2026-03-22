@@ -16,7 +16,14 @@
       "Bash(git push:*)",
       "Bash(cp \"c:/Users/Dell/Documents/claude/glowy_wallpaper/engineering-code-reviewer.md\" ~/.claude/agents/)",
       "Bash(cp \"c:/Users/Dell/Documents/claude/glowy_wallpaper/engineering-software-architect.md\" ~/.claude/agents/)",
-      "Bash(find C:UsersDellDocumentsclaudeglowy_wallpaperlibfeaturesauthpresentation -type f -name *.dart)"
+      "Bash(find C:UsersDellDocumentsclaudeglowy_wallpaperlibfeaturesauthpresentation -type f -name *.dart)",
+      "Bash(powershell -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"home-categories-grids\" \"Phase 3 Home Categories and Content Grids\")",
+      "Bash(powershell -File .specify/scripts/powershell/create-new-feature.ps1 -Number 0 -Json -ShortName \"home-categories-grids\" \"Phase 3 Home Categories and Content Grids\")",
+      "Bash(dart run:*)",
+      "Bash(dart format:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(gh pr:*)",
+      "Bash(where gh:*)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

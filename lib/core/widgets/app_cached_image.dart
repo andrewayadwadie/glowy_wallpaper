@@ -29,7 +29,11 @@ class AppCachedImage extends StatelessWidget {
       placeholder: (context, url) => Shimmer.fromColors(
         baseColor: colorScheme.surfaceContainerHighest,
         highlightColor: colorScheme.surface,
-        child: Container(width: width, height: height, color: colorScheme.surface),
+        child: Container(
+          width: width,
+          height: height,
+          color: colorScheme.surface,
+        ),
       ),
       errorWidget: (context, url, error) => Icon(
         Icons.broken_image,

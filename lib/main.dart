@@ -10,6 +10,7 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox('user_cache');
+  await Hive.openBox('categories');
   await init();
 
   try {

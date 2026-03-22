@@ -20,6 +20,18 @@ import '../../features/auth/domain/usecases/validate_token.dart';
 import '../../features/auth/domain/usecases/get_cached_user.dart';
 import '../../features/auth/domain/usecases/unsubscribe.dart';
 import '../../features/auth/presentation/cubit/subscription_cubit.dart';
+import '../../features/home/presentation/cubit/home_cubit.dart';
+import '../../features/categories/data/datasources/category_remote_data_source.dart';
+import '../../features/categories/data/datasources/category_local_data_source.dart';
+import '../../features/categories/data/repositories/category_repository_impl.dart';
+import '../../features/categories/domain/repositories/category_repository.dart';
+import '../../features/categories/domain/usecases/get_categories.dart';
+import '../../features/categories/domain/usecases/get_classifications.dart';
+import '../../features/wallpapers/data/datasources/wallpaper_remote_data_source.dart';
+import '../../features/wallpapers/data/repositories/wallpaper_repository_impl.dart';
+import '../../features/wallpapers/domain/repositories/wallpaper_repository.dart';
+import '../../features/wallpapers/domain/usecases/get_wallpapers_by_category.dart';
+import '../../features/wallpapers/domain/usecases/get_wallpapers_by_classification.dart';
 
 final sl = GetIt.instance;
 
@@ -95,4 +107,51 @@ Future<void> init() async {
       unsubscribe: sl(),
     ),
   );
+
+  //! Phase 3 — Categories & Wallpapers
+
+  // Category Data Sources
+  sl.registerLazySingleton<CategoryRemoteDataSource>(
+    () => CategoryRemoteDataSource(sl<Dio>()),
+  );
+  sl.registerLazySingleton<CategoryLocalDataSource>(
+    () => CategoryLocalDataSourceImpl(Hive.box('categories')),
+  );
+
+  // Wallpaper Data Sources
+  sl.registerLazySingleton<WallpaperRemoteDataSource>(
+    () => WallpaperRemoteDataSource(sl<Dio>()),
+  );
+
+  // Category Repository
+  sl.registerLazySingleton<CategoryRepository>(
+    () => CategoryRepositoryImpl(sl(), sl(), sl()),
+  );
+
+  // Wallpaper Repository
+  sl.registerLazySingleton<WallpaperRepository>(
+    () => WallpaperRepositoryImpl(sl(), sl()),
+  );
+
+  // Category Use Cases
+  sl.registerLazySingleton(() => GetCategories(sl()));
+  sl.registerLazySingleton(() => GetClassifications(sl()));
+
+  // Wallpaper Use Cases
+  sl.registerLazySingleton(() => GetWallpapersByCategory(sl()));
+  sl.registerLazySingleton(() => GetWallpapersByClassification(sl()));
+
+  // Home Cubit
+  sl.registerFactory(
+    () => HomeCubit(
+      getCategories: sl(),
+      getWallpapersByCategory: sl(),
+      getClassifications: sl(),
+      categoryRepo: sl<CategoryRepository>() as CategoryRepositoryImpl,
+    ),
+  );
+
+  // ClassificationDetail Cubit (factory with params — registered via factoryParam)
+  // Note: ClassificationDetailCubit needs a ClassificationEntity at creation time,
+  // so it's provided inline in the router via BlocProvider.
 }

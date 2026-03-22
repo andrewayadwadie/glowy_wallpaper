@@ -23,3 +23,7 @@ class NetworkFailure extends Failure {
 class UnauthorizedFailure extends Failure {
   const UnauthorizedFailure(super.message);
 }
+
+class CancelledFailure extends Failure {
+  const CancelledFailure([super.message = 'Request cancelled']);
+}

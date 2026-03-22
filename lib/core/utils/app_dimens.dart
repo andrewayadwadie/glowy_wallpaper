@@ -15,4 +15,17 @@ abstract class AppDimens {
   static double get iconS => 16.w;
   static double get iconM => 24.w;
   static double get iconL => 32.w;
+
+  static double get categoryChipHeight => 40.h;
+  static double get categoryChipPaddingH => 12.w;
+  static double get categoryChipPaddingV => 6.h;
+  static double get categoryChipGap => 8.w;
+  static double get categorySelectorHeight => 56.h;
+
+  static double get bentoLargeCardHeight => 200.h;
+  static double get bentoSmallCardHeight => 150.h;
+  static double get bentoCardGap => 8.w;
+
+  static double get gridSpacing => 8.w;
+  static double get paginationThreshold => 200.h;
 }
