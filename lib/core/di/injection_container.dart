@@ -147,6 +147,7 @@ Future<void> init() async {
       getCategories: sl(),
       getWallpapersByCategory: sl(),
       getClassifications: sl(),
+      categoryRepo: sl<CategoryRepository>() as CategoryRepositoryImpl,
     ),
   );
 

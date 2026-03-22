@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../home/presentation/cubit/home_state.dart';
+import '../../../../core/enums/status.dart';
 import '../../../wallpapers/domain/usecases/get_wallpapers_by_classification.dart';
 import '../../domain/entities/classification_entity.dart';
 import 'classification_detail_state.dart';
@@ -41,7 +41,7 @@ class ClassificationDetailCubit extends Cubit<ClassificationDetailState> {
     );
   }
 
-  void loadMore() {
+  Future<void> loadMore() async {
     if (state.hasReachedEnd ||
         state.isLoadingMore ||
         state.status != Status.success) {
@@ -50,7 +50,7 @@ class ClassificationDetailCubit extends Cubit<ClassificationDetailState> {
     emit(
       state.copyWith(isLoadingMore: true, currentPage: state.currentPage + 1),
     );
-    loadWallpapers();
+    await loadWallpapers();
   }
 
   void retry() {

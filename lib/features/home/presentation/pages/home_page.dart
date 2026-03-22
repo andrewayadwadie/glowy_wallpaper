@@ -53,7 +53,12 @@ class HomePage extends StatelessWidget {
                   isLoadingMore: state.isLoadingMore,
                   hasReachedEnd: state.hasReachedEnd,
                   onLoadMore: () => homeCubit.loadMore(),
-                  onWallpaperTapped: (wallpaper) {},
+                  onWallpaperTapped: (wallpaper) {
+                    context.push(
+                      '/wallpaper/${wallpaper.id}',
+                      extra: wallpaper,
+                    );
+                  },
                   onClassificationTapped: (classification) {
                     context.push(
                       '/classification/${classification.id}',

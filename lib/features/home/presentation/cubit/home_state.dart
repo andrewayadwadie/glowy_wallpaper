@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/enums/status.dart';
 import '../../../categories/domain/entities/category_entity.dart';
 import '../../../categories/domain/entities/classification_entity.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 
-part 'home_state.freezed.dart';
+export '../../../../core/enums/status.dart';
 
-enum Status { loading, success, error, empty }
+part 'home_state.freezed.dart';
 
 @freezed
 abstract class HomeState with _$HomeState {

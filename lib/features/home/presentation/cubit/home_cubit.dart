@@ -1,7 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
+import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../categories/domain/entities/category_entity.dart';
+import '../../../categories/data/repositories/category_repository_impl.dart';
 import '../../../categories/domain/usecases/get_categories.dart';
 import '../../../categories/domain/usecases/get_classifications.dart';
 import '../../../wallpapers/domain/usecases/get_wallpapers_by_category.dart';
@@ -11,6 +13,7 @@ class HomeCubit extends Cubit<HomeState> {
   final GetCategories getCategories;
   final GetWallpapersByCategory getWallpapersByCategory;
   final GetClassifications getClassifications;
+  final CategoryRepositoryImpl? _categoryRepo;
 
   CancelToken? _activeCancelToken;
 
@@ -18,7 +21,19 @@ class HomeCubit extends Cubit<HomeState> {
     required this.getCategories,
     required this.getWallpapersByCategory,
     required this.getClassifications,
-  }) : super(const HomeState());
+    CategoryRepositoryImpl? categoryRepo,
+  }) : _categoryRepo = categoryRepo,
+       super(const HomeState()) {
+    // Listen for background refresh completions
+    _categoryRepo?.onCategoriesRefreshed = _onCategoriesRefreshed;
+  }
+
+  void _onCategoriesRefreshed(List<CategoryEntity> freshCategories) {
+    if (isClosed) return;
+    final sorted = List<CategoryEntity>.from(freshCategories)
+      ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
+    emit(state.copyWith(categories: sorted));
+  }
 
   CategoryEntity? get selectedCategory => state.categories.isNotEmpty
       ? state.categories[state.selectedCategoryIndex]
@@ -95,7 +110,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
     result.fold(
       (failure) {
-        if (!failure.message.contains('cancelled')) {
+        if (failure is! CancelledFailure) {
           emit(
             state.copyWith(
               contentStatus: Status.error,
@@ -145,7 +160,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  void loadMore() {
+  Future<void> loadMore() async {
     if (state.hasReachedEnd ||
         state.isLoadingMore ||
         state.contentStatus != Status.success) {
@@ -154,7 +169,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(
       state.copyWith(isLoadingMore: true, currentPage: state.currentPage + 1),
     );
-    _loadWallpapers(selectedCategory!.id);
+    await _loadWallpapers(selectedCategory!.id);
   }
 
   void retry() {
@@ -169,6 +184,7 @@ class HomeCubit extends Cubit<HomeState> {
   @override
   Future<void> close() {
     _activeCancelToken?.cancel();
+    _categoryRepo?.onCategoriesRefreshed = null;
     return super.close();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/errors/failure.dart';
-import '../../data/models/paginated_response.dart';
+import '../../../../core/models/paginated_response.dart';
 import '../entities/wallpaper_entity.dart';
 
 abstract class WallpaperRepository {

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/app_dimens.dart';
-import '../../../home/presentation/cubit/home_state.dart';
+import '../../../../core/enums/status.dart';
 import '../../../wallpapers/presentation/widgets/wallpaper_grid.dart';
 import '../../../auth/presentation/cubit/subscription_cubit.dart';
 import '../cubit/classification_detail_cubit.dart';
@@ -87,7 +88,9 @@ class ClassificationDetailPage extends StatelessWidget {
           hasReachedEnd: state.hasReachedEnd,
           onLoadMore: () =>
               context.read<ClassificationDetailCubit>().loadMore(),
-          onWallpaperTapped: (wallpaper) {},
+          onWallpaperTapped: (wallpaper) {
+            context.push('/wallpaper/${wallpaper.id}', extra: wallpaper);
+          },
           isPremium: context.read<SubscriptionCubit>().isPremium,
         );
     }

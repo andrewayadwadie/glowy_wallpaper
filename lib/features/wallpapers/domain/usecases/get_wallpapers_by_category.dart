@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
-import '../../data/models/paginated_response.dart';
+import '../../../../core/models/paginated_response.dart';
 import '../entities/wallpaper_entity.dart';
 import '../repositories/wallpaper_repository.dart';
 

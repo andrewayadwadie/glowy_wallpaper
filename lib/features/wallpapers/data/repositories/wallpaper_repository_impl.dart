@@ -43,7 +43,7 @@ class WallpaperRepositoryImpl implements WallpaperRepository {
       );
     } on DioException catch (e) {
       if (CancelToken.isCancel(e)) {
-        return const Left(ServerFailure('Request cancelled'));
+        return const Left(CancelledFailure());
       }
       return Left(ServerFailure(e.message ?? 'Server error'));
     } catch (e) {

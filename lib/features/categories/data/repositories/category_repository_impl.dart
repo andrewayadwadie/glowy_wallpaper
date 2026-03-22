@@ -13,6 +13,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
   final CategoryLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
+  /// Called when a background refresh completes with fresh categories.
+  void Function(List<CategoryEntity>)? onCategoriesRefreshed;
+
   CategoryRepositoryImpl(
     this.remoteDataSource,
     this.localDataSource,
@@ -28,7 +31,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
       if (cachedCategories != null) {
         final entities = cachedCategories.map((m) => m.toEntity()).toList();
 
-        // If cache is stale, refresh in background
+        // If cache is stale, refresh in background and notify listener
         if (localDataSource.isCacheStale() && await networkInfo.isConnected) {
           _refreshCategoriesInBackground();
         }
@@ -46,7 +49,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
       }
     } on DioException catch (e) {
       if (e.type == DioExceptionType.cancel) {
-        return Left(ServerFailure('Request cancelled'));
+        return const Left(CancelledFailure());
       }
       return Left(ServerFailure(e.message ?? 'Server error'));
     } catch (e) {
@@ -58,6 +61,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
     try {
       final remoteCategories = await remoteDataSource.getCategories();
       await localDataSource.cacheCategories(remoteCategories);
+      final freshEntities = remoteCategories.map((m) => m.toEntity()).toList();
+      onCategoriesRefreshed?.call(freshEntities);
     } catch (_) {
       // Silently fail — stale cache is still being served
     }
@@ -78,7 +83,7 @@ class CategoryRepositoryImpl implements CategoryRepository {
       return Right(classifications.map((m) => m.toEntity()).toList());
     } on DioException catch (e) {
       if (e.type == DioExceptionType.cancel) {
-        return Left(ServerFailure('Request cancelled'));
+        return const Left(CancelledFailure());
       }
       return Left(ServerFailure(e.message ?? 'Server error'));
     } catch (e) {
