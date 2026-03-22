@@ -8,7 +8,10 @@
       "Bash(dart analyze:*)",
       "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 \"Phase 2 Auth and User Profile\" -Json -ShortName \"auth-user-profile\")",
       "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"auth-user-profile\" \"Phase 2 Auth and User Profile\")",
-      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''auth-user-profile'' ''Phase'' ''2'' ''Auth'' ''and'' ''User'' ''Profile''\")"
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''auth-user-profile'' ''Phase'' ''2'' ''Auth'' ''and'' ''User'' ''Profile''\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''auth-user-profile'' ''Auth and User Profile feature''\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''auth-user-profile'' -Number 0 ''Auth and User Profile feature''\")",
+      "Bash(git add:*)"
     ]
   }
 }
