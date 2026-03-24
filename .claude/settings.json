@@ -23,7 +23,14 @@
       "Bash(dart format:*)",
       "Bash(flutter analyze:*)",
       "Bash(gh pr:*)",
-      "Bash(where gh:*)"
+      "Bash(where gh:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 \"from plan.md start to implement Phase 4 — Wallpaper Detail, Download & Favorites\" -Json -ShortName \"detail-download-favorites\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"detail-download-favorites\" \"Wallpaper Detail, Download and Favorites\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"detail-download-favorites\" -Number 0 \"Wallpaper Detail Download and Favorites\")",
+      "Bash(xargs -I {} basename {})",
+      "Bash(flutter pub:*)",
+      "Bash(powershell -Command \"\\(Get-Content ''specs/004-detail-download-favorites/tasks.md''\\) -replace ''- \\\\[ \\\\] T033 \\\\[P\\\\] \\\\[US3\\\\]'', ''- [x] T033 [P] [US3]'' -replace ''- \\\\[ \\\\] T034 \\\\[P\\\\] \\\\[US3\\\\]'', ''- [x] T034 [P] [US3]'' -replace ''- \\\\[ \\\\] T035 \\\\[P\\\\] \\\\[US3\\\\]'', ''- [x] T035 [P] [US3]'' -replace ''- \\\\[ \\\\] T036 \\\\[US3\\\\]'', ''- [x] T036 [US3]'' -replace ''- \\\\[ \\\\] T037 \\\\[US3\\\\]'', ''- [x] T037 [US3]'' -replace ''- \\\\[ \\\\] T038 \\\\[US3\\\\]'', ''- [x] T038 [US3]'' -replace ''- \\\\[ \\\\] T039 \\\\[US3\\\\]'', ''- [x] T039 [US3]'' -replace ''- \\\\[ \\\\] T040 \\\\[US3\\\\]'', ''- [x] T040 [US3]'' -replace ''- \\\\[ \\\\] T041 \\\\[US3\\\\]'', ''- [x] T041 [US3]'' | Set-Content ''specs/004-detail-download-favorites/tasks.md''\")",
+      "Bash(powershell -Command \"\\(Get-Content ''specs/004-detail-download-favorites/tasks.md''\\) -replace ''- \\\\[ \\\\] T042'', ''- [x] T042'' -replace ''- \\\\[ \\\\] T043'', ''- [x] T043'' -replace ''- \\\\[ \\\\] T044'', ''- [x] T044'' -replace ''- \\\\[ \\\\] T045'', ''- [x] T045'' -replace ''- \\\\[ \\\\] T046'', ''- [x] T046'' -replace ''- \\\\[ \\\\] T047'', ''- [x] T047'' -replace ''- \\\\[ \\\\] T048'', ''- [x] T048'' -replace ''- \\\\[ \\\\] T049'', ''- [x] T049'' -replace ''- \\\\[ \\\\] T050'', ''- [x] T050'' | Set-Content ''specs/004-detail-download-favorites/tasks.md''\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

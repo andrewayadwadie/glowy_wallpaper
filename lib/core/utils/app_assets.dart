@@ -5,4 +5,5 @@ abstract class AppAssets {
   static const String errorIllustration = 'assets/images/app_logo.png';
   static const String emptyIllustration = 'assets/images/app_logo.png';
   static const String langPath = 'assets/lang';
+  static const String phoneFrame = 'assets/images/phone_frame.png';
 }
