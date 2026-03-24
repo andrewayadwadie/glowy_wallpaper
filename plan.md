@@ -4,7 +4,7 @@
 
 **Glowy Wallpapers** is a cross-platform mobile wallpaper app built with Flutter for Android and iOS. Users browse high-quality wallpapers organized by categories — static images, looping videos, and thematic classifications — download them to their device, save favorites, and preview wallpapers in a phone frame mockup before setting them.
 
-The app follows a freemium monetization model: free users see AdMob ads (banner on home, rewarded ads gating downloads and previews, and an app-open ad on launch), while premium subscribers via Stripe enjoy a fully ad-free experience. Firebase Cloud Messaging powers push notifications to drive engagement and re-engagement.
+The app follows a freemium monetization model: free users see AdMob ads (banner on home, rewarded ads gating downloads and previews, and an app-open ad on launch), while premium subscribers via native in-app purchases (Google Play Billing on Android, StoreKit on iOS) enjoy a fully ad-free experience. Firebase Cloud Messaging powers push notifications to drive engagement and re-engagement.
 
 ### Tech Stack
 
@@ -19,7 +19,7 @@ The app follows a freemium monetization model: free users see AdMob ads (banner 
 | Local Storage        | Hive (cache), flutter_secure_storage (tokens) |
 | Error Handling       | dartz Either\<Failure, T\>                    |
 | Ads                  | Google AdMob (banner, rewarded, app open)     |
-| Payments             | Stripe via flutter_stripe                     |
+| Payments             | In-App Purchases via `in_app_purchase` plugin  |
 | Notifications        | Firebase Cloud Messaging                      |
 | Environment          | Envied (dev / staging / prod flavors)         |
 
@@ -30,7 +30,7 @@ The app follows a freemium monetization model: free users see AdMob ads (banner 
 | App Open Ad         | On cold start, after splash          | Free users              |
 | Banner Ad           | Bottom of Home screen                | Free users              |
 | Rewarded Ad         | Before download and preview actions  | Free users              |
-| Stripe Subscription | Monthly premium plan removes all ads | Converts free → premium |
+| IAP Subscription    | Monthly/yearly premium via Play Store / App Store removes all ads | Converts free → premium |
 
 ---
 
@@ -115,22 +115,24 @@ The app follows a freemium monetization model: free users see AdMob ads (banner 
 
 ---
 
-## Phase 5 — Monetization (AdMob & Stripe Premium)
+## Phase 5 — Monetization (AdMob & In-App Purchases)
 
-> Integrate all ad formats and the Stripe premium subscription flow. Free users see ads; premium users enjoy ad-free experience. Unsubscribe reverts to free.
+> Integrate all ad formats and the native in-app subscription flow via Google Play Billing (Android) and StoreKit (iOS). Free users see ads; premium subscribers enjoy an ad-free experience. Cancel reverts to free.
 
-| #   | Task                 | Description                                                                                                                              |
-| --- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| 5.1 | AdMob Helper         | Centralized `AdHelper` singleton: load/show/dispose for banner, rewarded, app-open; `shouldShowAds` checks `SubscriptionCubit`           |
-| 5.2 | Banner Ad (Home)     | `BannerAdWidget` at Home bottom, visible for free users, hidden for premium, proper lifecycle disposal                                   |
-| 5.3 | Rewarded Ad Gates    | Gate download + preview in `WallpaperDetailCubit`: check premium → show rewarded → proceed only if reward earned; auto-preload next ad   |
-| 5.4 | App Open Ad (Launch) | Load during splash init, show for free users before navigating to Home; graceful fallback if ad fails to load                            |
-| 5.5 | Premium Domain       | `SubscriptionEntity`, `PremiumRepository` (create checkout, get status, cancel), use cases                                               |
-| 5.6 | Stripe Integration   | Retrofit source → API returns `clientSecret` → `Stripe.instance.initPaymentSheet()` → `presentPaymentSheet()` → update SubscriptionCubit |
-| 5.7 | Get Premium Page     | Feature comparison table (Free vs Premium), price, "Subscribe Now" button → Stripe flow, "Restore Purchase" button                       |
-| 5.8 | Unsubscribe Flow     | Profile page: confirmation dialog → API cancel + Stripe cancel → revert `SubscriptionCubit` to free → ads reappear                       |
+| #   | Task                     | Description                                                                                                                                                                   |
+| --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 5.1 | AdMob Helper             | Centralized `AdHelper` singleton: load/show/dispose for banner, rewarded, app-open; `shouldShowAds` checks `SubscriptionCubit`                                                |
+| 5.2 | Banner Ad (Home)         | `BannerAdWidget` at Home bottom, visible for free users, hidden for premium, proper lifecycle disposal                                                                        |
+| 5.3 | Rewarded Ad Gates        | Gate download + preview in `WallpaperDetailCubit`: check premium → show rewarded → proceed only if reward earned; auto-preload next ad                                        |
+| 5.4 | App Open Ad (Launch)     | Load during splash init, show for free users before navigating to Home; graceful fallback if ad fails to load                                                                 |
+| 5.5 | IAP Domain               | `SubscriptionEntity`, `PremiumRepository` contract with `getProducts`, `purchasePremium`, `restorePurchases`, `getSubscriptionStatus`; use cases for each                     |
+| 5.6 | IAP Data Layer           | `in_app_purchase` plugin integration; `IAPDataSource` listens to `InAppPurchase.instance.purchaseStream`; verify receipts server-side (`POST /subscription/verify`); Hive-cache premium flag |
+| 5.7 | Purchase Flow            | `InAppPurchase.instance.buyNonConsumable` (or subscription product) → handle `PurchaseStatus.purchased` → verify → update `SubscriptionCubit` to premium; error + pending states |
+| 5.8 | Restore Purchases        | `InAppPurchase.instance.restorePurchases()` → re-verify each restored transaction → reactivate premium; surface result via `SubscriptionCubit`                                |
+| 5.9 | Get Premium Page         | Feature comparison table (Free vs Premium), price fetched from `ProductDetails`, "Subscribe Now" button → IAP flow, "Restore Purchase" button                                |
+| 5.10 | Cancel / Manage Flow     | Profile page: direct user to Play Store / App Store subscription management via `url_launcher` (platform-specific deep link); no in-app cancel — managed by platform          |
 
-**Exit Criteria:** Banner ad on Home, rewarded ads gate downloads/previews, app open ad on launch. Stripe checkout works. Premium removes all ads. Unsubscribe restores them.
+**Exit Criteria:** Banner ad on Home, rewarded ads gate downloads/previews, app open ad on launch. Google Play / App Store purchase flow works end-to-end. Receipt verified server-side. Premium removes all ads. Restore purchases reactivates premium on reinstall.
 
 ---
 
@@ -159,7 +161,7 @@ The app follows a freemium monetization model: free users see AdMob ads (banner 
 ```
 Phase 1  ──►  Phase 2  ──►  Phase 3  ──►  Phase 4  ──►  Phase 5  ──►  Phase 6
 Foundation    Auth &        Home &        Detail,       AdMob &       Firebase,
-& Scaffold    Profile       Categories    Downloads     Stripe        Polish &
+& Scaffold    Profile       Categories    Downloads     IAP           Polish &
                                           & Favorites   Premium       Store
 ```
 

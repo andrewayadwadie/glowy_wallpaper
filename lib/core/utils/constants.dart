@@ -10,6 +10,10 @@ class AppConstants {
   static const Duration connectionTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
 
+  // Hive Box Names
+  static const String favoritesBoxName = 'favorites';
+  static const String downloadsBoxName = 'downloads';
+
   // Storage Keys
   static const String accessTokenKey = 'access_token';
   static const String refreshTokenKey = 'refresh_token';

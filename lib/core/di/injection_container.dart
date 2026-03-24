@@ -32,6 +32,27 @@ import '../../features/wallpapers/data/repositories/wallpaper_repository_impl.da
 import '../../features/wallpapers/domain/repositories/wallpaper_repository.dart';
 import '../../features/wallpapers/domain/usecases/get_wallpapers_by_category.dart';
 import '../../features/wallpapers/domain/usecases/get_wallpapers_by_classification.dart';
+import '../../features/wallpaper_detail/data/datasources/similar_wallpaper_remote_data_source.dart';
+import '../../features/wallpaper_detail/data/repositories/similar_wallpaper_repository_impl.dart';
+import '../../features/wallpaper_detail/domain/repositories/similar_wallpaper_repository.dart';
+import '../../features/wallpaper_detail/domain/usecases/get_similar_wallpapers.dart';
+import '../../features/wallpaper_detail/presentation/cubit/wallpaper_detail_cubit.dart';
+import '../../features/downloads/data/datasources/download_local_data_source.dart';
+import '../../features/downloads/data/datasources/gallery_data_source.dart';
+import '../../features/downloads/data/repositories/download_repository_impl.dart';
+import '../../features/downloads/domain/repositories/download_repository.dart';
+import '../../features/downloads/domain/usecases/download_wallpaper.dart';
+import '../../features/downloads/domain/usecases/get_download_history.dart';
+import '../../features/downloads/presentation/cubit/download_cubit.dart';
+import '../../features/favorites/data/datasources/favorite_local_data_source.dart';
+import '../../features/favorites/data/datasources/favorite_remote_data_source.dart';
+import '../../features/favorites/data/repositories/favorite_repository_impl.dart';
+import '../../features/favorites/domain/repositories/favorite_repository.dart';
+import '../../features/favorites/domain/usecases/toggle_favorite.dart';
+import '../../features/favorites/domain/usecases/is_favorite.dart';
+import '../../features/favorites/domain/usecases/get_favorites.dart';
+import '../../features/favorites/domain/usecases/merge_guest_favorites.dart';
+import '../../features/favorites/presentation/cubit/favorite_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -154,4 +175,73 @@ Future<void> init() async {
   // ClassificationDetail Cubit (factory with params — registered via factoryParam)
   // Note: ClassificationDetailCubit needs a ClassificationEntity at creation time,
   // so it's provided inline in the router via BlocProvider.
+
+  //! Phase 4 — Wallpaper Detail, Download & Favorites
+
+  // SimilarWallpaper Data Source & Repository
+  sl.registerLazySingleton<SimilarWallpaperRemoteDataSource>(
+    () => SimilarWallpaperRemoteDataSource(sl<Dio>()),
+  );
+  sl.registerLazySingleton<SimilarWallpaperRepository>(
+    () => SimilarWallpaperRepositoryImpl(sl(), sl()),
+  );
+  sl.registerLazySingleton(() => GetSimilarWallpapers(sl()));
+
+  // WallpaperDetail Cubit
+  sl.registerFactory(
+    () => WallpaperDetailCubit(getSimilarWallpapers: sl(), analytics: sl()),
+  );
+
+  // Download Data Sources
+  sl.registerLazySingleton<DownloadLocalDataSource>(
+    () => DownloadLocalDataSourceImpl(Hive.box('downloads')),
+  );
+  sl.registerLazySingleton<GalleryDataSource>(() => GalleryDataSourceImpl());
+
+  // Download Repository
+  sl.registerLazySingleton<DownloadRepository>(
+    () => DownloadRepositoryImpl(sl(), sl(), sl()),
+  );
+
+  // Download Use Cases
+  sl.registerLazySingleton(() => DownloadWallpaper(sl()));
+  sl.registerLazySingleton(() => GetDownloadHistory(sl()));
+
+  // Download Cubit
+  sl.registerFactory(
+    () => DownloadCubit(
+      downloadWallpaper: sl(),
+      getDownloadHistory: sl(),
+      analytics: sl(),
+    ),
+  );
+
+  // Favorite Data Sources
+  sl.registerLazySingleton<FavoriteLocalDataSource>(
+    () => FavoriteLocalDataSourceImpl(Hive.box('favorites')),
+  );
+  sl.registerLazySingleton<FavoriteRemoteDataSource>(
+    () => FavoriteRemoteDataSource(sl<Dio>()),
+  );
+
+  // Favorite Repository
+  sl.registerLazySingleton<FavoriteRepository>(
+    () => FavoriteRepositoryImpl(sl(), sl(), sl()),
+  );
+
+  // Favorite Use Cases
+  sl.registerLazySingleton(() => ToggleFavorite(sl()));
+  sl.registerLazySingleton(() => IsFavorite(sl()));
+  sl.registerLazySingleton(() => GetFavorites(sl()));
+  sl.registerLazySingleton(() => MergeGuestFavorites(sl()));
+
+  // Favorite Cubit
+  sl.registerFactory(
+    () => FavoriteCubit(
+      toggleFavorite: sl(),
+      isFavorite: sl(),
+      getFavorites: sl(),
+      analytics: sl(),
+    ),
+  );
 }

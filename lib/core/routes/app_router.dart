@@ -11,6 +11,13 @@ import '../../features/categories/domain/entities/classification_entity.dart';
 import '../../features/categories/presentation/cubit/classification_detail_cubit.dart';
 import '../../features/categories/presentation/pages/classification_detail_page.dart';
 import '../../features/wallpapers/domain/usecases/get_wallpapers_by_classification.dart';
+import '../../features/wallpapers/domain/entities/wallpaper_entity.dart';
+import '../../features/wallpaper_detail/presentation/cubit/wallpaper_detail_cubit.dart';
+import '../../features/wallpaper_detail/presentation/pages/wallpaper_detail_page.dart';
+import '../../features/downloads/presentation/cubit/download_cubit.dart';
+import '../../features/favorites/presentation/cubit/favorite_cubit.dart';
+import '../../features/favorites/presentation/pages/favorites_page.dart';
+import '../../features/downloads/presentation/pages/downloads_page.dart';
 
 abstract class AppRouter {
   static final GoRouter router = GoRouter(
@@ -47,24 +54,63 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.favorites,
-        builder: (context, state) =>
-            Scaffold(body: Center(child: AutoSizeText('Route: favorites'))),
+        builder: (context, state) => BlocProvider(
+          create: (_) => sl<FavoriteCubit>(),
+          child: const FavoritesPage(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.downloads,
-        builder: (context, state) =>
-            Scaffold(body: Center(child: AutoSizeText('Route: downloads'))),
+        builder: (context, state) => BlocProvider(
+          create: (_) => sl<DownloadCubit>(),
+          child: const DownloadsPage(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.wallpaperDetail,
-        builder: (context, state) => Scaffold(
-          body: Center(child: AutoSizeText('Route: wallpaperDetail')),
-        ),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is! Map<String, dynamic>) {
+            return const Scaffold(
+              body: Center(child: Text('Invalid navigation parameters')),
+            );
+          }
+          final wallpapers = extra['wallpapers'] as List<WallpaperEntity>;
+          final initialIndex = extra['initialIndex'] as int? ?? 0;
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => sl<WallpaperDetailCubit>()
+                  ..init(wallpapers: wallpapers, initialIndex: initialIndex),
+              ),
+              BlocProvider(create: (_) => sl<DownloadCubit>()),
+              BlocProvider(
+                create: (_) {
+                  final cubit = sl<FavoriteCubit>();
+                  if (wallpapers.isNotEmpty) {
+                    cubit.checkIsFavorite(wallpapers[initialIndex].id);
+                  }
+                  return cubit;
+                },
+              ),
+            ],
+            child: WallpaperDetailPage(
+              wallpapers: wallpapers,
+              initialIndex: initialIndex,
+            ),
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.classificationDetail,
         builder: (context, state) {
-          final classification = state.extra as ClassificationEntity;
+          final extra = state.extra;
+          if (extra is! ClassificationEntity) {
+            return const Scaffold(
+              body: Center(child: Text('Invalid navigation parameters')),
+            );
+          }
+          final classification = extra;
           return BlocProvider(
             create: (context) => ClassificationDetailCubit(
               getWallpapersByClassification:

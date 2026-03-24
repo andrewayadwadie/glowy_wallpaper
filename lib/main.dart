@@ -11,6 +11,8 @@ Future<void> main() async {
   await Hive.initFlutter();
   await Hive.openBox('user_cache');
   await Hive.openBox('categories');
+  await Hive.openBox('favorites');
+  await Hive.openBox('downloads');
   await init();
 
   try {

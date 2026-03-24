@@ -67,4 +67,46 @@ abstract class AppStrings {
   static const String offlineMode = 'Showing cached data';
   static const String loadingMore = 'Loading more...';
   static const String adPlaceholder = 'Ad Space';
+
+  // Wallpaper Detail
+  static const String download = 'Download';
+  static const String setAsWallpaper = 'Set as Wallpaper';
+  static const String previewOnPhone = 'Preview';
+  static const String addToFavorites = 'Add to Favorites';
+  static const String removeFromFavorites = 'Remove from Favorites';
+  static const String similarWallpapers = 'Similar Wallpapers';
+  static const String wallpaperDetail = 'Wallpaper';
+
+  // Download
+  static const String downloading = 'Downloading...';
+  static const String wallpaperSaved = 'Wallpaper saved to gallery';
+  static const String downloadFailed = 'Download failed. Please try again.';
+  static const String downloadAlreadyExists = 'Already downloaded';
+
+  // Favorites
+  static const String noFavorites = 'No favorites yet';
+  static const String noFavoritesSubtitle =
+      'Tap the heart icon on any wallpaper to save it here';
+  static const String favoriteAdded = 'Added to favorites';
+  static const String favoriteRemoved = 'Removed from favorites';
+  static const String favoriteFailed = 'Failed to update favorites';
+
+  // Downloads
+  static const String noDownloads = 'No downloads yet';
+  static const String noDownloadsSubtitle =
+      'Download wallpapers to access them offline';
+
+  // Permissions
+  static const String permissionRequired = 'Permission Required';
+  static const String permissionDenied =
+      'Storage permission is required to save wallpapers';
+  static const String openSettings = 'Open Settings';
+  static const String cancel = 'Cancel';
+
+  // Phone Frame Preview
+  static const String phoneFramePreview = 'Preview';
+  static const String closePreview = 'Close';
+
+  // Similar Wallpapers
+  static const String noSimilarWallpapers = 'No similar wallpapers found';
 }
