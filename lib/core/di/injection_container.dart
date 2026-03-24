@@ -53,6 +53,18 @@ import '../../features/favorites/domain/usecases/is_favorite.dart';
 import '../../features/favorites/domain/usecases/get_favorites.dart';
 import '../../features/favorites/domain/usecases/merge_guest_favorites.dart';
 import '../../features/favorites/presentation/cubit/favorite_cubit.dart';
+import '../../features/premium/data/datasources/iap_data_source.dart';
+import '../../features/premium/data/datasources/premium_local_source.dart';
+import '../../features/premium/data/datasources/premium_remote_source.dart';
+import '../../features/premium/data/repositories/premium_repository_impl.dart';
+import '../../features/premium/domain/repositories/premium_repository.dart';
+import '../services/ad_helper.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import '../../features/premium/domain/usecases/get_products.dart';
+import '../../features/premium/domain/usecases/purchase_premium.dart';
+import '../../features/premium/domain/usecases/get_subscription_status.dart';
+import '../../features/premium/domain/usecases/restore_purchases.dart';
+import '../../features/premium/presentation/cubit/premium_cubit.dart';
 
 final sl = GetIt.instance;
 
@@ -241,6 +253,50 @@ Future<void> init() async {
       toggleFavorite: sl(),
       isFavorite: sl(),
       getFavorites: sl(),
+      analytics: sl(),
+    ),
+  );
+
+  //! Phase 5 — Premium & Monetization
+
+  // AdHelper
+  sl.registerLazySingleton<AdHelper>(() => AdHelper.instance);
+
+  // Premium Hive Boxes
+  final subscriptionCacheBox = Hive.box('subscription_cache') as Box<String>;
+  final adFrequencyBox = Hive.box('ad_frequency') as Box<String>;
+  sl.registerLazySingleton(() => subscriptionCacheBox);
+  sl.registerLazySingleton(() => adFrequencyBox);
+
+  // Premium Data Sources
+  sl.registerLazySingleton<IAPDataSource>(
+    () => IAPDataSource(InAppPurchase.instance),
+  );
+  sl.registerLazySingleton<PremiumRemoteSource>(
+    () => PremiumRemoteSource(sl<Dio>()),
+  );
+  sl.registerLazySingleton<PremiumLocalSource>(
+    () => PremiumLocalSource(subscriptionCacheBox, adFrequencyBox),
+  );
+
+  // Premium Repository
+  sl.registerLazySingleton<PremiumRepository>(
+    () => PremiumRepositoryImpl(sl(), sl(), sl()),
+  );
+
+  // Premium Use Cases
+  sl.registerLazySingleton(() => GetProducts(sl()));
+  sl.registerLazySingleton(() => PurchasePremium(sl()));
+  sl.registerLazySingleton(() => GetSubscriptionStatus(sl()));
+  sl.registerLazySingleton(() => RestorePurchases(sl()));
+
+  // Premium Cubit — subscriptionCubit must be passed from widget tree (same instance as app-level BlocProvider)
+  sl.registerFactoryParam<PremiumCubit, SubscriptionCubit, void>(
+    (subscriptionCubit, _) => PremiumCubit(
+      getProducts: sl(),
+      purchasePremium: sl(),
+      restorePurchases: sl(),
+      subscriptionCubit: subscriptionCubit,
       analytics: sl(),
     ),
   );

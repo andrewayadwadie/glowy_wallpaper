@@ -18,6 +18,9 @@ import '../../features/downloads/presentation/cubit/download_cubit.dart';
 import '../../features/favorites/presentation/cubit/favorite_cubit.dart';
 import '../../features/favorites/presentation/pages/favorites_page.dart';
 import '../../features/downloads/presentation/pages/downloads_page.dart';
+import '../../features/auth/presentation/cubit/subscription_cubit.dart';
+import '../../features/premium/presentation/cubit/premium_cubit.dart';
+import '../../features/premium/presentation/pages/get_premium_page.dart';
 
 abstract class AppRouter {
   static final GoRouter router = GoRouter(
@@ -123,8 +126,13 @@ abstract class AppRouter {
       ),
       GoRoute(
         path: AppRoutes.premium,
-        builder: (context, state) =>
-            Scaffold(body: Center(child: AutoSizeText('Route: premium'))),
+        builder: (context, state) {
+          final subscriptionCubit = context.read<SubscriptionCubit>();
+          return BlocProvider(
+            create: (_) => sl<PremiumCubit>(param1: subscriptionCubit),
+            child: const GetPremiumPage(),
+          );
+        },
       ),
       GoRoute(
         path: AppRoutes.settings,

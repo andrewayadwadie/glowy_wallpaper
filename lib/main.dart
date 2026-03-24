@@ -13,6 +13,8 @@ Future<void> main() async {
   await Hive.openBox('categories');
   await Hive.openBox('favorites');
   await Hive.openBox('downloads');
+  await Hive.openBox('subscription_cache');
+  await Hive.openBox('ad_frequency');
   await init();
 
   try {

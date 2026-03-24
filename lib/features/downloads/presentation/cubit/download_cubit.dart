@@ -44,7 +44,8 @@ class DownloadCubit extends Cubit<DownloadState> {
   Future<void> download(WallpaperEntity wallpaper) async {
     if (state.isDownloading) return;
 
-    await adGatePlaceholder(
+    final shouldProceed = await adGatePlaceholder(
+      action: 'download',
       onProceed: () async {
         emit(state.copyWith(isDownloading: true, downloadProgress: 0.0));
 
@@ -88,6 +89,10 @@ class DownloadCubit extends Cubit<DownloadState> {
         );
       },
     );
+
+    if (!shouldProceed) {
+      return;
+    }
   }
 
   void clearMessages() {

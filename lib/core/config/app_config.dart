@@ -12,8 +12,6 @@ class AppConfig {
 
   // API Configuration
   static String get baseUrl {
-    return isProduction
-        ? 'https://api.production.com'
-        : 'https://api.development.com';
+    return isProduction ? 'http://localhost:3001' : 'http://localhost:3001';
   }
 }

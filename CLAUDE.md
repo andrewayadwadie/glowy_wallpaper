@@ -9,6 +9,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-24
 - Hive (category cache, wallpaper page cache) (003-home-categories-grids)
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit), freezed, injectable + get_it, dio + retrofit, go_router, hive + hive_flutter, cached_network_image, video_player, visibility_detector, dartz, equatable, flutter_screenutil, auto_size_text, gal (NEW — gallery saver), permission_handler (NEW), lottie (existing — for empty state animations) (004-detail-download-favorites)
 - Hive (favorites local box, downloads local box), flutter_secure_storage (auth tokens — existing) (004-detail-download-favorites)
+- Dart 3.11.3 / Flutter 3.41.5 + google_mobile_ads ^5.3.0 (existing), in_app_purchase ^3.2.0 (NEW), flutter_bloc, freezed, injectable + get_it, dio + retrofit, firebase_analytics (existing) (005-admob-iap-monetization)
+- Hive (subscription_cache box, ad_frequency box — NEW), flutter_secure_storage (auth tokens — existing) (005-admob-iap-monetization)
 
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, hive + flutter_secure_storage, flutter_screenutil, envied, dartz, google_fonts (Poppins), cached_network_image, auto_size_text, loader_overlay + flutter_spinkit, easy_localization (001-phase1-foundation)
 
@@ -28,9 +30,9 @@ tests/
 Dart 3.11.3 / Flutter 3.41.5: Follow standard conventions
 
 ## Recent Changes
+- 005-admob-iap-monetization: Added Dart 3.11.3 / Flutter 3.41.5 + google_mobile_ads ^5.3.0 (existing), in_app_purchase ^3.2.0 (NEW), flutter_bloc, freezed, injectable + get_it, dio + retrofit, firebase_analytics (existing)
 - 004-detail-download-favorites: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit), freezed, injectable + get_it, dio + retrofit, go_router, hive + hive_flutter, cached_network_image, video_player, visibility_detector, dartz, equatable, flutter_screenutil, auto_size_text, gal (NEW — gallery saver), permission_handler (NEW), lottie (existing — for empty state animations)
 - 003-home-categories-grids: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, hive + hive_flutter, cached_network_image, auto_size_text, flutter_screenutil, dartz, equatable, video_player (NEW), visibility_detector (NEW)
-- 002-auth-user-profile: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, flutter_secure_storage, auto_size_text, flutter_screenutil, dartz, equatable
 
 
 <!-- MANUAL ADDITIONS START -->
