@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/usecases/usecase.dart';
+import '../../../../features/notifications/domain/services/notification_service.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../domain/entities/favorite_entity.dart';
 import '../../domain/usecases/get_favorites.dart';
@@ -13,16 +14,19 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   final IsFavorite _isFavorite;
   final GetFavorites _getFavorites;
   final FirebaseAnalytics? _analytics;
+  final NotificationService? _notificationService;
 
   FavoriteCubit({
     required ToggleFavorite toggleFavorite,
     required IsFavorite isFavorite,
     required GetFavorites getFavorites,
     FirebaseAnalytics? analytics,
+    NotificationService? notificationService,
   }) : _toggleFavorite = toggleFavorite,
        _isFavorite = isFavorite,
        _getFavorites = getFavorites,
        _analytics = analytics,
+       _notificationService = notificationService,
        super(const FavoriteState());
 
   Future<void> checkIsFavorite(String wallpaperId) async {
@@ -82,6 +86,9 @@ class FavoriteCubit extends Cubit<FavoriteState> {
             'action': newIsFav ? 'add' : 'remove',
           },
         );
+        if (newIsFav && _notificationService?.hasRequestedPermission == false) {
+          _notificationService?.requestPermission();
+        }
       },
     );
   }

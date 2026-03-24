@@ -11,5 +11,7 @@ abstract class AppRoutes {
   static const String premium = '/premium';
   static const String settings = '/settings';
   static const String about = '/about';
+  static const String privacyPolicy = '/privacy';
+  static const String termsOfUse = '/terms';
   static const String onboarding = '/onboarding';
 }

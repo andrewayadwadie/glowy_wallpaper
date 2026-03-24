@@ -60,6 +60,8 @@ abstract class AppStrings {
   static const String classificationDetail = 'Classification Detail';
   static const String myDownloads = 'My Downloads';
   static const String about = 'About';
+  static const String privacyPolicy = 'Privacy Policy';
+  static const String termsOfUse = 'Terms of Use';
   static const String rateApp = 'Rate App';
   static const String shareApp = 'Share App';
   static const String sendFeedback = 'Send Feedback';

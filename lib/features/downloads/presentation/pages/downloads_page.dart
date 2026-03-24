@@ -1,9 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/utils/app_strings.dart';
+import '../../../../core/utils/app_dimens.dart';
+import '../../../../core/widgets/app_error_widget.dart';
+import '../../../../core/widgets/app_empty_state_widget.dart';
+import '../../../../core/widgets/app_shimmer_widget.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../domain/entities/download_record_entity.dart';
 import '../cubit/download_cubit.dart';
@@ -56,36 +61,38 @@ class _DownloadsPageState extends State<DownloadsPage> {
         builder: (context, state) {
           switch (state.historyStatus) {
             case Status.loading:
-              return const Center(child: CircularProgressIndicator());
-
-            case Status.error:
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AutoSizeText(state.errorMessage ?? AppStrings.error),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () =>
-                          context.read<DownloadCubit>().loadHistory(),
-                      child: const AutoSizeText(AppStrings.retry),
+              return AppShimmerWidget(
+                child: GridView.builder(
+                  padding: EdgeInsets.all(AppDimens.paddingM),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: AppDimens.paddingS,
+                    mainAxisSpacing: AppDimens.paddingS,
+                    childAspectRatio: 0.65,
+                  ),
+                  itemCount: 6,
+                  itemBuilder: (context, index) => Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
-                  ],
+                  ),
                 ),
               );
 
+            case Status.error:
+              return AppErrorWidget(
+                message: state.errorMessage ?? AppStrings.error,
+                onRetry: () => context.read<DownloadCubit>().loadHistory(),
+              );
+
             case Status.empty:
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.download_outlined, size: 64),
-                    SizedBox(height: 16),
-                    AutoSizeText(AppStrings.noDownloads),
-                    SizedBox(height: 8),
-                    AutoSizeText(AppStrings.noDownloadsSubtitle),
-                  ],
-                ),
+              return AppEmptyStateWidget(
+                title: AppStrings.noDownloads,
+                message: AppStrings.noDownloadsSubtitle,
+                icon: Icons.download_outlined,
               );
 
             case Status.success:

@@ -65,6 +65,8 @@ import '../../features/premium/domain/usecases/purchase_premium.dart';
 import '../../features/premium/domain/usecases/get_subscription_status.dart';
 import '../../features/premium/domain/usecases/restore_purchases.dart';
 import '../../features/premium/presentation/cubit/premium_cubit.dart';
+import '../../features/notifications/domain/services/notification_service.dart';
+import '../../features/notifications/data/services/notification_service_impl.dart';
 
 final sl = GetIt.instance;
 
@@ -225,6 +227,7 @@ Future<void> init() async {
       downloadWallpaper: sl(),
       getDownloadHistory: sl(),
       analytics: sl(),
+      notificationService: sl(),
     ),
   );
 
@@ -254,6 +257,7 @@ Future<void> init() async {
       isFavorite: sl(),
       getFavorites: sl(),
       analytics: sl(),
+      notificationService: sl(),
     ),
   );
 
@@ -299,5 +303,10 @@ Future<void> init() async {
       subscriptionCubit: subscriptionCubit,
       analytics: sl(),
     ),
+  );
+
+  //! Phase 6 — Notifications
+  sl.registerLazySingleton<NotificationService>(
+    () => NotificationServiceImpl(),
   );
 }

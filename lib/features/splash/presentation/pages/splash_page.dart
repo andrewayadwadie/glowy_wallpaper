@@ -9,6 +9,7 @@ import 'package:glowy_wallpaper/core/widgets/app_error_widget.dart';
 import 'package:glowy_wallpaper/core/di/injection_container.dart';
 import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_cubit.dart';
 import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_state.dart';
+import 'package:glowy_wallpaper/features/notifications/domain/services/notification_service.dart';
 import 'package:glowy_wallpaper/features/premium/domain/usecases/get_subscription_status.dart';
 import 'package:glowy_wallpaper/core/usecases/usecase.dart';
 
@@ -66,7 +67,17 @@ class _SplashPageState extends State<SplashPage> {
       }
 
       if (mounted) {
-        context.go(AppRoutes.home);
+        final notificationService = sl<NotificationService>();
+        final pendingRoute = notificationService.pendingRoute;
+
+        // Only consume pending route if user is authenticated
+        final isAuthenticated = subscriptionCubit.state is! SubscriptionGuest;
+        if (pendingRoute != null && isAuthenticated) {
+          notificationService.clearPendingRoute();
+          context.go(pendingRoute);
+        } else {
+          context.go(AppRoutes.home);
+        }
       }
     } catch (e) {
       if (mounted) {
