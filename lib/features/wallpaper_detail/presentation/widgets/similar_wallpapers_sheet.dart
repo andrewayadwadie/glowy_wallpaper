@@ -5,6 +5,9 @@ import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
 
 import '../../../../core/widgets/app_cached_image.dart';
+import '../../../../core/widgets/app_error_widget.dart';
+import '../../../../core/widgets/app_empty_state_widget.dart';
+import '../../../../core/widgets/app_shimmer_widget.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 
 class SimilarWallpapersSheet extends StatelessWidget {
@@ -75,25 +78,31 @@ class SimilarWallpapersSheet extends StatelessWidget {
     ScrollController scrollController,
   ) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (errorMessage != null) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AutoSizeText(errorMessage!),
-            const SizedBox(height: 12),
-            ElevatedButton(
-              onPressed: onRetry,
-              child: const AutoSizeText(AppStrings.retry),
+      return AppShimmerWidget(
+        child: GridView.builder(
+          padding: EdgeInsets.all(AppDimens.paddingM),
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+          ),
+          itemCount: 6,
+          itemBuilder: (context, index) => Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(AppDimens.radiusS),
             ),
-          ],
+          ),
         ),
       );
     }
+    if (errorMessage != null) {
+      return AppErrorWidget(message: errorMessage!, onRetry: onRetry);
+    }
     if (wallpapers.isEmpty) {
-      return const Center(child: AutoSizeText(AppStrings.noSimilarWallpapers));
+      return AppEmptyStateWidget(message: AppStrings.noSimilarWallpapers);
     }
     return GridView.builder(
       controller: scrollController,

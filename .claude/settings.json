@@ -38,7 +38,17 @@
       "Bash(powershell -Command \".specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName ''admob-iap-monetization'' -FeatureDescription ''Phase 5 Monetization AdMob IAP In-App Purchases''\")",
       "Bash(powershell -Command \".specify/scripts/powershell/check-prerequisites.ps1 -Json\")",
       "Bash(powershell -Command \".specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks\")",
-      "Bash(flutter test:*)"
+      "Bash(flutter test:*)",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/create-new-feature.ps1 ''implement Phase 6 - Firebase, Polish and Store Readiness'' -Json -ShortName ''firebase-polish-store'' ''Firebase Polish Store Readiness''\")",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName ''firebase-polish-store'' ''Firebase Polish Store Readiness''\")",
+      "Bash(powershell.exe -NonInteractive -Command \"Get-Help .specify/scripts/powershell/create-new-feature.ps1 -Full\")",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName ''firebase-polish-store'' -FeatureDescription ''Firebase Polish Store Readiness''\")",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/check-prerequisites.ps1 -Json -PathsOnly\")",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/setup-plan.ps1 -Json\")",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/update-agent-context.ps1 -AgentType claude\")",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/check-prerequisites.ps1 -Json\")",
+      "Bash(dart pub:*)",
+      "Bash(python -c \"import sys,json; deps=json.load\\(sys.stdin\\); [print\\(p[''''name''''],p[''''version'''']\\) for p in deps.get\\(''''packages'''',[]\\) if ''''share'''' in p[''''name''''].lower\\(\\)]\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

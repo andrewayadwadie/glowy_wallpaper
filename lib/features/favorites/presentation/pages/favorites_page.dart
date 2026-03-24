@@ -1,9 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/utils/app_strings.dart';
+import '../../../../core/utils/app_dimens.dart';
+import '../../../../core/widgets/app_error_widget.dart';
+import '../../../../core/widgets/app_empty_state_widget.dart';
+import '../../../../core/widgets/app_shimmer_widget.dart';
 import '../cubit/favorite_cubit.dart';
 import '../cubit/favorite_state.dart';
 import '../widgets/favorites_grid.dart';
@@ -40,36 +45,38 @@ class _FavoritesPageState extends State<FavoritesPage> {
         builder: (context, state) {
           switch (state.listStatus) {
             case Status.loading:
-              return const Center(child: CircularProgressIndicator());
-
-            case Status.error:
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AutoSizeText(state.errorMessage ?? AppStrings.error),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () =>
-                          context.read<FavoriteCubit>().loadFavorites(),
-                      child: const AutoSizeText(AppStrings.retry),
+              return AppShimmerWidget(
+                child: GridView.builder(
+                  padding: EdgeInsets.all(AppDimens.paddingM),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: AppDimens.paddingS,
+                    mainAxisSpacing: AppDimens.paddingS,
+                    childAspectRatio: 0.65,
+                  ),
+                  itemCount: 6,
+                  itemBuilder: (context, index) => Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
-                  ],
+                  ),
                 ),
               );
 
+            case Status.error:
+              return AppErrorWidget(
+                message: state.errorMessage ?? AppStrings.error,
+                onRetry: () => context.read<FavoriteCubit>().loadFavorites(),
+              );
+
             case Status.empty:
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.favorite_border, size: 64),
-                    const SizedBox(height: 16),
-                    const AutoSizeText(AppStrings.noFavorites),
-                    const SizedBox(height: 8),
-                    const AutoSizeText(AppStrings.noFavoritesSubtitle),
-                  ],
-                ),
+              return AppEmptyStateWidget(
+                title: AppStrings.noFavorites,
+                message: AppStrings.noFavoritesSubtitle,
+                icon: Icons.favorite_border,
               );
 
             case Status.success:

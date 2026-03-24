@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:gap/gap.dart';
-import '../../../../core/widgets/app_loading.dart';
 import '../../../../core/widgets/app_error_widget.dart';
+import '../../../../core/widgets/app_shimmer_widget.dart';
+import '../../../../core/widgets/app_empty_state_widget.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/app_dimens.dart';
 import '../../../categories/domain/entities/category_entity.dart';
@@ -47,7 +46,26 @@ class ContentSwitcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (contentStatus == Status.loading) {
-      return const Center(child: AppLoading());
+      return AppShimmerWidget(
+        child: GridView.builder(
+          padding: EdgeInsets.all(AppDimens.paddingM),
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: AppDimens.paddingS,
+            mainAxisSpacing: AppDimens.paddingS,
+            childAspectRatio: 0.65,
+          ),
+          itemCount: 6,
+          itemBuilder: (context, index) => Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+          ),
+        ),
+      );
     }
 
     if (contentStatus == Status.error) {
@@ -58,31 +76,9 @@ class ContentSwitcher extends StatelessWidget {
     }
 
     if (contentStatus == Status.empty) {
-      return Center(
-        child: Padding(
-          padding: EdgeInsets.all(AppDimens.paddingXL),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.image_not_supported_outlined,
-                size: 64.sp,
-                color: Theme.of(context).colorScheme.onSurface.withAlpha(100),
-              ),
-              Gap(AppDimens.paddingM),
-              AutoSizeText(
-                AppStrings.noWallpapers,
-                style: Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.center,
-              ),
-              Gap(AppDimens.paddingL),
-              ElevatedButton(
-                onPressed: onRetry,
-                child: AutoSizeText(AppStrings.retry),
-              ),
-            ],
-          ),
-        ),
+      return AppEmptyStateWidget(
+        message: AppStrings.noWallpapers,
+        icon: Icons.image_not_supported_outlined,
       );
     }
 

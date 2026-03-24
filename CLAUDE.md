@@ -1,6 +1,6 @@
 ﻿# glowy_wallpaper Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-03-24
+Auto-generated from all feature plans. Last updated: 2026-03-25
 
 ## Active Technologies
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, flutter_secure_storage, auto_size_text, flutter_screenutil, dartz, equatable (002-auth-user-profile)
@@ -11,6 +11,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-24
 - Hive (favorites local box, downloads local box), flutter_secure_storage (auth tokens — existing) (004-detail-download-favorites)
 - Dart 3.11.3 / Flutter 3.41.5 + google_mobile_ads ^5.3.0 (existing), in_app_purchase ^3.2.0 (NEW), flutter_bloc, freezed, injectable + get_it, dio + retrofit, firebase_analytics (existing) (005-admob-iap-monetization)
 - Hive (subscription_cache box, ad_frequency box — NEW), flutter_secure_storage (auth tokens — existing) (005-admob-iap-monetization)
+- Dart 3.11.3 / Flutter 3.41.5 + firebase_messaging ^15.2.5, flutter_local_notifications ^18.0.1, firebase_analytics ^11.4.5, url_launcher, share_plus, shimmer, flutter_launcher_icons, flutter_native_splash, permission_handler (existing) (006-firebase-polish-store)
+- Hive (`notification_prefs` box — new, stores "permission-requested" flag), flutter_secure_storage (tokens — existing) (006-firebase-polish-store)
 
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, hive + flutter_secure_storage, flutter_screenutil, envied, dartz, google_fonts (Poppins), cached_network_image, auto_size_text, loader_overlay + flutter_spinkit, easy_localization (001-phase1-foundation)
 
@@ -30,9 +32,9 @@ tests/
 Dart 3.11.3 / Flutter 3.41.5: Follow standard conventions
 
 ## Recent Changes
+- 006-firebase-polish-store: Added Dart 3.11.3 / Flutter 3.41.5 + firebase_messaging ^15.2.5, flutter_local_notifications ^18.0.1, firebase_analytics ^11.4.5, url_launcher, share_plus, shimmer, flutter_launcher_icons, flutter_native_splash, permission_handler (existing)
 - 005-admob-iap-monetization: Added Dart 3.11.3 / Flutter 3.41.5 + google_mobile_ads ^5.3.0 (existing), in_app_purchase ^3.2.0 (NEW), flutter_bloc, freezed, injectable + get_it, dio + retrofit, firebase_analytics (existing)
 - 004-detail-download-favorites: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit), freezed, injectable + get_it, dio + retrofit, go_router, hive + hive_flutter, cached_network_image, video_player, visibility_detector, dartz, equatable, flutter_screenutil, auto_size_text, gal (NEW — gallery saver), permission_handler (NEW), lottie (existing — for empty state animations)
-- 003-home-categories-grids: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, hive + hive_flutter, cached_network_image, auto_size_text, flutter_screenutil, dartz, equatable, video_player (NEW), visibility_detector (NEW)
 
 
 <!-- MANUAL ADDITIONS START -->

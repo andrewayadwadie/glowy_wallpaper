@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/ad_gate_placeholder.dart';
+import '../../../../features/notifications/domain/services/notification_service.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../domain/usecases/download_wallpaper.dart';
 import '../../domain/usecases/get_download_history.dart';
@@ -12,14 +13,17 @@ class DownloadCubit extends Cubit<DownloadState> {
   final DownloadWallpaper _downloadWallpaper;
   final GetDownloadHistory _getDownloadHistory;
   final FirebaseAnalytics? _analytics;
+  final NotificationService? _notificationService;
 
   DownloadCubit({
     required DownloadWallpaper downloadWallpaper,
     required GetDownloadHistory getDownloadHistory,
     FirebaseAnalytics? analytics,
+    NotificationService? notificationService,
   }) : _downloadWallpaper = downloadWallpaper,
        _getDownloadHistory = getDownloadHistory,
        _analytics = analytics,
+       _notificationService = notificationService,
        super(const DownloadState());
 
   Future<void> loadHistory() async {
@@ -84,6 +88,9 @@ class DownloadCubit extends Cubit<DownloadState> {
                 name: 'download_wallpaper',
                 parameters: {'wallpaper_id': wallpaper.id},
               );
+              if (_notificationService?.hasRequestedPermission == false) {
+                _notificationService?.requestPermission();
+              }
             }
           },
         );

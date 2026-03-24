@@ -18,4 +18,10 @@ abstract class AppColors {
   static const Color textPrimary = Color(0xFF1A1A2E);
   static const Color textSecondary = Color(0xFF757575);
   static const Color border = Color(0xFFE0E0E0);
+
+  // Shimmer
+  static const Color shimmerBase = Color(0xFFE0E0E0);
+  static const Color shimmerHighlight = Color(0xFFF5F5F5);
+  static const Color darkShimmerBase = Color(0xFF2A2A3E);
+  static const Color darkShimmerHighlight = Color(0xFF3A3A5E);
 }

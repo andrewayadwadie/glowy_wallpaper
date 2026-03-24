@@ -17,7 +17,7 @@ class AdaptiveGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-        final columns = width < 400 ? 2 : (width < 700 ? 3 : 4);
+        final columns = width < 600 ? 2 : (width < 900 ? 3 : 4);
 
         return GridView.builder(
           shrinkWrap: true,
