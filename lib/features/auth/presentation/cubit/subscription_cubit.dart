@@ -5,6 +5,7 @@ import 'package:glowy_wallpaper/features/auth/domain/usecases/unsubscribe.dart';
 import 'package:glowy_wallpaper/core/usecases/usecase.dart';
 import 'package:glowy_wallpaper/features/auth/domain/entities/user_entity.dart';
 import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_state.dart';
+import 'package:glowy_wallpaper/features/premium/domain/entities/subscription_entity.dart';
 
 class SubscriptionCubit extends Cubit<SubscriptionState> {
   final ValidateToken validateToken;
@@ -60,6 +61,22 @@ class SubscriptionCubit extends Cubit<SubscriptionState> {
 
   void setPremium(UserEntity user) {
     emit(SubscriptionState.premium(user: user));
+  }
+
+  void setPremiumFromSubscription(SubscriptionEntity subscription) {
+    if (subscription.isPremium) {
+      // Use the existing premium state with a placeholder user
+      // The next checkStatus() call will resolve the full user entity
+      final currentState = state;
+      if (currentState is SubscriptionPremium) {
+        // Already premium, re-emit to notify listeners
+        emit(SubscriptionState.premium(user: currentState.user));
+      } else {
+        // Transition to premium — emit loading then check status to get full user
+        emit(const SubscriptionState.loading());
+        checkStatus();
+      }
+    }
   }
 
   bool get isPremium => state is SubscriptionPremium;

@@ -4,8 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:glowy_wallpaper/core/routes/routes.dart';
+import 'package:glowy_wallpaper/core/services/ad_helper.dart';
 import 'package:glowy_wallpaper/core/widgets/app_error_widget.dart';
+import 'package:glowy_wallpaper/core/di/injection_container.dart';
 import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_cubit.dart';
+import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_state.dart';
+import 'package:glowy_wallpaper/features/premium/domain/usecases/get_subscription_status.dart';
+import 'package:glowy_wallpaper/core/usecases/usecase.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -28,6 +33,38 @@ class _SplashPageState extends State<SplashPage> {
     try {
       final subscriptionCubit = context.read<SubscriptionCubit>();
       await subscriptionCubit.checkStatus();
+
+      if (!mounted) return;
+
+      final subscriptionState = subscriptionCubit.state;
+
+      // Cold-start lapse detection: if premium, verify with server
+      if (subscriptionState is SubscriptionPremium) {
+        final getStatus = sl<GetSubscriptionStatus>();
+        final statusResult = await getStatus(NoParams());
+        statusResult.fold(
+          (_) {
+            // Network error — keep cached premium (optimistic)
+          },
+          (subscription) {
+            if (!subscription.isPremium) {
+              // Subscription lapsed — revert to free
+              subscriptionCubit.setGuest();
+            }
+          },
+        );
+      }
+
+      if (!mounted) return;
+
+      // Re-read state after potential lapse detection
+      final currentState = subscriptionCubit.state;
+
+      if (currentState is SubscriptionGuest) {
+        final adHelper = AdHelper.instance;
+        await adHelper.showAppOpenAd();
+      }
+
       if (mounted) {
         context.go(AppRoutes.home);
       }

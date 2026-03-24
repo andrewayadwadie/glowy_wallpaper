@@ -34,6 +34,115 @@ The app follows a freemium monetization model: free users see AdMob ads (banner 
 
 ---
 
+## API Collection
+
+> Backend REST API contracts that all feature phases consume. Base URL is configured per environment via Envied (`dev` / `staging` / `prod`). All responses follow the envelope: `{ "success": bool, "data": { ... }, "message": string }`.
+
+### API-1: App Data (Bootstrap)
+
+**`GET /api/v1/mobile/apps/{appId}`**
+
+Returns app metadata + categories list on cold start. Used by Splash → Home init.
+
+**Response fields:**
+
+| Field                          | Type     | Used In                          |
+| ------------------------------ | -------- | -------------------------------- |
+| `data.app.name`               | string   | Drawer header                    |
+| `data.app.description`        | string   | Drawer subtitle                  |
+| `data.app.about`              | string   | About page (drawer)              |
+| `data.app.privacyPolicy`      | string   | Privacy Policy page (drawer)     |
+| `data.app.termsOfUse`         | string   | Terms of Use page (drawer)       |
+| `data.app.androidShareLink`   | string   | Share App action (Android)       |
+| `data.app.iphoneShareLink`    | string   | Share App action (iOS)           |
+| `data.app.contactEmail`       | string   | Contact Us / Send Feedback       |
+| `data.app.categories[]`       | array    | Horizontal category carousel     |
+
+**Category object:**
+
+| Field          | Type   | Notes                                             |
+| -------------- | ------ | ------------------------------------------------- |
+| `id`           | string | UUID — used as `categoryId` in content/classification APIs |
+| `name`         | string | Display label in carousel chip                    |
+| `type`         | enum   | `IMAGES` \| `VIDEOS` \| `IMAGE_CLASSIFICATION`   |
+| `displayOrder` | int    | Sort order for carousel                           |
+| `imageCount`   | int    | Badge / subtitle count                            |
+
+---
+
+### API-2: Category Content (Images & Videos)
+
+**`GET /api/v1/mobile/apps/{appId}/categories/{categoryId}/content?page={page}&limit={limit}`**
+
+Returns paginated wallpaper items for categories of type `IMAGES` or `VIDEOS`. Displayed in the image grid or video grid.
+
+Optional query param: `&classificationId={classificationId}` — filters content within an `IMAGE_CLASSIFICATION` category to a specific classification.
+
+**Response `data.items[]` fields:**
+
+| Field                          | Type     | Notes                                      |
+| ------------------------------ | -------- | ------------------------------------------ |
+| `id`                           | string   | Wallpaper UUID                             |
+| `url`                          | string   | Full-resolution media URL                  |
+| `thumbUrl`                     | string   | Thumbnail URL for grid                     |
+| `isTopRated`                   | bool     | Can be used for badges / sorting           |
+| `mediaType`                    | enum     | `IMAGE` \| `VIDEO`                         |
+| `classificationId`             | string?  | `null` for non-classification categories   |
+| `classificationName`           | string?  | `null` for non-classification categories   |
+| `classificationThumbnailUrl`   | string?  | `null` for non-classification categories   |
+| `createdAt`                    | ISO 8601 | Sort / display date                        |
+
+**Response `data.pagination`:**
+
+| Field        | Type | Notes                    |
+| ------------ | ---- | ------------------------ |
+| `page`       | int  | Current page             |
+| `limit`      | int  | Items per page           |
+| `total`      | int  | Total item count         |
+| `totalPages` | int  | Used for `hasReachedEnd` |
+
+---
+
+### API-3: Classifications List
+
+**`GET /api/v1/mobile/apps/{appId}/categories/{categoryId}/classifications`**
+
+Returns classifications for categories of type `IMAGE_CLASSIFICATION`. Displayed as a bento grid. Only called when `category.type == IMAGE_CLASSIFICATION`.
+
+**Response `data.classifications[]` fields:**
+
+| Field          | Type   | Notes                                    |
+| -------------- | ------ | ---------------------------------------- |
+| `id`           | string | Classification UUID — used as `classificationId` in content API |
+| `name`         | string | Display label on bento card              |
+| `thumbnailUrl` | string | Bento card background image              |
+| `itemCount`    | int    | Badge count on card                      |
+
+---
+
+### API Flow Summary
+
+```
+App Launch
+  └─► API-1: GET /apps/{appId}
+        ├─► categories[] loaded into horizontal carousel
+        └─► app metadata cached for drawer
+
+User taps category:
+  ├─► type == IMAGES  → API-2: GET /categories/{id}/content?page=1&limit=20
+  │     └─► Image grid with pagination
+  ├─► type == VIDEOS  → API-2: GET /categories/{id}/content?page=1&limit=20
+  │     └─► Video grid with pagination
+  └─► type == IMAGE_CLASSIFICATION
+        └─► API-3: GET /categories/{id}/classifications
+              └─► Bento grid of classification cards
+                    └─► User taps classification
+                          └─► API-2: GET /categories/{id}/content?page=1&limit=20&classificationId={clsId}
+                                └─► Image grid with pagination (filtered)
+```
+
+---
+
 ## Phase 1 — Foundation & Scaffolding
 
 > Set up the Flutter project, Clean Architecture folders, core infrastructure, and native splash. The app compiles and navigates from splash to an empty Home shell.

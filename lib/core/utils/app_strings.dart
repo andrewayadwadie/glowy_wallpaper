@@ -109,4 +109,34 @@ abstract class AppStrings {
 
   // Similar Wallpapers
   static const String noSimilarWallpapers = 'No similar wallpapers found';
+
+  // Premium / Monetization
+  static const String getPremium = 'Get Premium';
+  static const String subscribeNow = 'Subscribe Now';
+  static const String restorePurchase = 'Restore Purchase';
+  static const String manageSubscription = 'Manage Subscription';
+  static const String monthly = 'Monthly';
+  static const String yearly = 'Yearly';
+  static const String free = 'Free';
+  static const String adsIncluded = 'Ads included';
+  static const String limitedDownloads = 'Limited downloads';
+  static const String limitedPreviews = 'Limited previews';
+  static const String adFree = 'Ad-free experience';
+  static const String unlimitedDownloads = 'Unlimited downloads';
+  static const String unlimitedPreviews = 'Unlimited previews';
+  static const String purchasePending = 'Purchase is being verified...';
+  static const String purchaseError = 'Purchase failed. Please try again.';
+  static const String purchaseSuccess = 'Premium activated!';
+  static const String restoreSuccess = 'Purchase restored!';
+  static const String restoreNotFound = 'No active subscription found';
+  static const String restoreError = 'Failed to restore purchase';
+  static const String adUnavailable = 'Ad unavailable. Please try again later';
+  static const String loadingProducts = 'Loading subscription plans...';
+  static const String productsError = 'Failed to load subscription plans';
+  static const String networkError =
+      'Network error. Please check your connection';
+  static const String verificationFailed =
+      'Verification failed. Please try again';
+  static const String subscriptionExpired = 'Your subscription has expired';
+  static const String subscriptionLapsed = 'Your subscription has lapsed';
 }

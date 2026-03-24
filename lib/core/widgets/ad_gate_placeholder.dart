@@ -1,10 +1,111 @@
-/// Placeholder for Phase 5 rewarded ad gate.
-/// For free users, calls [onProceed] directly (auto-proceeds without an ad).
-/// In Phase 5, this will be replaced with a rewarded ad flow.
-Future<void> adGatePlaceholder({
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:glowy_wallpaper/core/services/ad_helper.dart';
+import 'package:glowy_wallpaper/core/utils/app_strings.dart';
+import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_cubit.dart';
+import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_state.dart';
+
+/// Rewarded ad gate for download/preview actions.
+/// For premium users, immediately proceeds with the action.
+/// For free users, shows a rewarded ad before allowing the action.
+/// Returns true if the action should proceed, false otherwise.
+Future<bool> adGatePlaceholder({
   required Future<void> Function() onProceed,
+  required String action,
 }) async {
-  // In Phase 5, check subscription state and show a rewarded ad for free users.
-  // For now, auto-proceed for all users.
-  await onProceed();
+  final navigatorKey = GlobalKey<NavigatorState>();
+
+  final result = await navigatorKey.currentState?.push<bool>(
+    MaterialPageRoute(
+      builder: (context) => AdGateWidget(action: action, onProceed: onProceed),
+    ),
+  );
+
+  return result ?? false;
+}
+
+class AdGateWidget extends StatefulWidget {
+  final String action;
+  final Future<void> Function() onProceed;
+
+  const AdGateWidget({
+    super.key,
+    required this.action,
+    required this.onProceed,
+  });
+
+  @override
+  State<AdGateWidget> createState() => _AdGateWidgetState();
+}
+
+class _AdGateWidgetState extends State<AdGateWidget> {
+  bool _isShowingAd = false;
+  bool _proceeded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAndShowAd();
+  }
+
+  Future<void> _checkAndShowAd() async {
+    final subscriptionState = context.read<SubscriptionCubit>().state;
+
+    if (subscriptionState is SubscriptionPremium) {
+      await _proceedWithAction();
+      return;
+    }
+
+    final adHelper = AdHelper.instance;
+
+    if (_isShowingAd) return;
+    setState(() => _isShowingAd = true);
+
+    final rewardEarned = await adHelper.showRewardedAd(action: widget.action);
+
+    if (rewardEarned) {
+      await _proceedWithAction();
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(AppStrings.adUnavailable)));
+      }
+    }
+
+    if (mounted) {
+      Navigator.of(context).pop(rewardEarned);
+    }
+  }
+
+  Future<void> _proceedWithAction() async {
+    if (_proceeded) return;
+    _proceeded = true;
+    await widget.onProceed();
+    if (mounted) {
+      Navigator.of(context).pop(true);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black54,
+      body: Center(
+        child: _isShowingAd
+            ? const CircularProgressIndicator()
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Loading ad...',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
 }

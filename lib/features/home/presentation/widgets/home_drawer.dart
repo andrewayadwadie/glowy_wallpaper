@@ -1,9 +1,13 @@
+import 'dart:io' show Platform;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/utils/app_strings.dart';
+import '../../../auth/presentation/cubit/subscription_cubit.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -69,6 +73,16 @@ class HomeDrawer extends StatelessWidget {
               context.push(AppRoutes.premium);
             },
           ),
+          if (context.watch<SubscriptionCubit>().isPremium)
+            _buildMenuItem(
+              context,
+              Icons.manage_accounts_outlined,
+              AppStrings.manageSubscription,
+              () {
+                Navigator.pop(context);
+                _openSubscriptionManagement(context);
+              },
+            ),
           const Divider(),
           _buildMenuItem(
             context,
@@ -109,6 +123,22 @@ class HomeDrawer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _openSubscriptionManagement(BuildContext context) async {
+    final Uri url;
+    if (Platform.isIOS) {
+      url = Uri.parse('https://apps.apple.com/account/subscriptions');
+    } else {
+      url = Uri.parse('https://play.google.com/store/account/subscriptions');
+    }
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open subscription manager')),
+        );
+      }
+    }
   }
 
   ListTile _buildMenuItem(
