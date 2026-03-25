@@ -10,18 +10,20 @@ import '../repositories/wallpaper_repository.dart';
 class GetWallpapersByCategoryParams extends Equatable {
   final String categoryId;
   final int page;
-  final int perPage;
+  final int limit;
+  final String? classificationId;
   final CancelToken? cancelToken;
 
   const GetWallpapersByCategoryParams({
     required this.categoryId,
     required this.page,
-    this.perPage = 20,
+    this.limit = 20,
+    this.classificationId,
     this.cancelToken,
   });
 
   @override
-  List<Object?> get props => [categoryId, page, perPage];
+  List<Object?> get props => [categoryId, page, limit, classificationId];
 }
 
 class GetWallpapersByCategory
@@ -39,7 +41,8 @@ class GetWallpapersByCategory
   ) => repository.getWallpapersByCategory(
     categoryId: params.categoryId,
     page: params.page,
-    perPage: params.perPage,
+    limit: params.limit,
+    classificationId: params.classificationId,
     cancelToken: params.cancelToken,
   );
 }

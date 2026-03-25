@@ -10,15 +10,14 @@ abstract class WallpaperModel with _$WallpaperModel {
 
   const factory WallpaperModel({
     required String id,
-    required String title,
-    @JsonKey(name: 'image_url') required String imageUrl,
-    @JsonKey(name: 'thumbnail_url') required String thumbnailUrl,
-    @JsonKey(name: 'video_url') String? videoUrl,
-    @JsonKey(name: 'is_premium') required bool isPremium,
-    @JsonKey(name: 'category_id') required String categoryId,
-    @JsonKey(name: 'classification_ids')
-    @Default([])
-    List<String> classificationIds,
+    required String url,
+    required String thumbUrl,
+    required bool isTopRated,
+    required String mediaType,
+    String? classificationId,
+    String? classificationName,
+    String? classificationThumbnailUrl,
+    required String createdAt,
   }) = _WallpaperModel;
 
   factory WallpaperModel.fromJson(Map<String, dynamic> json) =>
@@ -26,12 +25,13 @@ abstract class WallpaperModel with _$WallpaperModel {
 
   WallpaperEntity toEntity() => WallpaperEntity(
     id: id,
-    title: title,
-    imageUrl: imageUrl,
-    thumbnailUrl: thumbnailUrl,
-    videoUrl: videoUrl,
-    isPremium: isPremium,
-    categoryId: categoryId,
-    classificationIds: classificationIds,
+    url: url,
+    thumbUrl: thumbUrl,
+    isTopRated: isTopRated,
+    mediaType: mediaType == 'VIDEO' ? MediaType.video : MediaType.image,
+    classificationId: classificationId,
+    classificationName: classificationName,
+    classificationThumbnailUrl: classificationThumbnailUrl,
+    createdAt: DateTime.parse(createdAt),
   );
 }

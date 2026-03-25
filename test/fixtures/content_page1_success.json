@@ -1,0 +1,36 @@
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": "wp-uuid-1",
+        "url": "https://cdn.example.com/wallpapers/neon-city-full.jpg",
+        "thumbUrl": "https://cdn.example.com/wallpapers/neon-city-thumb.jpg",
+        "isTopRated": true,
+        "mediaType": "IMAGE",
+        "classificationId": null,
+        "classificationName": null,
+        "classificationThumbnailUrl": null,
+        "createdAt": "2025-11-15T08:30:00.000Z"
+      },
+      {
+        "id": "wp-uuid-2",
+        "url": "https://cdn.example.com/wallpapers/glow-loop.mp4",
+        "thumbUrl": "https://cdn.example.com/wallpapers/glow-loop-thumb.jpg",
+        "isTopRated": false,
+        "mediaType": "VIDEO",
+        "classificationId": null,
+        "classificationName": null,
+        "classificationThumbnailUrl": null,
+        "createdAt": "2025-12-01T10:00:00.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "limit": 20,
+      "total": 50,
+      "totalPages": 3
+    }
+  },
+  "message": "Content retrieved successfully"
+}

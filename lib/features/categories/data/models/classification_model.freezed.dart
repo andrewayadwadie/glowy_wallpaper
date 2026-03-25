@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ClassificationModel {
 
- String get id; String get name;@JsonKey(name: 'thumbnail_url') String get thumbnailUrl;@JsonKey(name: 'wallpaper_count') int get wallpaperCount;
+ String get id; String get name;@JsonKey(name: 'thumbnailUrl') String get thumbnailUrl;@JsonKey(name: 'itemCount') int get itemCount;
 /// Create a copy of ClassificationModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ClassificationModelCopyWith<ClassificationModel> get copyWith => _$Classificati
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClassificationModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.wallpaperCount, wallpaperCount) || other.wallpaperCount == wallpaperCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ClassificationModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.itemCount, itemCount) || other.itemCount == itemCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,thumbnailUrl,wallpaperCount);
+int get hashCode => Object.hash(runtimeType,id,name,thumbnailUrl,itemCount);
 
 @override
 String toString() {
-  return 'ClassificationModel(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, wallpaperCount: $wallpaperCount)';
+  return 'ClassificationModel(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, itemCount: $itemCount)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ClassificationModelCopyWith<$Res>  {
   factory $ClassificationModelCopyWith(ClassificationModel value, $Res Function(ClassificationModel) _then) = _$ClassificationModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String name,@JsonKey(name: 'thumbnail_url') String thumbnailUrl,@JsonKey(name: 'wallpaper_count') int wallpaperCount
+ String id, String name,@JsonKey(name: 'thumbnailUrl') String thumbnailUrl,@JsonKey(name: 'itemCount') int itemCount
 });
 
 
@@ -65,12 +65,12 @@ class _$ClassificationModelCopyWithImpl<$Res>
 
 /// Create a copy of ClassificationModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? thumbnailUrl = null,Object? wallpaperCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? thumbnailUrl = null,Object? itemCount = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,thumbnailUrl: null == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-as String,wallpaperCount: null == wallpaperCount ? _self.wallpaperCount : wallpaperCount // ignore: cast_nullable_to_non_nullable
+as String,itemCount: null == itemCount ? _self.itemCount : itemCount // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -156,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name, @JsonKey(name: 'thumbnail_url')  String thumbnailUrl, @JsonKey(name: 'wallpaper_count')  int wallpaperCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name, @JsonKey(name: 'thumbnailUrl')  String thumbnailUrl, @JsonKey(name: 'itemCount')  int itemCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ClassificationModel() when $default != null:
-return $default(_that.id,_that.name,_that.thumbnailUrl,_that.wallpaperCount);case _:
+return $default(_that.id,_that.name,_that.thumbnailUrl,_that.itemCount);case _:
   return orElse();
 
 }
@@ -177,10 +177,10 @@ return $default(_that.id,_that.name,_that.thumbnailUrl,_that.wallpaperCount);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name, @JsonKey(name: 'thumbnail_url')  String thumbnailUrl, @JsonKey(name: 'wallpaper_count')  int wallpaperCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name, @JsonKey(name: 'thumbnailUrl')  String thumbnailUrl, @JsonKey(name: 'itemCount')  int itemCount)  $default,) {final _that = this;
 switch (_that) {
 case _ClassificationModel():
-return $default(_that.id,_that.name,_that.thumbnailUrl,_that.wallpaperCount);case _:
+return $default(_that.id,_that.name,_that.thumbnailUrl,_that.itemCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +197,10 @@ return $default(_that.id,_that.name,_that.thumbnailUrl,_that.wallpaperCount);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name, @JsonKey(name: 'thumbnail_url')  String thumbnailUrl, @JsonKey(name: 'wallpaper_count')  int wallpaperCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name, @JsonKey(name: 'thumbnailUrl')  String thumbnailUrl, @JsonKey(name: 'itemCount')  int itemCount)?  $default,) {final _that = this;
 switch (_that) {
 case _ClassificationModel() when $default != null:
-return $default(_that.id,_that.name,_that.thumbnailUrl,_that.wallpaperCount);case _:
+return $default(_that.id,_that.name,_that.thumbnailUrl,_that.itemCount);case _:
   return null;
 
 }
@@ -212,13 +212,13 @@ return $default(_that.id,_that.name,_that.thumbnailUrl,_that.wallpaperCount);cas
 @JsonSerializable()
 
 class _ClassificationModel extends ClassificationModel {
-  const _ClassificationModel({required this.id, required this.name, @JsonKey(name: 'thumbnail_url') required this.thumbnailUrl, @JsonKey(name: 'wallpaper_count') required this.wallpaperCount}): super._();
+  const _ClassificationModel({required this.id, required this.name, @JsonKey(name: 'thumbnailUrl') required this.thumbnailUrl, @JsonKey(name: 'itemCount') required this.itemCount}): super._();
   factory _ClassificationModel.fromJson(Map<String, dynamic> json) => _$ClassificationModelFromJson(json);
 
 @override final  String id;
 @override final  String name;
-@override@JsonKey(name: 'thumbnail_url') final  String thumbnailUrl;
-@override@JsonKey(name: 'wallpaper_count') final  int wallpaperCount;
+@override@JsonKey(name: 'thumbnailUrl') final  String thumbnailUrl;
+@override@JsonKey(name: 'itemCount') final  int itemCount;
 
 /// Create a copy of ClassificationModel
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClassificationModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.wallpaperCount, wallpaperCount) || other.wallpaperCount == wallpaperCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ClassificationModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.itemCount, itemCount) || other.itemCount == itemCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,thumbnailUrl,wallpaperCount);
+int get hashCode => Object.hash(runtimeType,id,name,thumbnailUrl,itemCount);
 
 @override
 String toString() {
-  return 'ClassificationModel(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, wallpaperCount: $wallpaperCount)';
+  return 'ClassificationModel(id: $id, name: $name, thumbnailUrl: $thumbnailUrl, itemCount: $itemCount)';
 }
 
 
@@ -253,7 +253,7 @@ abstract mixin class _$ClassificationModelCopyWith<$Res> implements $Classificat
   factory _$ClassificationModelCopyWith(_ClassificationModel value, $Res Function(_ClassificationModel) _then) = __$ClassificationModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name,@JsonKey(name: 'thumbnail_url') String thumbnailUrl,@JsonKey(name: 'wallpaper_count') int wallpaperCount
+ String id, String name,@JsonKey(name: 'thumbnailUrl') String thumbnailUrl,@JsonKey(name: 'itemCount') int itemCount
 });
 
 
@@ -270,12 +270,12 @@ class __$ClassificationModelCopyWithImpl<$Res>
 
 /// Create a copy of ClassificationModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? thumbnailUrl = null,Object? wallpaperCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? thumbnailUrl = null,Object? itemCount = null,}) {
   return _then(_ClassificationModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,thumbnailUrl: null == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-as String,wallpaperCount: null == wallpaperCount ? _self.wallpaperCount : wallpaperCount // ignore: cast_nullable_to_non_nullable
+as String,itemCount: null == itemCount ? _self.itemCount : itemCount // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

@@ -31,7 +31,6 @@ import '../../features/wallpapers/data/datasources/wallpaper_remote_data_source.
 import '../../features/wallpapers/data/repositories/wallpaper_repository_impl.dart';
 import '../../features/wallpapers/domain/repositories/wallpaper_repository.dart';
 import '../../features/wallpapers/domain/usecases/get_wallpapers_by_category.dart';
-import '../../features/wallpapers/domain/usecases/get_wallpapers_by_classification.dart';
 import '../../features/wallpaper_detail/data/datasources/similar_wallpaper_remote_data_source.dart';
 import '../../features/wallpaper_detail/data/repositories/similar_wallpaper_repository_impl.dart';
 import '../../features/wallpaper_detail/domain/repositories/similar_wallpaper_repository.dart';
@@ -67,6 +66,11 @@ import '../../features/premium/domain/usecases/restore_purchases.dart';
 import '../../features/premium/presentation/cubit/premium_cubit.dart';
 import '../../features/notifications/domain/services/notification_service.dart';
 import '../../features/notifications/data/services/notification_service_impl.dart';
+import '../../features/app/data/datasources/bootstrap_remote_data_source.dart';
+import '../../features/app/data/datasources/bootstrap_local_data_source.dart';
+import '../../features/app/data/repositories/app_repository_impl.dart';
+import '../../features/app/domain/repositories/app_repository.dart';
+import '../../features/app/domain/usecases/get_app_data.dart';
 
 final sl = GetIt.instance;
 
@@ -79,6 +83,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => InternetConnectionChecker.createInstance());
   sl.registerLazySingleton(() => const FlutterSecureStorage());
 
+  // Authenticated Dio (with AuthInterceptor) — for protected endpoints
   sl.registerLazySingleton(() {
     final dio = Dio(
       BaseOptions(
@@ -107,6 +112,33 @@ Future<void> init() async {
 
     return dio;
   });
+
+  // Public Dio (no AuthInterceptor) — for public endpoints (bootstrap, content, classifications)
+  sl.registerLazySingleton<Dio>(() {
+    final dio = Dio(
+      BaseOptions(
+        baseUrl: AppConfig.baseUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+
+    if (AppConfig.enableLogging) {
+      dio.interceptors.add(
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+          responseHeader: true,
+        ),
+      );
+    }
+
+    return dio;
+  }, instanceName: 'publicDio');
 
   //! Firebase & Ads
   sl.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
@@ -147,7 +179,7 @@ Future<void> init() async {
 
   // Category Data Sources
   sl.registerLazySingleton<CategoryRemoteDataSource>(
-    () => CategoryRemoteDataSource(sl<Dio>()),
+    () => CategoryRemoteDataSource(sl<Dio>(instanceName: 'publicDio')),
   );
   sl.registerLazySingleton<CategoryLocalDataSource>(
     () => CategoryLocalDataSourceImpl(Hive.box('categories')),
@@ -155,7 +187,7 @@ Future<void> init() async {
 
   // Wallpaper Data Sources
   sl.registerLazySingleton<WallpaperRemoteDataSource>(
-    () => WallpaperRemoteDataSource(sl<Dio>()),
+    () => WallpaperRemoteDataSource(sl<Dio>(instanceName: 'publicDio')),
   );
 
   // Category Repository
@@ -165,7 +197,7 @@ Future<void> init() async {
 
   // Wallpaper Repository
   sl.registerLazySingleton<WallpaperRepository>(
-    () => WallpaperRepositoryImpl(sl(), sl()),
+    () => WallpaperRepositoryImpl(sl()),
   );
 
   // Category Use Cases
@@ -174,15 +206,14 @@ Future<void> init() async {
 
   // Wallpaper Use Cases
   sl.registerLazySingleton(() => GetWallpapersByCategory(sl()));
-  sl.registerLazySingleton(() => GetWallpapersByClassification(sl()));
 
   // Home Cubit
   sl.registerFactory(
     () => HomeCubit(
-      getCategories: sl(),
+      getAppData: sl(),
       getWallpapersByCategory: sl(),
       getClassifications: sl(),
-      categoryRepo: sl<CategoryRepository>() as CategoryRepositoryImpl,
+      appRepo: sl<AppRepository>() as AppRepositoryImpl,
     ),
   );
 
@@ -267,10 +298,16 @@ Future<void> init() async {
   sl.registerLazySingleton<AdHelper>(() => AdHelper.instance);
 
   // Premium Hive Boxes
-  final subscriptionCacheBox = Hive.box('subscription_cache') as Box<String>;
-  final adFrequencyBox = Hive.box('ad_frequency') as Box<String>;
-  sl.registerLazySingleton(() => subscriptionCacheBox);
-  sl.registerLazySingleton(() => adFrequencyBox);
+  final subscriptionCacheBox = Hive.box<String>('subscription_cache');
+  final adFrequencyBox = Hive.box<String>('ad_frequency');
+  sl.registerLazySingleton<Box<String>>(
+    () => subscriptionCacheBox,
+    instanceName: 'subscriptionCacheBox',
+  );
+  sl.registerLazySingleton<Box<String>>(
+    () => adFrequencyBox,
+    instanceName: 'adFrequencyBox',
+  );
 
   // Premium Data Sources
   sl.registerLazySingleton<IAPDataSource>(
@@ -280,7 +317,10 @@ Future<void> init() async {
     () => PremiumRemoteSource(sl<Dio>()),
   );
   sl.registerLazySingleton<PremiumLocalSource>(
-    () => PremiumLocalSource(subscriptionCacheBox, adFrequencyBox),
+    () => PremiumLocalSource(
+      sl<Box<String>>(instanceName: 'subscriptionCacheBox'),
+      sl<Box<String>>(instanceName: 'adFrequencyBox'),
+    ),
   );
 
   // Premium Repository
@@ -304,6 +344,18 @@ Future<void> init() async {
       analytics: sl(),
     ),
   );
+
+  //! Phase 7 — App Bootstrap (public API)
+  sl.registerLazySingleton<BootstrapRemoteDataSource>(
+    () => BootstrapRemoteDataSource(sl<Dio>(instanceName: 'publicDio')),
+  );
+  sl.registerLazySingleton<BootstrapLocalDataSource>(
+    () => BootstrapLocalDataSourceImpl(Hive.box('app_bootstrap')),
+  );
+  sl.registerLazySingleton<AppRepository>(
+    () => AppRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
+  );
+  sl.registerLazySingleton(() => GetAppData(sl()));
 
   //! Phase 6 — Notifications
   sl.registerLazySingleton<NotificationService>(

@@ -74,7 +74,7 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
               ),
               actions: [
                 if (state.wallpapers.isNotEmpty &&
-                    state.wallpapers[state.currentIndex].videoUrl != null)
+                    state.wallpapers[state.currentIndex].mediaType == MediaType.video)
                   IconButton(
                     icon: Icon(
                       state.isMuted
@@ -219,7 +219,7 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                           pageBuilder: (ctx, anim, secondary) =>
                                               PhoneFramePreview(
                                                 imageUrl:
-                                                    currentWallpaper.imageUrl,
+                                                    currentWallpaper.url,
                                               ),
                                         ),
                                       );
@@ -253,13 +253,13 @@ class _WallpaperPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (wallpaper.videoUrl != null && isCurrentPage) {
+    if (wallpaper.mediaType == MediaType.video && isCurrentPage) {
       return _VideoPage(cubit: cubit, wallpaper: wallpaper);
     }
     return Hero(
       tag: 'wallpaper_${wallpaper.id}',
       child: AppCachedImage(
-        imageUrl: wallpaper.imageUrl,
+        imageUrl: wallpaper.url,
         width: 1.sw,
         height: 1.sh,
         fit: BoxFit.cover,
@@ -316,7 +316,7 @@ class _VideoPageState extends State<_VideoPage> {
       return Hero(
         tag: 'wallpaper_${widget.wallpaper.id}',
         child: AppCachedImage(
-          imageUrl: widget.wallpaper.thumbnailUrl,
+          imageUrl: widget.wallpaper.thumbUrl,
           width: 1.sw,
           height: 1.sh,
           fit: BoxFit.cover,

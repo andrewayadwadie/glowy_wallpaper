@@ -11,17 +11,18 @@ abstract class ClassificationModel with _$ClassificationModel {
   const factory ClassificationModel({
     required String id,
     required String name,
-    @JsonKey(name: 'thumbnail_url') required String thumbnailUrl,
-    @JsonKey(name: 'wallpaper_count') required int wallpaperCount,
+    @JsonKey(name: 'thumbnailUrl') required String thumbnailUrl,
+    @JsonKey(name: 'itemCount') required int itemCount,
   }) = _ClassificationModel;
 
   factory ClassificationModel.fromJson(Map<String, dynamic> json) =>
       _$ClassificationModelFromJson(json);
 
-  ClassificationEntity toEntity() => ClassificationEntity(
+  ClassificationEntity toEntity({required String categoryId}) => ClassificationEntity(
     id: id,
+    categoryId: categoryId,
     name: name,
     thumbnailUrl: thumbnailUrl,
-    wallpaperCount: wallpaperCount,
+    itemCount: itemCount,
   );
 }

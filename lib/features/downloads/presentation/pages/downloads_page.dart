@@ -38,11 +38,13 @@ class _DownloadsPageState extends State<DownloadsPage> {
         .map(
           (r) => WallpaperEntity(
             id: r.wallpaperId,
-            title: r.title,
-            imageUrl: r.imageUrl,
-            thumbnailUrl: r.thumbnailUrl,
-            isPremium: false,
-            categoryId: '',
+            url: r.imageUrl,
+            thumbUrl: r.thumbnailUrl,
+            isTopRated: false,
+            mediaType: r.fileType == WallpaperFileType.video
+                ? MediaType.video
+                : MediaType.image,
+            createdAt: r.downloadedAt,
           ),
         )
         .toList();

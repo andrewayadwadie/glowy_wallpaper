@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CategoryModel {
 
- String get id; String get name; String get type;@JsonKey(name: 'thumbnail_url') String? get thumbnailUrl;@JsonKey(name: 'display_order') int get displayOrder;
+ String get id; String get name; String get type;@JsonKey(name: 'displayOrder') int get displayOrder;@JsonKey(name: 'imageCount') int get imageCount;
 /// Create a copy of CategoryModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CategoryModelCopyWith<CategoryModel> get copyWith => _$CategoryModelCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.type, type) || other.type == type)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.type, type) || other.type == type)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder)&&(identical(other.imageCount, imageCount) || other.imageCount == imageCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,type,thumbnailUrl,displayOrder);
+int get hashCode => Object.hash(runtimeType,id,name,type,displayOrder,imageCount);
 
 @override
 String toString() {
-  return 'CategoryModel(id: $id, name: $name, type: $type, thumbnailUrl: $thumbnailUrl, displayOrder: $displayOrder)';
+  return 'CategoryModel(id: $id, name: $name, type: $type, displayOrder: $displayOrder, imageCount: $imageCount)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CategoryModelCopyWith<$Res>  {
   factory $CategoryModelCopyWith(CategoryModel value, $Res Function(CategoryModel) _then) = _$CategoryModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String type,@JsonKey(name: 'thumbnail_url') String? thumbnailUrl,@JsonKey(name: 'display_order') int displayOrder
+ String id, String name, String type,@JsonKey(name: 'displayOrder') int displayOrder,@JsonKey(name: 'imageCount') int imageCount
 });
 
 
@@ -65,13 +65,13 @@ class _$CategoryModelCopyWithImpl<$Res>
 
 /// Create a copy of CategoryModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? type = null,Object? thumbnailUrl = freezed,Object? displayOrder = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? type = null,Object? displayOrder = null,Object? imageCount = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as String,thumbnailUrl: freezed == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-as String?,displayOrder: null == displayOrder ? _self.displayOrder : displayOrder // ignore: cast_nullable_to_non_nullable
+as String,displayOrder: null == displayOrder ? _self.displayOrder : displayOrder // ignore: cast_nullable_to_non_nullable
+as int,imageCount: null == imageCount ? _self.imageCount : imageCount // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -157,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String type, @JsonKey(name: 'thumbnail_url')  String? thumbnailUrl, @JsonKey(name: 'display_order')  int displayOrder)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String type, @JsonKey(name: 'displayOrder')  int displayOrder, @JsonKey(name: 'imageCount')  int imageCount)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CategoryModel() when $default != null:
-return $default(_that.id,_that.name,_that.type,_that.thumbnailUrl,_that.displayOrder);case _:
+return $default(_that.id,_that.name,_that.type,_that.displayOrder,_that.imageCount);case _:
   return orElse();
 
 }
@@ -178,10 +178,10 @@ return $default(_that.id,_that.name,_that.type,_that.thumbnailUrl,_that.displayO
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String type, @JsonKey(name: 'thumbnail_url')  String? thumbnailUrl, @JsonKey(name: 'display_order')  int displayOrder)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String type, @JsonKey(name: 'displayOrder')  int displayOrder, @JsonKey(name: 'imageCount')  int imageCount)  $default,) {final _that = this;
 switch (_that) {
 case _CategoryModel():
-return $default(_that.id,_that.name,_that.type,_that.thumbnailUrl,_that.displayOrder);case _:
+return $default(_that.id,_that.name,_that.type,_that.displayOrder,_that.imageCount);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +198,10 @@ return $default(_that.id,_that.name,_that.type,_that.thumbnailUrl,_that.displayO
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String type, @JsonKey(name: 'thumbnail_url')  String? thumbnailUrl, @JsonKey(name: 'display_order')  int displayOrder)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String type, @JsonKey(name: 'displayOrder')  int displayOrder, @JsonKey(name: 'imageCount')  int imageCount)?  $default,) {final _that = this;
 switch (_that) {
 case _CategoryModel() when $default != null:
-return $default(_that.id,_that.name,_that.type,_that.thumbnailUrl,_that.displayOrder);case _:
+return $default(_that.id,_that.name,_that.type,_that.displayOrder,_that.imageCount);case _:
   return null;
 
 }
@@ -213,14 +213,14 @@ return $default(_that.id,_that.name,_that.type,_that.thumbnailUrl,_that.displayO
 @JsonSerializable()
 
 class _CategoryModel extends CategoryModel {
-  const _CategoryModel({required this.id, required this.name, required this.type, @JsonKey(name: 'thumbnail_url') this.thumbnailUrl, @JsonKey(name: 'display_order') required this.displayOrder}): super._();
+  const _CategoryModel({required this.id, required this.name, required this.type, @JsonKey(name: 'displayOrder') required this.displayOrder, @JsonKey(name: 'imageCount') required this.imageCount}): super._();
   factory _CategoryModel.fromJson(Map<String, dynamic> json) => _$CategoryModelFromJson(json);
 
 @override final  String id;
 @override final  String name;
 @override final  String type;
-@override@JsonKey(name: 'thumbnail_url') final  String? thumbnailUrl;
-@override@JsonKey(name: 'display_order') final  int displayOrder;
+@override@JsonKey(name: 'displayOrder') final  int displayOrder;
+@override@JsonKey(name: 'imageCount') final  int imageCount;
 
 /// Create a copy of CategoryModel
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.type, type) || other.type == type)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryModel&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.type, type) || other.type == type)&&(identical(other.displayOrder, displayOrder) || other.displayOrder == displayOrder)&&(identical(other.imageCount, imageCount) || other.imageCount == imageCount));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,type,thumbnailUrl,displayOrder);
+int get hashCode => Object.hash(runtimeType,id,name,type,displayOrder,imageCount);
 
 @override
 String toString() {
-  return 'CategoryModel(id: $id, name: $name, type: $type, thumbnailUrl: $thumbnailUrl, displayOrder: $displayOrder)';
+  return 'CategoryModel(id: $id, name: $name, type: $type, displayOrder: $displayOrder, imageCount: $imageCount)';
 }
 
 
@@ -255,7 +255,7 @@ abstract mixin class _$CategoryModelCopyWith<$Res> implements $CategoryModelCopy
   factory _$CategoryModelCopyWith(_CategoryModel value, $Res Function(_CategoryModel) _then) = __$CategoryModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String type,@JsonKey(name: 'thumbnail_url') String? thumbnailUrl,@JsonKey(name: 'display_order') int displayOrder
+ String id, String name, String type,@JsonKey(name: 'displayOrder') int displayOrder,@JsonKey(name: 'imageCount') int imageCount
 });
 
 
@@ -272,13 +272,13 @@ class __$CategoryModelCopyWithImpl<$Res>
 
 /// Create a copy of CategoryModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? type = null,Object? thumbnailUrl = freezed,Object? displayOrder = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? type = null,Object? displayOrder = null,Object? imageCount = null,}) {
   return _then(_CategoryModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as String,thumbnailUrl: freezed == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-as String?,displayOrder: null == displayOrder ? _self.displayOrder : displayOrder // ignore: cast_nullable_to_non_nullable
+as String,displayOrder: null == displayOrder ? _self.displayOrder : displayOrder // ignore: cast_nullable_to_non_nullable
+as int,imageCount: null == imageCount ? _self.imageCount : imageCount // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

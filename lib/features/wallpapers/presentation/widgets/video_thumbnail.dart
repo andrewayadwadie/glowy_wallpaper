@@ -27,14 +27,14 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
   @override
   void initState() {
     super.initState();
-    if (widget.shouldAutoPlay && widget.wallpaper.videoUrl != null) {
+    if (widget.shouldAutoPlay && widget.wallpaper.mediaType == MediaType.video) {
       _initializeController();
     }
   }
 
   void _initializeController() {
     _controller =
-        VideoPlayerController.networkUrl(Uri.parse(widget.wallpaper.videoUrl!))
+        VideoPlayerController.networkUrl(Uri.parse(widget.wallpaper.url))
           ..initialize().then((_) {
             if (mounted) {
               setState(() {});
@@ -55,7 +55,7 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
         _controller!.pause();
       } else if (widget.shouldAutoPlay &&
           _controller == null &&
-          widget.wallpaper.videoUrl != null) {
+          widget.wallpaper.mediaType == MediaType.video) {
         _initializeController();
       }
     }
@@ -89,7 +89,7 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
               )
             else
               AppCachedImage(
-                imageUrl: widget.wallpaper.thumbnailUrl,
+                imageUrl: widget.wallpaper.thumbUrl,
                 fit: BoxFit.cover,
               ),
             if (!widget.shouldAutoPlay ||

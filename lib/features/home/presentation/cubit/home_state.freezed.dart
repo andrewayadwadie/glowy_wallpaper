@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- Status get categoriesStatus; List<CategoryEntity> get categories; int get selectedCategoryIndex; Status get contentStatus; List<WallpaperEntity> get wallpapers; List<ClassificationEntity> get classifications; int get currentPage; bool get hasReachedEnd; bool get isLoadingMore; String? get errorMessage;
+ Status get categoriesStatus; List<CategoryEntity> get categories; int get selectedCategoryIndex; Status get contentStatus; List<WallpaperEntity> get wallpapers; List<ClassificationEntity> get classifications; int get currentPage; bool get hasReachedEnd; bool get isLoadingMore; AppMetadataEntity? get appMetadata; String? get errorMessage;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.categoriesStatus, categoriesStatus) || other.categoriesStatus == categoriesStatus)&&const DeepCollectionEquality().equals(other.categories, categories)&&(identical(other.selectedCategoryIndex, selectedCategoryIndex) || other.selectedCategoryIndex == selectedCategoryIndex)&&(identical(other.contentStatus, contentStatus) || other.contentStatus == contentStatus)&&const DeepCollectionEquality().equals(other.wallpapers, wallpapers)&&const DeepCollectionEquality().equals(other.classifications, classifications)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.categoriesStatus, categoriesStatus) || other.categoriesStatus == categoriesStatus)&&const DeepCollectionEquality().equals(other.categories, categories)&&(identical(other.selectedCategoryIndex, selectedCategoryIndex) || other.selectedCategoryIndex == selectedCategoryIndex)&&(identical(other.contentStatus, contentStatus) || other.contentStatus == contentStatus)&&const DeepCollectionEquality().equals(other.wallpapers, wallpapers)&&const DeepCollectionEquality().equals(other.classifications, classifications)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.appMetadata, appMetadata) || other.appMetadata == appMetadata)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,categoriesStatus,const DeepCollectionEquality().hash(categories),selectedCategoryIndex,contentStatus,const DeepCollectionEquality().hash(wallpapers),const DeepCollectionEquality().hash(classifications),currentPage,hasReachedEnd,isLoadingMore,errorMessage);
+int get hashCode => Object.hash(runtimeType,categoriesStatus,const DeepCollectionEquality().hash(categories),selectedCategoryIndex,contentStatus,const DeepCollectionEquality().hash(wallpapers),const DeepCollectionEquality().hash(classifications),currentPage,hasReachedEnd,isLoadingMore,appMetadata,errorMessage);
 
 @override
 String toString() {
-  return 'HomeState(categoriesStatus: $categoriesStatus, categories: $categories, selectedCategoryIndex: $selectedCategoryIndex, contentStatus: $contentStatus, wallpapers: $wallpapers, classifications: $classifications, currentPage: $currentPage, hasReachedEnd: $hasReachedEnd, isLoadingMore: $isLoadingMore, errorMessage: $errorMessage)';
+  return 'HomeState(categoriesStatus: $categoriesStatus, categories: $categories, selectedCategoryIndex: $selectedCategoryIndex, contentStatus: $contentStatus, wallpapers: $wallpapers, classifications: $classifications, currentPage: $currentPage, hasReachedEnd: $hasReachedEnd, isLoadingMore: $isLoadingMore, appMetadata: $appMetadata, errorMessage: $errorMessage)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- Status categoriesStatus, List<CategoryEntity> categories, int selectedCategoryIndex, Status contentStatus, List<WallpaperEntity> wallpapers, List<ClassificationEntity> classifications, int currentPage, bool hasReachedEnd, bool isLoadingMore, String? errorMessage
+ Status categoriesStatus, List<CategoryEntity> categories, int selectedCategoryIndex, Status contentStatus, List<WallpaperEntity> wallpapers, List<ClassificationEntity> classifications, int currentPage, bool hasReachedEnd, bool isLoadingMore, AppMetadataEntity? appMetadata, String? errorMessage
 });
 
 
@@ -62,7 +62,7 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? categoriesStatus = null,Object? categories = null,Object? selectedCategoryIndex = null,Object? contentStatus = null,Object? wallpapers = null,Object? classifications = null,Object? currentPage = null,Object? hasReachedEnd = null,Object? isLoadingMore = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? categoriesStatus = null,Object? categories = null,Object? selectedCategoryIndex = null,Object? contentStatus = null,Object? wallpapers = null,Object? classifications = null,Object? currentPage = null,Object? hasReachedEnd = null,Object? isLoadingMore = null,Object? appMetadata = freezed,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 categoriesStatus: null == categoriesStatus ? _self.categoriesStatus : categoriesStatus // ignore: cast_nullable_to_non_nullable
 as Status,categories: null == categories ? _self.categories : categories // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,8 @@ as List<WallpaperEntity>,classifications: null == classifications ? _self.classi
 as List<ClassificationEntity>,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,hasReachedEnd: null == hasReachedEnd ? _self.hasReachedEnd : hasReachedEnd // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,appMetadata: freezed == appMetadata ? _self.appMetadata : appMetadata // ignore: cast_nullable_to_non_nullable
+as AppMetadataEntity?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Status categoriesStatus,  List<CategoryEntity> categories,  int selectedCategoryIndex,  Status contentStatus,  List<WallpaperEntity> wallpapers,  List<ClassificationEntity> classifications,  int currentPage,  bool hasReachedEnd,  bool isLoadingMore,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Status categoriesStatus,  List<CategoryEntity> categories,  int selectedCategoryIndex,  Status contentStatus,  List<WallpaperEntity> wallpapers,  List<ClassificationEntity> classifications,  int currentPage,  bool hasReachedEnd,  bool isLoadingMore,  AppMetadataEntity? appMetadata,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIndex,_that.contentStatus,_that.wallpapers,_that.classifications,_that.currentPage,_that.hasReachedEnd,_that.isLoadingMore,_that.errorMessage);case _:
+return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIndex,_that.contentStatus,_that.wallpapers,_that.classifications,_that.currentPage,_that.hasReachedEnd,_that.isLoadingMore,_that.appMetadata,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIn
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Status categoriesStatus,  List<CategoryEntity> categories,  int selectedCategoryIndex,  Status contentStatus,  List<WallpaperEntity> wallpapers,  List<ClassificationEntity> classifications,  int currentPage,  bool hasReachedEnd,  bool isLoadingMore,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Status categoriesStatus,  List<CategoryEntity> categories,  int selectedCategoryIndex,  Status contentStatus,  List<WallpaperEntity> wallpapers,  List<ClassificationEntity> classifications,  int currentPage,  bool hasReachedEnd,  bool isLoadingMore,  AppMetadataEntity? appMetadata,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
-return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIndex,_that.contentStatus,_that.wallpapers,_that.classifications,_that.currentPage,_that.hasReachedEnd,_that.isLoadingMore,_that.errorMessage);case _:
+return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIndex,_that.contentStatus,_that.wallpapers,_that.classifications,_that.currentPage,_that.hasReachedEnd,_that.isLoadingMore,_that.appMetadata,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIn
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Status categoriesStatus,  List<CategoryEntity> categories,  int selectedCategoryIndex,  Status contentStatus,  List<WallpaperEntity> wallpapers,  List<ClassificationEntity> classifications,  int currentPage,  bool hasReachedEnd,  bool isLoadingMore,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Status categoriesStatus,  List<CategoryEntity> categories,  int selectedCategoryIndex,  Status contentStatus,  List<WallpaperEntity> wallpapers,  List<ClassificationEntity> classifications,  int currentPage,  bool hasReachedEnd,  bool isLoadingMore,  AppMetadataEntity? appMetadata,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIndex,_that.contentStatus,_that.wallpapers,_that.classifications,_that.currentPage,_that.hasReachedEnd,_that.isLoadingMore,_that.errorMessage);case _:
+return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIndex,_that.contentStatus,_that.wallpapers,_that.classifications,_that.currentPage,_that.hasReachedEnd,_that.isLoadingMore,_that.appMetadata,_that.errorMessage);case _:
   return null;
 
 }
@@ -215,7 +216,7 @@ return $default(_that.categoriesStatus,_that.categories,_that.selectedCategoryIn
 
 
 class _HomeState implements HomeState {
-  const _HomeState({this.categoriesStatus = Status.loading, final  List<CategoryEntity> categories = const [], this.selectedCategoryIndex = 0, this.contentStatus = Status.loading, final  List<WallpaperEntity> wallpapers = const [], final  List<ClassificationEntity> classifications = const [], this.currentPage = 1, this.hasReachedEnd = false, this.isLoadingMore = false, this.errorMessage}): _categories = categories,_wallpapers = wallpapers,_classifications = classifications;
+  const _HomeState({this.categoriesStatus = Status.loading, final  List<CategoryEntity> categories = const [], this.selectedCategoryIndex = 0, this.contentStatus = Status.loading, final  List<WallpaperEntity> wallpapers = const [], final  List<ClassificationEntity> classifications = const [], this.currentPage = 1, this.hasReachedEnd = false, this.isLoadingMore = false, this.appMetadata, this.errorMessage}): _categories = categories,_wallpapers = wallpapers,_classifications = classifications;
   
 
 @override@JsonKey() final  Status categoriesStatus;
@@ -245,6 +246,7 @@ class _HomeState implements HomeState {
 @override@JsonKey() final  int currentPage;
 @override@JsonKey() final  bool hasReachedEnd;
 @override@JsonKey() final  bool isLoadingMore;
+@override final  AppMetadataEntity? appMetadata;
 @override final  String? errorMessage;
 
 /// Create a copy of HomeState
@@ -257,16 +259,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.categoriesStatus, categoriesStatus) || other.categoriesStatus == categoriesStatus)&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.selectedCategoryIndex, selectedCategoryIndex) || other.selectedCategoryIndex == selectedCategoryIndex)&&(identical(other.contentStatus, contentStatus) || other.contentStatus == contentStatus)&&const DeepCollectionEquality().equals(other._wallpapers, _wallpapers)&&const DeepCollectionEquality().equals(other._classifications, _classifications)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.categoriesStatus, categoriesStatus) || other.categoriesStatus == categoriesStatus)&&const DeepCollectionEquality().equals(other._categories, _categories)&&(identical(other.selectedCategoryIndex, selectedCategoryIndex) || other.selectedCategoryIndex == selectedCategoryIndex)&&(identical(other.contentStatus, contentStatus) || other.contentStatus == contentStatus)&&const DeepCollectionEquality().equals(other._wallpapers, _wallpapers)&&const DeepCollectionEquality().equals(other._classifications, _classifications)&&(identical(other.currentPage, currentPage) || other.currentPage == currentPage)&&(identical(other.hasReachedEnd, hasReachedEnd) || other.hasReachedEnd == hasReachedEnd)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore)&&(identical(other.appMetadata, appMetadata) || other.appMetadata == appMetadata)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,categoriesStatus,const DeepCollectionEquality().hash(_categories),selectedCategoryIndex,contentStatus,const DeepCollectionEquality().hash(_wallpapers),const DeepCollectionEquality().hash(_classifications),currentPage,hasReachedEnd,isLoadingMore,errorMessage);
+int get hashCode => Object.hash(runtimeType,categoriesStatus,const DeepCollectionEquality().hash(_categories),selectedCategoryIndex,contentStatus,const DeepCollectionEquality().hash(_wallpapers),const DeepCollectionEquality().hash(_classifications),currentPage,hasReachedEnd,isLoadingMore,appMetadata,errorMessage);
 
 @override
 String toString() {
-  return 'HomeState(categoriesStatus: $categoriesStatus, categories: $categories, selectedCategoryIndex: $selectedCategoryIndex, contentStatus: $contentStatus, wallpapers: $wallpapers, classifications: $classifications, currentPage: $currentPage, hasReachedEnd: $hasReachedEnd, isLoadingMore: $isLoadingMore, errorMessage: $errorMessage)';
+  return 'HomeState(categoriesStatus: $categoriesStatus, categories: $categories, selectedCategoryIndex: $selectedCategoryIndex, contentStatus: $contentStatus, wallpapers: $wallpapers, classifications: $classifications, currentPage: $currentPage, hasReachedEnd: $hasReachedEnd, isLoadingMore: $isLoadingMore, appMetadata: $appMetadata, errorMessage: $errorMessage)';
 }
 
 
@@ -277,7 +279,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- Status categoriesStatus, List<CategoryEntity> categories, int selectedCategoryIndex, Status contentStatus, List<WallpaperEntity> wallpapers, List<ClassificationEntity> classifications, int currentPage, bool hasReachedEnd, bool isLoadingMore, String? errorMessage
+ Status categoriesStatus, List<CategoryEntity> categories, int selectedCategoryIndex, Status contentStatus, List<WallpaperEntity> wallpapers, List<ClassificationEntity> classifications, int currentPage, bool hasReachedEnd, bool isLoadingMore, AppMetadataEntity? appMetadata, String? errorMessage
 });
 
 
@@ -294,7 +296,7 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? categoriesStatus = null,Object? categories = null,Object? selectedCategoryIndex = null,Object? contentStatus = null,Object? wallpapers = null,Object? classifications = null,Object? currentPage = null,Object? hasReachedEnd = null,Object? isLoadingMore = null,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? categoriesStatus = null,Object? categories = null,Object? selectedCategoryIndex = null,Object? contentStatus = null,Object? wallpapers = null,Object? classifications = null,Object? currentPage = null,Object? hasReachedEnd = null,Object? isLoadingMore = null,Object? appMetadata = freezed,Object? errorMessage = freezed,}) {
   return _then(_HomeState(
 categoriesStatus: null == categoriesStatus ? _self.categoriesStatus : categoriesStatus // ignore: cast_nullable_to_non_nullable
 as Status,categories: null == categories ? _self._categories : categories // ignore: cast_nullable_to_non_nullable
@@ -305,7 +307,8 @@ as List<WallpaperEntity>,classifications: null == classifications ? _self._class
 as List<ClassificationEntity>,currentPage: null == currentPage ? _self.currentPage : currentPage // ignore: cast_nullable_to_non_nullable
 as int,hasReachedEnd: null == hasReachedEnd ? _self.hasReachedEnd : hasReachedEnd // ignore: cast_nullable_to_non_nullable
 as bool,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,appMetadata: freezed == appMetadata ? _self.appMetadata : appMetadata // ignore: cast_nullable_to_non_nullable
+as AppMetadataEntity?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

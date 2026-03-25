@@ -31,8 +31,8 @@ class DownloadRepositoryImpl implements DownloadRepository {
         return Left(CacheFailure('Storage permission denied'));
       }
 
-      final url = wallpaper.videoUrl ?? wallpaper.imageUrl;
-      final isVideo = wallpaper.videoUrl != null;
+      final url = wallpaper.url;
+      final isVideo = wallpaper.mediaType == MediaType.video;
 
       final response = await _dio.get<List<int>>(
         url,
@@ -59,9 +59,9 @@ class DownloadRepositoryImpl implements DownloadRepository {
 
       final record = DownloadRecordEntity(
         wallpaperId: wallpaper.id,
-        imageUrl: wallpaper.imageUrl,
-        thumbnailUrl: wallpaper.thumbnailUrl,
-        title: wallpaper.title,
+        imageUrl: wallpaper.url,
+        thumbnailUrl: wallpaper.thumbUrl,
+        title: wallpaper.id,
         downloadedAt: DateTime.now(),
         fileType: isVideo ? WallpaperFileType.video : WallpaperFileType.image,
       );

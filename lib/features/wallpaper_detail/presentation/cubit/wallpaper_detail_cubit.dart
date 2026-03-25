@@ -34,9 +34,9 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
   void _initVideoForIndex(int index) {
     if (index < 0 || index >= state.wallpapers.length) return;
     final wallpaper = state.wallpapers[index];
-    if (wallpaper.videoUrl != null) {
+    if (wallpaper.mediaType == MediaType.video) {
       _videoController =
-          VideoPlayerController.networkUrl(Uri.parse(wallpaper.videoUrl!))
+          VideoPlayerController.networkUrl(Uri.parse(wallpaper.url))
             ..initialize().then((_) {
               if (!isClosed) {
                 _videoController!
