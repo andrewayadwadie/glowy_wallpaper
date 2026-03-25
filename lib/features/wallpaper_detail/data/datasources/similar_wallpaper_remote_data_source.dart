@@ -1,16 +1,21 @@
 import 'package:dio/dio.dart';
-import 'package:retrofit/retrofit.dart';
+import '../../../../core/config/app_config.dart';
 import '../../../wallpapers/data/models/wallpaper_model.dart';
 
-part 'similar_wallpaper_remote_data_source.g.dart';
+class SimilarWallpaperRemoteDataSource {
+  final Dio _dio;
+  SimilarWallpaperRemoteDataSource(this._dio);
 
-@RestApi()
-abstract class SimilarWallpaperRemoteDataSource {
-  factory SimilarWallpaperRemoteDataSource(Dio dio, {String baseUrl}) =
-      _SimilarWallpaperRemoteDataSource;
-
-  @GET('/wallpapers/{wallpaperId}/similar')
   Future<List<WallpaperModel>> getSimilarWallpapers(
-    @Path('wallpaperId') String wallpaperId,
-  );
+    String wallpaperId,
+  ) async {
+    final response = await _dio.get(
+      '/api/v1/mobile/apps/${AppConfig.appId}/wallpapers/$wallpaperId/similar',
+    );
+    final data = response.data['data'] as Map<String, dynamic>;
+    final items = data['items'] as List;
+    return items
+        .map((e) => WallpaperModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 import '../models/app_metadata_model.dart';
 
@@ -14,13 +16,18 @@ class BootstrapLocalDataSourceImpl implements BootstrapLocalDataSource {
 
   @override
   AppMetadataModel? getAppMetadata() {
-    final json = _box.get(_kAppMetadataKey);
-    if (json == null) return null;
-    return AppMetadataModel.fromJson(Map<String, dynamic>.from(json as Map));
+    final raw = _box.get(_kAppMetadataKey);
+    if (raw == null) return null;
+    // Stored as JSON string to avoid Hive Map<dynamic,dynamic> issues
+    final json = jsonDecode(raw as String) as Map<String, dynamic>;
+    return AppMetadataModel.fromJson(json);
   }
 
   @override
   Future<void> saveAppMetadata(AppMetadataModel model) async {
-    await _box.put(_kAppMetadataKey, model.toJson());
+    // jsonEncode calls toJson() on nested objects (CategoryModel etc.),
+    // ensuring full serialization. Raw model.toJson() leaves nested
+    // freezed objects un-serialized, which Hive cannot persist.
+    await _box.put(_kAppMetadataKey, jsonEncode(model.toJson()));
   }
 }

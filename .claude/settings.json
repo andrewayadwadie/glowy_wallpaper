@@ -56,7 +56,8 @@
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/setup-plan.ps1'' -Json\")",
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/update-agent-context.ps1'' -AgentType claude\")",
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json\")",
-      "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")"
+      "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")",
+      "Bash(grep -E \"\\(entity|model\\)\\\\.dart$\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

@@ -29,7 +29,7 @@ abstract class AppTheme {
       foregroundColor: AppColors.onSurface,
       elevation: 0,
     ),
-    cardTheme: const CardThemeData(color: Colors.white, elevation: 0),
+    cardTheme: const CardThemeData(color: AppColors.surface, elevation: 0),
     iconTheme: IconThemeData(color: AppColors.onSurface),
   );
 
