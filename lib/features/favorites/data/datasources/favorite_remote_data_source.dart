@@ -10,15 +10,15 @@ abstract class FavoriteRemoteDataSource {
   factory FavoriteRemoteDataSource(Dio dio, {String baseUrl}) =
       _FavoriteRemoteDataSource;
 
-  @GET('/favorites')
+  @GET('/api/v1/favorites')
   Future<List<FavoriteModel>> getFavorites();
 
-  @POST('/favorites')
+  @POST('/api/v1/favorites')
   Future<void> addFavorite(@Body() FavoriteRequestModel request);
 
-  @DELETE('/favorites/{wallpaperId}')
+  @DELETE('/api/v1/favorites/{wallpaperId}')
   Future<void> removeFavorite(@Path('wallpaperId') String wallpaperId);
 
-  @POST('/favorites/merge')
+  @POST('/api/v1/favorites/merge')
   Future<void> mergeFavorites(@Body() MergeFavoritesRequestModel request);
 }

@@ -12,18 +12,18 @@ abstract class AuthRemoteDataSource {
   factory AuthRemoteDataSource(Dio dio, {String baseUrl}) =
       _AuthRemoteDataSource;
 
-  @POST('/auth/login')
+  @POST('/api/v1/auth/login')
   Future<AuthResponseModel> login(@Body() LoginRequestModel request);
 
-  @POST('/auth/register')
+  @POST('/api/v1/auth/register')
   Future<AuthResponseModel> register(@Body() RegisterRequestModel request);
 
-  @POST('/auth/logout')
+  @POST('/api/v1/auth/logout')
   Future<void> logout();
 
-  @GET('/subscription/status')
+  @GET('/api/v1/subscription/status')
   Future<SubscriptionStatusModel> getSubscriptionStatus();
 
-  @POST('/subscription/unsubscribe')
+  @POST('/api/v1/subscription/unsubscribe')
   Future<void> unsubscribe();
 }

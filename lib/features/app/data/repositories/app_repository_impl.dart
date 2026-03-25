@@ -20,19 +20,26 @@ class AppRepositoryImpl implements AppRepository {
 
   @override
   Future<Either<Failure, AppMetadataEntity>> getAppData() async {
+    // Try cache first (stale-while-revalidate)
     try {
       final cached = localDataSource.getAppMetadata();
-
       if (cached != null) {
         final entity = cached.toEntity();
-        // Always refresh in background (true stale-while-revalidate)
         _refreshInBackground();
         return Right(entity);
       }
+    } catch (_) {
+      // Cache corrupted — fall through to network fetch
+    }
 
-      // No cache — fetch from network
+    // No cache or cache failed — fetch from network
+    try {
       final model = await remoteDataSource.getAppData();
-      await localDataSource.saveAppMetadata(model);
+      try {
+        await localDataSource.saveAppMetadata(model);
+      } catch (_) {
+        // Cache write failed — non-critical, data still returns
+      }
       return Right(model.toEntity());
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError ||
