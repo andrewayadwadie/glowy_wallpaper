@@ -80,7 +80,9 @@ class CategoryRepositoryImpl implements CategoryRepository {
       final classifications = await remoteDataSource.getClassifications(
         categoryId,
       );
-      return Right(classifications.map((m) => m.toEntity()).toList());
+      return Right(
+        classifications.map((m) => m.toEntity(categoryId: categoryId)).toList(),
+      );
     } on DioException catch (e) {
       if (e.type == DioExceptionType.cancel) {
         return const Left(CancelledFailure());

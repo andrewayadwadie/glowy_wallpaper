@@ -1,0 +1,39 @@
+{
+  "success": true,
+  "data": {
+    "app": {
+      "name": "Glowy Wallpaper",
+      "description": "High-quality glowing and neon wallpapers",
+      "about": "Glowy Wallpapers is a curated collection of high-quality glowing, neon, and ambient wallpapers for your device.",
+      "privacyPolicy": "Your privacy is important to us. Glowy Wallpapers collects only the minimum data necessary to provide the service.",
+      "termsOfUse": "By using Glowy Wallpapers, you agree to use the app for personal, non-commercial purposes only.",
+      "androidShareLink": "https://play.google.com/store/apps/details?id=com.glowy.wallpaper",
+      "iphoneShareLink": "https://apps.apple.com/app/id123456789",
+      "contactEmail": "support@glowywallpapers.com",
+      "categories": [
+        {
+          "id": "cat-uuid-1",
+          "name": "Neon",
+          "type": "IMAGES",
+          "displayOrder": 1,
+          "imageCount": 142
+        },
+        {
+          "id": "cat-uuid-2",
+          "name": "Live Wallpapers",
+          "type": "VIDEOS",
+          "displayOrder": 2,
+          "imageCount": 38
+        },
+        {
+          "id": "cat-uuid-3",
+          "name": "By Style",
+          "type": "IMAGE_CLASSIFICATION",
+          "displayOrder": 3,
+          "imageCount": 0
+        }
+      ]
+    }
+  },
+  "message": "App data retrieved successfully"
+}

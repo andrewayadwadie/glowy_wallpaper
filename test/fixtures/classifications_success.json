@@ -1,0 +1,26 @@
+{
+  "success": true,
+  "data": {
+    "classifications": [
+      {
+        "id": "cls-uuid-1",
+        "name": "Cyberpunk",
+        "thumbnailUrl": "https://cdn.example.com/cls/cyberpunk-thumb.jpg",
+        "itemCount": 47
+      },
+      {
+        "id": "cls-uuid-2",
+        "name": "Minimal",
+        "thumbnailUrl": "https://cdn.example.com/cls/minimal-thumb.jpg",
+        "itemCount": 23
+      },
+      {
+        "id": "cls-uuid-3",
+        "name": "Nature",
+        "thumbnailUrl": "https://cdn.example.com/cls/nature-thumb.jpg",
+        "itemCount": 31
+      }
+    ]
+  },
+  "message": "Classifications retrieved successfully"
+}

@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../wallpapers/data/models/wallpaper_model.dart';
+import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../domain/entities/favorite_entity.dart';
 
 part 'favorite_model.freezed.dart';
@@ -32,13 +33,17 @@ abstract class FavoriteModel with _$FavoriteModel {
     wallpaperId: entity.wallpaperId,
     wallpaper: WallpaperModel(
       id: entity.wallpaper.id,
-      title: entity.wallpaper.title,
-      imageUrl: entity.wallpaper.imageUrl,
-      thumbnailUrl: entity.wallpaper.thumbnailUrl,
-      videoUrl: entity.wallpaper.videoUrl,
-      isPremium: entity.wallpaper.isPremium,
-      categoryId: entity.wallpaper.categoryId,
-      classificationIds: entity.wallpaper.classificationIds,
+      url: entity.wallpaper.url,
+      thumbUrl: entity.wallpaper.thumbUrl,
+      isTopRated: entity.wallpaper.isTopRated,
+      mediaType: entity.wallpaper.mediaType == MediaType.video
+          ? 'VIDEO'
+          : 'IMAGE',
+      classificationId: entity.wallpaper.classificationId,
+      classificationName: entity.wallpaper.classificationName,
+      classificationThumbnailUrl:
+          entity.wallpaper.classificationThumbnailUrl,
+      createdAt: entity.wallpaper.createdAt.toIso8601String(),
     ),
     userId: entity.userId,
     favoritedAt: entity.favoritedAt,

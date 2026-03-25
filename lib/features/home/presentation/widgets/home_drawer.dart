@@ -9,13 +9,16 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/config/app_config.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/utils/app_strings.dart';
+import '../../../app/domain/entities/app_metadata_entity.dart';
 import '../../../auth/presentation/cubit/subscription_cubit.dart';
+import '../cubit/home_cubit.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final appMetadata = context.watch<HomeCubit>().state.appMetadata;
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: 320.w),
       child: Drawer(
@@ -37,7 +40,7 @@ class HomeDrawer extends StatelessWidget {
                   ),
                   SizedBox(height: 8.h),
                   AutoSizeText(
-                    AppStrings.appName,
+                    appMetadata?.name ?? AppStrings.appName,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
@@ -130,7 +133,7 @@ class HomeDrawer extends StatelessWidget {
               AppStrings.shareApp,
               () {
                 Navigator.pop(context);
-                _shareApp();
+                _shareApp(appMetadata);
               },
             ),
             _buildMenuItem(
@@ -139,7 +142,7 @@ class HomeDrawer extends StatelessWidget {
               AppStrings.sendFeedback,
               () {
                 Navigator.pop(context);
-                _sendFeedback();
+                _sendFeedback(appMetadata);
               },
             ),
           ],
@@ -164,21 +167,27 @@ class HomeDrawer extends StatelessWidget {
     }
   }
 
-  void _shareApp() {
-    final storeUrl = Platform.isIOS
-        ? 'https://apps.apple.com/app/id${AppConfig.iosAppId}'
-        : 'https://play.google.com/store/apps/details?id=${AppConfig.androidPackageName}';
-    Share.share('Check out Glowy Wallpapers! $storeUrl');
+  void _shareApp(AppMetadataEntity? appMetadata) {
+    final String storeUrl;
+    if (Platform.isIOS) {
+      storeUrl = appMetadata?.iphoneShareLink ??
+          'https://apps.apple.com/app/id${AppConfig.iosAppId}';
+    } else {
+      storeUrl = appMetadata?.androidShareLink ??
+          'https://play.google.com/store/apps/details?id=${AppConfig.androidPackageName}';
+    }
+    Share.share('Check out ${appMetadata?.name ?? AppStrings.appName}! $storeUrl');
   }
 
-  Future<void> _sendFeedback() async {
-    final Uri email = Uri(
+  Future<void> _sendFeedback(AppMetadataEntity? appMetadata) async {
+    final email = appMetadata?.contactEmail ?? AppConfig.feedbackEmail;
+    final Uri uri = Uri(
       scheme: 'mailto',
-      path: AppConfig.feedbackEmail,
-      queryParameters: {'subject': 'Glowy Wallpapers Feedback'},
+      path: email,
+      queryParameters: {'subject': '${appMetadata?.name ?? AppStrings.appName} Feedback'},
     );
-    if (await canLaunchUrl(email)) {
-      await launchUrl(email);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     }
   }
 

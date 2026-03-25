@@ -12,8 +12,8 @@ abstract class CategoryModel with _$CategoryModel {
     required String id,
     required String name,
     required String type,
-    @JsonKey(name: 'thumbnail_url') String? thumbnailUrl,
-    @JsonKey(name: 'display_order') required int displayOrder,
+    @JsonKey(name: 'displayOrder') required int displayOrder,
+    @JsonKey(name: 'imageCount') required int imageCount,
   }) = _CategoryModel;
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
@@ -22,11 +22,21 @@ abstract class CategoryModel with _$CategoryModel {
   CategoryEntity toEntity() => CategoryEntity(
     id: id,
     name: name,
-    type: CategoryType.values.firstWhere(
-      (e) => e.name == type,
-      orElse: () => CategoryType.image,
-    ),
-    thumbnailUrl: thumbnailUrl,
+    type: _parseType(type),
     displayOrder: displayOrder,
+    imageCount: imageCount,
   );
+
+  static CategoryType _parseType(String type) {
+    switch (type) {
+      case 'IMAGES':
+        return CategoryType.image;
+      case 'VIDEOS':
+        return CategoryType.video;
+      case 'IMAGE_CLASSIFICATION':
+        return CategoryType.classification;
+      default:
+        return CategoryType.image;
+    }
+  }
 }

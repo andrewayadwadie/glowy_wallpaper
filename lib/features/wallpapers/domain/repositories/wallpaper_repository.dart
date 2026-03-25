@@ -9,14 +9,8 @@ abstract class WallpaperRepository {
   getWallpapersByCategory({
     required String categoryId,
     required int page,
-    int perPage = 20,
+    int limit = 20,
+    String? classificationId,
     CancelToken? cancelToken,
-  });
-
-  Future<Either<Failure, PaginatedResponse<WallpaperEntity>>>
-  getWallpapersByClassification({
-    required String classificationId,
-    required int page,
-    int perPage = 20,
   });
 }

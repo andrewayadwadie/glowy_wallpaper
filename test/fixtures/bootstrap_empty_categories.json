@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "data": {
+    "app": {
+      "name": "Glowy Wallpaper",
+      "description": "High-quality glowing and neon wallpapers",
+      "about": "About text here.",
+      "privacyPolicy": "Privacy policy text here.",
+      "termsOfUse": "Terms of use text here.",
+      "androidShareLink": "https://play.google.com/store/apps/details?id=com.glowy.wallpaper",
+      "iphoneShareLink": "https://apps.apple.com/app/id123456789",
+      "contactEmail": "support@glowywallpapers.com",
+      "categories": []
+    }
+  },
+  "message": "App data retrieved successfully"
+}

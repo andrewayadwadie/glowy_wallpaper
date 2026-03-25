@@ -2,45 +2,48 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/errors/failure.dart';
 import '../../../../core/usecases/usecase.dart';
+import '../../../app/data/repositories/app_repository_impl.dart';
+import '../../../app/domain/entities/app_metadata_entity.dart';
 import '../../../categories/domain/entities/category_entity.dart';
-import '../../../categories/data/repositories/category_repository_impl.dart';
-import '../../../categories/domain/usecases/get_categories.dart';
 import '../../../categories/domain/usecases/get_classifications.dart';
 import '../../../wallpapers/domain/usecases/get_wallpapers_by_category.dart';
+import '../../../app/domain/usecases/get_app_data.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  final GetCategories getCategories;
+  final GetAppData getAppData;
   final GetWallpapersByCategory getWallpapersByCategory;
   final GetClassifications getClassifications;
-  final CategoryRepositoryImpl? _categoryRepo;
+  final AppRepositoryImpl? _appRepo;
 
   CancelToken? _activeCancelToken;
 
   HomeCubit({
-    required this.getCategories,
+    required this.getAppData,
     required this.getWallpapersByCategory,
     required this.getClassifications,
-    CategoryRepositoryImpl? categoryRepo,
-  }) : _categoryRepo = categoryRepo,
+    AppRepositoryImpl? appRepo,
+  }) : _appRepo = appRepo,
        super(const HomeState()) {
-    // Listen for background refresh completions
-    _categoryRepo?.onCategoriesRefreshed = _onCategoriesRefreshed;
+    _appRepo?.onMetadataRefreshed = _onAppDataRefreshed;
   }
 
-  void _onCategoriesRefreshed(List<CategoryEntity> freshCategories) {
+  void _onAppDataRefreshed(AppMetadataEntity freshMetadata) {
     if (isClosed) return;
-    final sorted = List<CategoryEntity>.from(freshCategories)
-      ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
-    emit(state.copyWith(categories: sorted));
+    emit(
+      state.copyWith(
+        appMetadata: freshMetadata,
+        categories: freshMetadata.categories,
+      ),
+    );
   }
 
   CategoryEntity? get selectedCategory => state.categories.isNotEmpty
       ? state.categories[state.selectedCategoryIndex]
       : null;
 
-  Future<void> loadCategories() async {
-    final result = await getCategories(NoParams());
+  Future<void> loadAppData() async {
+    final result = await getAppData(NoParams());
     result.fold(
       (failure) => emit(
         state.copyWith(
@@ -48,18 +51,23 @@ class HomeCubit extends Cubit<HomeState> {
           errorMessage: failure.message,
         ),
       ),
-      (categories) {
-        final sorted = List<CategoryEntity>.from(categories)
-          ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
-        if (sorted.isEmpty) {
+      (metadata) {
+        final categories = metadata.categories;
+        if (categories.isEmpty) {
           emit(
-            state.copyWith(categoriesStatus: Status.empty, categories: sorted),
+            state.copyWith(
+              appMetadata: metadata,
+              categoriesStatus: Status.empty,
+              categories: const [],
+            ),
           );
         } else {
           emit(
             state.copyWith(
+              appMetadata: metadata,
               categoriesStatus: Status.success,
-              categories: sorted,
+              categories: categories,
+              selectedCategoryIndex: 0,
             ),
           );
           _loadContentForSelectedCategory();
@@ -99,12 +107,13 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> _loadWallpapers(String categoryId) async {
+  Future<void> _loadWallpapers(String categoryId, {String? classificationId}) async {
     _activeCancelToken = CancelToken();
     final result = await getWallpapersByCategory(
       GetWallpapersByCategoryParams(
         categoryId: categoryId,
         page: state.currentPage,
+        classificationId: classificationId,
         cancelToken: _activeCancelToken,
       ),
     );
@@ -127,7 +136,7 @@ class HomeCubit extends Cubit<HomeState> {
             state.copyWith(
               contentStatus: Status.success,
               wallpapers: [...state.wallpapers, ...response.items],
-              hasReachedEnd: !response.hasMore,
+              hasReachedEnd: response.hasReachedEnd,
               isLoadingMore: false,
             ),
           );
@@ -174,7 +183,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   void retry() {
     if (state.categoriesStatus == Status.error) {
-      loadCategories();
+      loadAppData();
     } else {
       emit(state.copyWith(contentStatus: Status.loading));
       _loadContentForSelectedCategory();
@@ -184,7 +193,7 @@ class HomeCubit extends Cubit<HomeState> {
   @override
   Future<void> close() {
     _activeCancelToken?.cancel();
-    _categoryRepo?.onCategoriesRefreshed = null;
+    _appRepo?.onMetadataRefreshed = null;
     return super.close();
   }
 }

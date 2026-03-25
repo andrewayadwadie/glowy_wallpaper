@@ -69,9 +69,7 @@ class _VideoGridState extends State<VideoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    final displayWallpapers = widget.isPremium
-        ? widget.wallpapers
-        : widget.wallpapers.where((w) => !w.isPremium).toList();
+    final displayWallpapers = widget.wallpapers;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {

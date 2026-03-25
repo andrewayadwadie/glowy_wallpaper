@@ -1,21 +1,22 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/enums/status.dart';
-import '../../../wallpapers/domain/usecases/get_wallpapers_by_classification.dart';
+import '../../../wallpapers/domain/usecases/get_wallpapers_by_category.dart';
 import '../../domain/entities/classification_entity.dart';
 import 'classification_detail_state.dart';
 
 class ClassificationDetailCubit extends Cubit<ClassificationDetailState> {
-  final GetWallpapersByClassification getWallpapersByClassification;
+  final GetWallpapersByCategory getWallpapersByCategory;
   final ClassificationEntity classification;
 
   ClassificationDetailCubit({
-    required this.getWallpapersByClassification,
+    required this.getWallpapersByCategory,
     required this.classification,
   }) : super(ClassificationDetailState(classification: classification));
 
   Future<void> loadWallpapers() async {
-    final result = await getWallpapersByClassification(
-      GetWallpapersByClassificationParams(
+    final result = await getWallpapersByCategory(
+      GetWallpapersByCategoryParams(
+        categoryId: classification.categoryId,
         classificationId: classification.id,
         page: state.currentPage,
       ),
@@ -32,7 +33,7 @@ class ClassificationDetailCubit extends Cubit<ClassificationDetailState> {
             state.copyWith(
               status: Status.success,
               wallpapers: [...state.wallpapers, ...response.items],
-              hasReachedEnd: !response.hasMore,
+              hasReachedEnd: response.hasReachedEnd,
               isLoadingMore: false,
             ),
           );

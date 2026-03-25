@@ -14,8 +14,9 @@ Future<void> main() async {
   await Hive.openBox('categories');
   await Hive.openBox('favorites');
   await Hive.openBox('downloads');
-  await Hive.openBox('subscription_cache');
-  await Hive.openBox('ad_frequency');
+  await Hive.openBox<String>('subscription_cache');
+  await Hive.openBox<String>('ad_frequency');
+  await Hive.openBox('app_bootstrap');
   await init();
 
   try {

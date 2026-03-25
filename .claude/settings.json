@@ -48,7 +48,15 @@
       "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/update-agent-context.ps1 -AgentType claude\")",
       "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/check-prerequisites.ps1 -Json\")",
       "Bash(dart pub:*)",
-      "Bash(python -c \"import sys,json; deps=json.load\\(sys.stdin\\); [print\\(p[''''name''''],p[''''version'''']\\) for p in deps.get\\(''''packages'''',[]\\) if ''''share'''' in p[''''name''''].lower\\(\\)]\")"
+      "Bash(python -c \"import sys,json; deps=json.load\\(sys.stdin\\); [print\\(p[''''name''''],p[''''version'''']\\) for p in deps.get\\(''''packages'''',[]\\) if ''''share'''' in p[''''name''''].lower\\(\\)]\")",
+      "Bash(powershell.exe -File \".specify/scripts/powershell/create-new-feature.ps1\" \"in @plan.md implement API Collection, API-1: App Data \\(Bootstrap\\), API-2: Category Content \\(Images & Videos\\), API-3: Classifications List and API Flow Summary integrate all apis in application to get real data and after integrate api in app make test to ensure this apis is work correctly without any errors or issues\" -Json -ShortName \"api-integration\")",
+      "Bash(powershell.exe -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"api-integration\" \"implement API Collection API-1 App Data Bootstrap API-2 Category Content Images Videos API-3 Classifications List and API Flow Summary integrate all apis in application to get real data and make tests to ensure apis work correctly\")",
+      "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''api-integration'' -FeatureDescription ''implement API Collection API-1 App Data Bootstrap API-2 Category Content Images Videos API-3 Classifications List integrate all apis to get real data and make tests''\")",
+      "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -PathsOnly\")",
+      "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/setup-plan.ps1'' -Json\")",
+      "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/update-agent-context.ps1'' -AgentType claude\")",
+      "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json\")",
+      "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

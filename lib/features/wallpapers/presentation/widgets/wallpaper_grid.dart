@@ -31,9 +31,7 @@ class WallpaperGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayWallpapers = isPremium
-        ? wallpapers
-        : wallpapers.where((w) => !w.isPremium).toList();
+    final displayWallpapers = wallpapers;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {

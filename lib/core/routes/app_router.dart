@@ -10,7 +10,7 @@ import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/categories/domain/entities/classification_entity.dart';
 import '../../features/categories/presentation/cubit/classification_detail_cubit.dart';
 import '../../features/categories/presentation/pages/classification_detail_page.dart';
-import '../../features/wallpapers/domain/usecases/get_wallpapers_by_classification.dart';
+import '../../features/wallpapers/domain/usecases/get_wallpapers_by_category.dart';
 import '../../features/wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../features/wallpaper_detail/presentation/cubit/wallpaper_detail_cubit.dart';
 import '../../features/wallpaper_detail/presentation/pages/wallpaper_detail_page.dart';
@@ -56,7 +56,7 @@ abstract class AppRouter {
       GoRoute(
         path: AppRoutes.home,
         builder: (context, state) => BlocProvider(
-          create: (context) => sl<HomeCubit>()..loadCategories(),
+          create: (context) => sl<HomeCubit>()..loadAppData(),
           child: const HomePage(),
         ),
       ),
@@ -136,8 +136,7 @@ abstract class AppRouter {
           final classification = extra;
           return BlocProvider(
             create: (context) => ClassificationDetailCubit(
-              getWallpapersByClassification:
-                  sl<GetWallpapersByClassification>(),
+              getWallpapersByCategory: sl<GetWallpapersByCategory>(),
               classification: classification,
             )..loadWallpapers(),
             child: const ClassificationDetailPage(),

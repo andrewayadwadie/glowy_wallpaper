@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$WallpaperModel {
 
- String get id; String get title;@JsonKey(name: 'image_url') String get imageUrl;@JsonKey(name: 'thumbnail_url') String get thumbnailUrl;@JsonKey(name: 'video_url') String? get videoUrl;@JsonKey(name: 'is_premium') bool get isPremium;@JsonKey(name: 'category_id') String get categoryId;@JsonKey(name: 'classification_ids') List<String> get classificationIds;
+ String get id; String get url; String get thumbUrl; bool get isTopRated; String get mediaType; String? get classificationId; String? get classificationName; String? get classificationThumbnailUrl; String get createdAt;
 /// Create a copy of WallpaperModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $WallpaperModelCopyWith<WallpaperModel> get copyWith => _$WallpaperModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WallpaperModel&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&(identical(other.isPremium, isPremium) || other.isPremium == isPremium)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&const DeepCollectionEquality().equals(other.classificationIds, classificationIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WallpaperModel&&(identical(other.id, id) || other.id == id)&&(identical(other.url, url) || other.url == url)&&(identical(other.thumbUrl, thumbUrl) || other.thumbUrl == thumbUrl)&&(identical(other.isTopRated, isTopRated) || other.isTopRated == isTopRated)&&(identical(other.mediaType, mediaType) || other.mediaType == mediaType)&&(identical(other.classificationId, classificationId) || other.classificationId == classificationId)&&(identical(other.classificationName, classificationName) || other.classificationName == classificationName)&&(identical(other.classificationThumbnailUrl, classificationThumbnailUrl) || other.classificationThumbnailUrl == classificationThumbnailUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,imageUrl,thumbnailUrl,videoUrl,isPremium,categoryId,const DeepCollectionEquality().hash(classificationIds));
+int get hashCode => Object.hash(runtimeType,id,url,thumbUrl,isTopRated,mediaType,classificationId,classificationName,classificationThumbnailUrl,createdAt);
 
 @override
 String toString() {
-  return 'WallpaperModel(id: $id, title: $title, imageUrl: $imageUrl, thumbnailUrl: $thumbnailUrl, videoUrl: $videoUrl, isPremium: $isPremium, categoryId: $categoryId, classificationIds: $classificationIds)';
+  return 'WallpaperModel(id: $id, url: $url, thumbUrl: $thumbUrl, isTopRated: $isTopRated, mediaType: $mediaType, classificationId: $classificationId, classificationName: $classificationName, classificationThumbnailUrl: $classificationThumbnailUrl, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $WallpaperModelCopyWith<$Res>  {
   factory $WallpaperModelCopyWith(WallpaperModel value, $Res Function(WallpaperModel) _then) = _$WallpaperModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String title,@JsonKey(name: 'image_url') String imageUrl,@JsonKey(name: 'thumbnail_url') String thumbnailUrl,@JsonKey(name: 'video_url') String? videoUrl,@JsonKey(name: 'is_premium') bool isPremium,@JsonKey(name: 'category_id') String categoryId,@JsonKey(name: 'classification_ids') List<String> classificationIds
+ String id, String url, String thumbUrl, bool isTopRated, String mediaType, String? classificationId, String? classificationName, String? classificationThumbnailUrl, String createdAt
 });
 
 
@@ -65,17 +65,18 @@ class _$WallpaperModelCopyWithImpl<$Res>
 
 /// Create a copy of WallpaperModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? imageUrl = null,Object? thumbnailUrl = null,Object? videoUrl = freezed,Object? isPremium = null,Object? categoryId = null,Object? classificationIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? url = null,Object? thumbUrl = null,Object? isTopRated = null,Object? mediaType = null,Object? classificationId = freezed,Object? classificationName = freezed,Object? classificationThumbnailUrl = freezed,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,imageUrl: null == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
-as String,thumbnailUrl: null == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-as String,videoUrl: freezed == videoUrl ? _self.videoUrl : videoUrl // ignore: cast_nullable_to_non_nullable
-as String?,isPremium: null == isPremium ? _self.isPremium : isPremium // ignore: cast_nullable_to_non_nullable
-as bool,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String,classificationIds: null == classificationIds ? _self.classificationIds : classificationIds // ignore: cast_nullable_to_non_nullable
-as List<String>,
+as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String,thumbUrl: null == thumbUrl ? _self.thumbUrl : thumbUrl // ignore: cast_nullable_to_non_nullable
+as String,isTopRated: null == isTopRated ? _self.isTopRated : isTopRated // ignore: cast_nullable_to_non_nullable
+as bool,mediaType: null == mediaType ? _self.mediaType : mediaType // ignore: cast_nullable_to_non_nullable
+as String,classificationId: freezed == classificationId ? _self.classificationId : classificationId // ignore: cast_nullable_to_non_nullable
+as String?,classificationName: freezed == classificationName ? _self.classificationName : classificationName // ignore: cast_nullable_to_non_nullable
+as String?,classificationThumbnailUrl: freezed == classificationThumbnailUrl ? _self.classificationThumbnailUrl : classificationThumbnailUrl // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -160,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title, @JsonKey(name: 'image_url')  String imageUrl, @JsonKey(name: 'thumbnail_url')  String thumbnailUrl, @JsonKey(name: 'video_url')  String? videoUrl, @JsonKey(name: 'is_premium')  bool isPremium, @JsonKey(name: 'category_id')  String categoryId, @JsonKey(name: 'classification_ids')  List<String> classificationIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String url,  String thumbUrl,  bool isTopRated,  String mediaType,  String? classificationId,  String? classificationName,  String? classificationThumbnailUrl,  String createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WallpaperModel() when $default != null:
-return $default(_that.id,_that.title,_that.imageUrl,_that.thumbnailUrl,_that.videoUrl,_that.isPremium,_that.categoryId,_that.classificationIds);case _:
+return $default(_that.id,_that.url,_that.thumbUrl,_that.isTopRated,_that.mediaType,_that.classificationId,_that.classificationName,_that.classificationThumbnailUrl,_that.createdAt);case _:
   return orElse();
 
 }
@@ -181,10 +182,10 @@ return $default(_that.id,_that.title,_that.imageUrl,_that.thumbnailUrl,_that.vid
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title, @JsonKey(name: 'image_url')  String imageUrl, @JsonKey(name: 'thumbnail_url')  String thumbnailUrl, @JsonKey(name: 'video_url')  String? videoUrl, @JsonKey(name: 'is_premium')  bool isPremium, @JsonKey(name: 'category_id')  String categoryId, @JsonKey(name: 'classification_ids')  List<String> classificationIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String url,  String thumbUrl,  bool isTopRated,  String mediaType,  String? classificationId,  String? classificationName,  String? classificationThumbnailUrl,  String createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _WallpaperModel():
-return $default(_that.id,_that.title,_that.imageUrl,_that.thumbnailUrl,_that.videoUrl,_that.isPremium,_that.categoryId,_that.classificationIds);case _:
+return $default(_that.id,_that.url,_that.thumbUrl,_that.isTopRated,_that.mediaType,_that.classificationId,_that.classificationName,_that.classificationThumbnailUrl,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +202,10 @@ return $default(_that.id,_that.title,_that.imageUrl,_that.thumbnailUrl,_that.vid
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title, @JsonKey(name: 'image_url')  String imageUrl, @JsonKey(name: 'thumbnail_url')  String thumbnailUrl, @JsonKey(name: 'video_url')  String? videoUrl, @JsonKey(name: 'is_premium')  bool isPremium, @JsonKey(name: 'category_id')  String categoryId, @JsonKey(name: 'classification_ids')  List<String> classificationIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String url,  String thumbUrl,  bool isTopRated,  String mediaType,  String? classificationId,  String? classificationName,  String? classificationThumbnailUrl,  String createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _WallpaperModel() when $default != null:
-return $default(_that.id,_that.title,_that.imageUrl,_that.thumbnailUrl,_that.videoUrl,_that.isPremium,_that.categoryId,_that.classificationIds);case _:
+return $default(_that.id,_that.url,_that.thumbUrl,_that.isTopRated,_that.mediaType,_that.classificationId,_that.classificationName,_that.classificationThumbnailUrl,_that.createdAt);case _:
   return null;
 
 }
@@ -216,23 +217,18 @@ return $default(_that.id,_that.title,_that.imageUrl,_that.thumbnailUrl,_that.vid
 @JsonSerializable()
 
 class _WallpaperModel extends WallpaperModel {
-  const _WallpaperModel({required this.id, required this.title, @JsonKey(name: 'image_url') required this.imageUrl, @JsonKey(name: 'thumbnail_url') required this.thumbnailUrl, @JsonKey(name: 'video_url') this.videoUrl, @JsonKey(name: 'is_premium') required this.isPremium, @JsonKey(name: 'category_id') required this.categoryId, @JsonKey(name: 'classification_ids') final  List<String> classificationIds = const []}): _classificationIds = classificationIds,super._();
+  const _WallpaperModel({required this.id, required this.url, required this.thumbUrl, required this.isTopRated, required this.mediaType, this.classificationId, this.classificationName, this.classificationThumbnailUrl, required this.createdAt}): super._();
   factory _WallpaperModel.fromJson(Map<String, dynamic> json) => _$WallpaperModelFromJson(json);
 
 @override final  String id;
-@override final  String title;
-@override@JsonKey(name: 'image_url') final  String imageUrl;
-@override@JsonKey(name: 'thumbnail_url') final  String thumbnailUrl;
-@override@JsonKey(name: 'video_url') final  String? videoUrl;
-@override@JsonKey(name: 'is_premium') final  bool isPremium;
-@override@JsonKey(name: 'category_id') final  String categoryId;
- final  List<String> _classificationIds;
-@override@JsonKey(name: 'classification_ids') List<String> get classificationIds {
-  if (_classificationIds is EqualUnmodifiableListView) return _classificationIds;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_classificationIds);
-}
-
+@override final  String url;
+@override final  String thumbUrl;
+@override final  bool isTopRated;
+@override final  String mediaType;
+@override final  String? classificationId;
+@override final  String? classificationName;
+@override final  String? classificationThumbnailUrl;
+@override final  String createdAt;
 
 /// Create a copy of WallpaperModel
 /// with the given fields replaced by the non-null parameter values.
@@ -247,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WallpaperModel&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.imageUrl, imageUrl) || other.imageUrl == imageUrl)&&(identical(other.thumbnailUrl, thumbnailUrl) || other.thumbnailUrl == thumbnailUrl)&&(identical(other.videoUrl, videoUrl) || other.videoUrl == videoUrl)&&(identical(other.isPremium, isPremium) || other.isPremium == isPremium)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&const DeepCollectionEquality().equals(other._classificationIds, _classificationIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WallpaperModel&&(identical(other.id, id) || other.id == id)&&(identical(other.url, url) || other.url == url)&&(identical(other.thumbUrl, thumbUrl) || other.thumbUrl == thumbUrl)&&(identical(other.isTopRated, isTopRated) || other.isTopRated == isTopRated)&&(identical(other.mediaType, mediaType) || other.mediaType == mediaType)&&(identical(other.classificationId, classificationId) || other.classificationId == classificationId)&&(identical(other.classificationName, classificationName) || other.classificationName == classificationName)&&(identical(other.classificationThumbnailUrl, classificationThumbnailUrl) || other.classificationThumbnailUrl == classificationThumbnailUrl)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,title,imageUrl,thumbnailUrl,videoUrl,isPremium,categoryId,const DeepCollectionEquality().hash(_classificationIds));
+int get hashCode => Object.hash(runtimeType,id,url,thumbUrl,isTopRated,mediaType,classificationId,classificationName,classificationThumbnailUrl,createdAt);
 
 @override
 String toString() {
-  return 'WallpaperModel(id: $id, title: $title, imageUrl: $imageUrl, thumbnailUrl: $thumbnailUrl, videoUrl: $videoUrl, isPremium: $isPremium, categoryId: $categoryId, classificationIds: $classificationIds)';
+  return 'WallpaperModel(id: $id, url: $url, thumbUrl: $thumbUrl, isTopRated: $isTopRated, mediaType: $mediaType, classificationId: $classificationId, classificationName: $classificationName, classificationThumbnailUrl: $classificationThumbnailUrl, createdAt: $createdAt)';
 }
 
 
@@ -267,7 +263,7 @@ abstract mixin class _$WallpaperModelCopyWith<$Res> implements $WallpaperModelCo
   factory _$WallpaperModelCopyWith(_WallpaperModel value, $Res Function(_WallpaperModel) _then) = __$WallpaperModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title,@JsonKey(name: 'image_url') String imageUrl,@JsonKey(name: 'thumbnail_url') String thumbnailUrl,@JsonKey(name: 'video_url') String? videoUrl,@JsonKey(name: 'is_premium') bool isPremium,@JsonKey(name: 'category_id') String categoryId,@JsonKey(name: 'classification_ids') List<String> classificationIds
+ String id, String url, String thumbUrl, bool isTopRated, String mediaType, String? classificationId, String? classificationName, String? classificationThumbnailUrl, String createdAt
 });
 
 
@@ -284,17 +280,18 @@ class __$WallpaperModelCopyWithImpl<$Res>
 
 /// Create a copy of WallpaperModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? imageUrl = null,Object? thumbnailUrl = null,Object? videoUrl = freezed,Object? isPremium = null,Object? categoryId = null,Object? classificationIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? url = null,Object? thumbUrl = null,Object? isTopRated = null,Object? mediaType = null,Object? classificationId = freezed,Object? classificationName = freezed,Object? classificationThumbnailUrl = freezed,Object? createdAt = null,}) {
   return _then(_WallpaperModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,imageUrl: null == imageUrl ? _self.imageUrl : imageUrl // ignore: cast_nullable_to_non_nullable
-as String,thumbnailUrl: null == thumbnailUrl ? _self.thumbnailUrl : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-as String,videoUrl: freezed == videoUrl ? _self.videoUrl : videoUrl // ignore: cast_nullable_to_non_nullable
-as String?,isPremium: null == isPremium ? _self.isPremium : isPremium // ignore: cast_nullable_to_non_nullable
-as bool,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String,classificationIds: null == classificationIds ? _self._classificationIds : classificationIds // ignore: cast_nullable_to_non_nullable
-as List<String>,
+as String,url: null == url ? _self.url : url // ignore: cast_nullable_to_non_nullable
+as String,thumbUrl: null == thumbUrl ? _self.thumbUrl : thumbUrl // ignore: cast_nullable_to_non_nullable
+as String,isTopRated: null == isTopRated ? _self.isTopRated : isTopRated // ignore: cast_nullable_to_non_nullable
+as bool,mediaType: null == mediaType ? _self.mediaType : mediaType // ignore: cast_nullable_to_non_nullable
+as String,classificationId: freezed == classificationId ? _self.classificationId : classificationId // ignore: cast_nullable_to_non_nullable
+as String?,classificationName: freezed == classificationName ? _self.classificationName : classificationName // ignore: cast_nullable_to_non_nullable
+as String?,classificationThumbnailUrl: freezed == classificationThumbnailUrl ? _self.classificationThumbnailUrl : classificationThumbnailUrl // ignore: cast_nullable_to_non_nullable
+as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

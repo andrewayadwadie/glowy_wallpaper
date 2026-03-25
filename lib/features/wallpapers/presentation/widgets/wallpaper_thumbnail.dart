@@ -22,7 +22,7 @@ class WallpaperThumbnail extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(AppDimens.radiusS),
           child: AppCachedImage(
-            imageUrl: wallpaper.thumbnailUrl,
+            imageUrl: wallpaper.thumbUrl,
             fit: BoxFit.cover,
           ),
         ),
