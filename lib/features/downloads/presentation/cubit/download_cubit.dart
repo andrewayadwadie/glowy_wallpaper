@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../../core/utils/app_strings.dart';
@@ -45,10 +46,11 @@ class DownloadCubit extends Cubit<DownloadState> {
     );
   }
 
-  Future<void> download(WallpaperEntity wallpaper) async {
+  Future<void> download(WallpaperEntity wallpaper, BuildContext context) async {
     if (state.isDownloading) return;
 
     final shouldProceed = await adGatePlaceholder(
+      context: context,
       action: 'download',
       onProceed: () async {
         emit(state.copyWith(isDownloading: true, downloadProgress: 0.0));

@@ -9,6 +9,7 @@ import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/widgets/app_error_widget.dart';
 import '../../../../core/widgets/app_empty_state_widget.dart';
 import '../../../../core/widgets/app_shimmer_widget.dart';
+import '../../../categories/domain/entities/category_entity.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../domain/entities/download_record_entity.dart';
 import '../cubit/download_cubit.dart';
@@ -34,6 +35,9 @@ class _DownloadsPageState extends State<DownloadsPage> {
     List<DownloadRecordEntity> all,
   ) {
     // Build minimal WallpaperEntity list from download records for navigation
+    final categoryType = record.fileType == WallpaperFileType.video
+        ? CategoryType.video
+        : CategoryType.image;
     final wallpapers = all
         .map(
           (r) => WallpaperEntity(
@@ -44,6 +48,9 @@ class _DownloadsPageState extends State<DownloadsPage> {
             mediaType: r.fileType == WallpaperFileType.video
                 ? MediaType.video
                 : MediaType.image,
+            classificationId: null,
+            classificationName: null,
+            classificationThumbnailUrl: null,
             createdAt: r.downloadedAt,
           ),
         )
@@ -51,7 +58,12 @@ class _DownloadsPageState extends State<DownloadsPage> {
     final index = all.indexOf(record);
     context.push(
       AppRoutes.wallpaperDetail.replaceFirst(':id', record.wallpaperId),
-      extra: {'wallpapers': wallpapers, 'initialIndex': index},
+      extra: {
+        'wallpapers': wallpapers,
+        'initialIndex': index,
+        'categoryType': categoryType,
+        'classificationId': null,
+      },
     );
   }
 

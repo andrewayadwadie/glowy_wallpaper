@@ -9,6 +9,7 @@ import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/widgets/app_error_widget.dart';
 import '../../../../core/widgets/app_empty_state_widget.dart';
 import '../../../../core/widgets/app_shimmer_widget.dart';
+import '../../../categories/domain/entities/category_entity.dart';
 import '../cubit/favorite_cubit.dart';
 import '../cubit/favorite_state.dart';
 import '../widgets/favorites_grid.dart';
@@ -28,12 +29,27 @@ class _FavoritesPageState extends State<FavoritesPage> {
     context.read<FavoriteCubit>().loadFavorites();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<FavoriteCubit>().loadFavorites();
+      }
+    });
+  }
+
   void _onFavoriteTapped(FavoriteEntity favorite, List<FavoriteEntity> all) {
     final wallpapers = all.map((f) => f.wallpaper).toList();
     final index = all.indexOf(favorite);
     context.push(
       AppRoutes.wallpaperDetail.replaceFirst(':id', favorite.wallpaperId),
-      extra: {'wallpapers': wallpapers, 'initialIndex': index},
+      extra: {
+        'wallpapers': wallpapers,
+        'initialIndex': index,
+        'categoryType': CategoryType.image,
+        'classificationId': null,
+      },
     );
   }
 

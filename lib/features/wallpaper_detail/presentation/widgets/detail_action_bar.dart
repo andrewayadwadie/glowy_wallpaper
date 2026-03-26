@@ -6,6 +6,7 @@ class DetailActionBar extends StatelessWidget {
   final bool isFavorite;
   final bool isDownloading;
   final double downloadProgress;
+  final bool isToggling;
   final VoidCallback onDownload;
   final VoidCallback onFavorite;
   final VoidCallback onPreview;
@@ -15,6 +16,7 @@ class DetailActionBar extends StatelessWidget {
     required this.isFavorite,
     required this.isDownloading,
     required this.downloadProgress,
+    required this.isToggling,
     required this.onDownload,
     required this.onFavorite,
     required this.onPreview,
@@ -28,7 +30,11 @@ class DetailActionBar extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [Colors.transparent, Colors.black.withAlpha(180)],
+          colors: [
+            Colors.transparent,
+            Colors.black.withAlpha(100),
+            Colors.black,
+          ],
         ),
       ),
       child: Row(
@@ -62,7 +68,7 @@ class DetailActionBar extends StatelessWidget {
             label: isFavorite
                 ? AppStrings.removeFromFavorites
                 : AppStrings.addToFavorites,
-            onTap: onFavorite,
+            onTap: isToggling ? null : onFavorite,
           ),
           _ActionButton(
             icon: const Icon(Icons.phone_android_rounded, color: Colors.white),

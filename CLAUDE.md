@@ -17,6 +17,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-26
 - Hive box `app_bootstrap` (new) for `AppMetadataModel` JSON cache; existing `categories_cache` box superseded (007-api-integration)
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), go_router, dio, hive, injectable + get_it, cached_network_image, auto_size_text, flutter_screenutil, share_plus, url_launcher (008-fix-runtime-bugs)
 - Hive (app_bootstrap box for AppMetadataModel cache) (008-fix-runtime-bugs)
+- Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), go_router, dio, hive + hive_flutter, cached_network_image, video_player, gal, permission_handler, injectable + get_it, dartz, flutter_screenutil, auto_size_text (009-fix-favorites-download-preview)
+- Hive (favorites box, downloads box) — local device storage (009-fix-favorites-download-preview)
 
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, hive + flutter_secure_storage, flutter_screenutil, envied, dartz, google_fonts (Poppins), cached_network_image, auto_size_text, loader_overlay + flutter_spinkit, easy_localization (001-phase1-foundation)
 
@@ -36,9 +38,9 @@ tests/
 Dart 3.11.3 / Flutter 3.41.5: Follow standard conventions
 
 ## Recent Changes
+- 009-fix-favorites-download-preview: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), go_router, dio, hive + hive_flutter, cached_network_image, video_player, gal, permission_handler, injectable + get_it, dartz, flutter_screenutil, auto_size_text
 - 008-fix-runtime-bugs: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), go_router, dio, hive, injectable + get_it, cached_network_image, auto_size_text, flutter_screenutil, share_plus, url_launcher
 - 007-api-integration: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), injectable + get_it, dio (public Dio instance), hive + hive_flutter, dartz Either, mocktail + bloc_test (tests)
-- 006-firebase-polish-store: Added Dart 3.11.3 / Flutter 3.41.5 + firebase_messaging ^15.2.5, flutter_local_notifications ^18.0.1, firebase_analytics ^11.4.5, url_launcher, share_plus, shimmer, flutter_launcher_icons, flutter_native_splash, permission_handler (existing)
 
 
 <!-- MANUAL ADDITIONS START -->

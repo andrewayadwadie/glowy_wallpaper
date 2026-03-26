@@ -19,7 +19,11 @@ class FavoriteLocalDataSourceImpl implements FavoriteLocalDataSource {
   @override
   Future<void> add(FavoriteEntity favorite) async {
     final model = FavoriteModel.fromEntity(favorite);
-    await _box.put(favorite.wallpaperId, model.toJson());
+    final json = model.toJson();
+    // explicitToJson is not enabled, so nested WallpaperModel must be
+    // serialized manually to avoid Hive failing on the raw Dart object.
+    json['wallpaper'] = model.wallpaper.toJson();
+    await _box.put(favorite.wallpaperId, json);
   }
 
   @override
@@ -30,13 +34,14 @@ class FavoriteLocalDataSourceImpl implements FavoriteLocalDataSource {
   @override
   Future<List<FavoriteEntity>> getAll() async {
     final entries = _box.values.toList();
-    return entries
-        .map(
-          (e) => FavoriteModel.fromJson(
-            Map<String, dynamic>.from(e as Map),
-          ).toEntity(),
-        )
-        .toList();
+    return entries.map((e) {
+      final raw = Map<String, dynamic>.from(e as Map);
+      // Hive stores nested maps as Map<dynamic, dynamic>; deep-convert wallpaper.
+      if (raw['wallpaper'] is Map) {
+        raw['wallpaper'] = Map<String, dynamic>.from(raw['wallpaper'] as Map);
+      }
+      return FavoriteModel.fromJson(raw).toEntity();
+    }).toList();
   }
 
   @override
@@ -59,11 +64,15 @@ class FavoriteLocalDataSourceImpl implements FavoriteLocalDataSource {
   ) async {
     final existing = _box.get(wallpaperId);
     if (existing == null) return;
-    final model = FavoriteModel.fromJson(
-      Map<String, dynamic>.from(existing as Map),
-    );
+    final raw = Map<String, dynamic>.from(existing as Map);
+    if (raw['wallpaper'] is Map) {
+      raw['wallpaper'] = Map<String, dynamic>.from(raw['wallpaper'] as Map);
+    }
+    final model = FavoriteModel.fromJson(raw);
     final updated = model.copyWith(syncStatus: _syncStatusToString(status));
-    await _box.put(wallpaperId, updated.toJson());
+    final json = updated.toJson();
+    json['wallpaper'] = updated.wallpaper.toJson();
+    await _box.put(wallpaperId, json);
   }
 
   static String _syncStatusToString(FavoriteSyncStatus status) {
