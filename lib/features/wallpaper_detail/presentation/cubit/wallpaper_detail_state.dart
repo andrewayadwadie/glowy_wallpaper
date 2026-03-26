@@ -11,8 +11,6 @@ abstract class WallpaperDetailState with _$WallpaperDetailState {
   const factory WallpaperDetailState({
     @Default([]) List<WallpaperEntity> wallpapers,
     @Default(0) int currentIndex,
-    @Default(false) bool isFavorite,
-    @Default(false) bool isDownloading,
     @Default(0.0) double downloadProgress,
     @Default(Status.loading) Status similarWallpapersStatus,
     @Default([]) List<WallpaperEntity> similarWallpapers,

@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
+import '../../../categories/domain/entities/category_entity.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../domain/usecases/get_similar_wallpapers.dart';
 import 'wallpaper_detail_state.dart';
@@ -73,11 +74,19 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
     );
   }
 
-  Future<void> loadSimilarWallpapers(String wallpaperId) async {
+  Future<void> loadSimilarWallpapers(
+    String wallpaperId,
+    CategoryType categoryType,
+    String classificationId,
+  ) async {
     if (_getSimilarWallpapers == null) return;
     _analytics?.logEvent(
       name: 'view_similar_wallpapers',
-      parameters: {'wallpaper_id': wallpaperId},
+      parameters: {
+        'wallpaper_id': wallpaperId,
+        'category_type': categoryType.name,
+        'classification_id': classificationId,
+      },
     );
     emit(
       state.copyWith(
@@ -86,7 +95,7 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
       ),
     );
     final result = await _getSimilarWallpapers(
-      GetSimilarWallpapersParams(wallpaperId),
+      GetSimilarWallpapersParams(wallpaperId, categoryType, classificationId),
     );
     result.fold(
       (failure) {

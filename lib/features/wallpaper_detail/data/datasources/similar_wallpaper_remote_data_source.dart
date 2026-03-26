@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import '../../../../core/config/app_config.dart';
+import '../../../categories/domain/entities/category_entity.dart';
 import '../../../wallpapers/data/models/wallpaper_model.dart';
 
 class SimilarWallpaperRemoteDataSource {
@@ -8,10 +9,13 @@ class SimilarWallpaperRemoteDataSource {
 
   Future<List<WallpaperModel>> getSimilarWallpapers(
     String wallpaperId,
+    CategoryType categoryType,
+    String classificationId,
   ) async {
-    final response = await _dio.get(
-      '/api/v1/mobile/apps/${AppConfig.appId}/wallpapers/$wallpaperId/similar',
-    );
+    final String url = categoryType == CategoryType.classification
+        ? '/api/v1/mobile/apps/${AppConfig.appId}/categories/$wallpaperId/content?classificationId=$classificationId'
+        : '/api/v1/mobile/apps/${AppConfig.appId}/categories/$wallpaperId/content';
+    final response = await _dio.get(url);
     final data = response.data['data'] as Map<String, dynamic>;
     final items = data['items'] as List;
     return items

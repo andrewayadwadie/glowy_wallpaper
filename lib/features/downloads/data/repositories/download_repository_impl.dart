@@ -28,6 +28,16 @@ class DownloadRepositoryImpl implements DownloadRepository {
     try {
       final hasPermission = await _galleryDataSource.requestPermission();
       if (!hasPermission) {
+        final isPermanentlyDenied = await _galleryDataSource
+            .isPermanentlyDenied();
+        if (isPermanentlyDenied) {
+          await _galleryDataSource.openAppSettings();
+          return Left(
+            CacheFailure(
+              'Storage permission permanently denied. Please enable it in settings.',
+            ),
+          );
+        }
         return Left(CacheFailure('Storage permission denied'));
       }
 

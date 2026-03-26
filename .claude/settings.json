@@ -57,7 +57,21 @@
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/update-agent-context.ps1'' -AgentType claude\")",
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json\")",
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")",
-      "Bash(grep -E \"\\(entity|model\\)\\\\.dart$\")"
+      "Bash(grep -E \"\\(entity|model\\)\\\\.dart$\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" \"Fix runtime bugs: setState error on category switch, classification network error, invalid navigation params, remove settings from drawer, drawer data from bootstrap API\" -Json -ShortName \"fix-runtime-bugs\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"fix-runtime-bugs\" \"Fix runtime bugs: setState error on category switch, classification network error, invalid navigation params, remove settings from drawer, drawer data from bootstrap API\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''fix-runtime-bugs'' -FeatureDescription ''Fix runtime bugs including setState error on category switch, classification network error, invalid navigation params, remove settings from drawer, drawer data from bootstrap API''\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -PathsOnly\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/setup-plan.ps1'' -Json\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/update-agent-context.ps1'' -AgentType claude\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")",
+      "Bash(find /c/Users/Dell/Documents/claude/glowy_wallpaper -name *.env* -o -name .env)",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 \"Fix favorites, downloads, and preview functionality - save favorites locally, download to gallery, phone frame preview\" -Json -ShortName \"fix-favorites-download-preview\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"fix-favorites-download-preview\" \"Fix favorites downloads and preview functionality\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''fix-favorites-download-preview'' -Number 0 ''Fix favorites downloads and preview functionality''\")",
+      "Bash(find c:/Users/Dell/Documents/claude/glowy_wallpaper/specs -type f -name *.md)",
+      "Bash(find c:/Users/Dell/Documents/claude/glowy_wallpaper/specs/009-* -type f)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

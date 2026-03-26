@@ -72,10 +72,6 @@ class CategoryRepositoryImpl implements CategoryRepository {
   Future<Either<Failure, List<ClassificationEntity>>> getClassifications(
     String categoryId,
   ) async {
-    if (!await networkInfo.isConnected) {
-      return const Left(NetworkFailure('No internet connection'));
-    }
-
     try {
       final classifications = await remoteDataSource.getClassifications(
         categoryId,

@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart' as ph;
 abstract class GalleryDataSource {
   Future<bool> requestPermission();
   Future<bool> checkPermission();
+  Future<bool> isPermanentlyDenied();
   Future<void> openAppSettings();
   Future<void> putImageBytes(Uint8List bytes, {String? name});
   Future<void> putVideoBytes(Uint8List bytes, {String? name});
@@ -23,6 +24,12 @@ class GalleryDataSourceImpl implements GalleryDataSource {
   @override
   Future<bool> checkPermission() async {
     return Gal.hasAccess(toAlbum: false);
+  }
+
+  @override
+  Future<bool> isPermanentlyDenied() async {
+    final status = await ph.Permission.storage.status;
+    return status.isPermanentlyDenied;
   }
 
   @override

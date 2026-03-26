@@ -20,7 +20,7 @@ abstract class AppDimens {
   static double get categoryChipPaddingH => 12.w;
   static double get categoryChipPaddingV => 6.h;
   static double get categoryChipGap => 8.w;
-  static double get categorySelectorHeight => 56.h;
+  static double get categorySelectorHeight => 40.h;
 
   static double get bentoLargeCardHeight => 200.h;
   static double get bentoSmallCardHeight => 150.h;

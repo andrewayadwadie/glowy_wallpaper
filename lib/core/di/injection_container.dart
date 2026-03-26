@@ -58,6 +58,7 @@ import '../../features/premium/data/datasources/premium_remote_source.dart';
 import '../../features/premium/data/repositories/premium_repository_impl.dart';
 import '../../features/premium/domain/repositories/premium_repository.dart';
 import '../services/ad_helper.dart';
+import '../services/device_id_service.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../../features/premium/domain/usecases/get_products.dart';
 import '../../features/premium/domain/usecases/purchase_premium.dart';
@@ -228,7 +229,7 @@ Future<void> init() async {
     () => SimilarWallpaperRemoteDataSource(sl<Dio>(instanceName: 'publicDio')),
   );
   sl.registerLazySingleton<SimilarWallpaperRepository>(
-    () => SimilarWallpaperRepositoryImpl(sl(), sl()),
+    () => SimilarWallpaperRepositoryImpl(sl()),
   );
   sl.registerLazySingleton(() => GetSimilarWallpapers(sl()));
 
@@ -262,6 +263,11 @@ Future<void> init() async {
     ),
   );
 
+  // Device ID Service
+  sl.registerLazySingleton<DeviceIdService>(
+    () => DeviceIdService(Hive.box('app_bootstrap')),
+  );
+
   // Favorite Data Sources
   sl.registerLazySingleton<FavoriteLocalDataSource>(
     () => FavoriteLocalDataSourceImpl(Hive.box('favorites')),
@@ -287,6 +293,7 @@ Future<void> init() async {
       toggleFavorite: sl(),
       isFavorite: sl(),
       getFavorites: sl(),
+      deviceIdService: sl(),
       analytics: sl(),
       notificationService: sl(),
     ),

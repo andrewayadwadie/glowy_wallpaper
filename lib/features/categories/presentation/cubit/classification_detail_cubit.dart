@@ -13,6 +13,8 @@ class ClassificationDetailCubit extends Cubit<ClassificationDetailState> {
     required this.classification,
   }) : super(ClassificationDetailState(classification: classification));
 
+  String get selectedClassificationId => classification.id;
+
   Future<void> loadWallpapers() async {
     final result = await getWallpapersByCategory(
       GetWallpapersByCategoryParams(

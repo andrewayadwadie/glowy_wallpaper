@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:glowy_wallpaper/core/di/injection_container.dart';
 import 'package:glowy_wallpaper/features/notifications/domain/services/notification_service.dart';
+import 'package:glowy_wallpaper/core/services/ad_helper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +23,9 @@ Future<void> main() async {
   try {
     await Firebase.initializeApp();
     await sl<NotificationService>().initialize();
+    await AdHelper.instance.initialize();
   } catch (e) {
-    // Firebase/notification initialization failed but don't block the app
+    // Firebase/notification/ads initialization failed but don't block the app
   }
 
   runApp(

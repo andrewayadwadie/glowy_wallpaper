@@ -28,10 +28,15 @@ class AdHelper {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-    await MobileAds.instance.initialize();
-    _isInitialized = true;
+    try {
+      await MobileAds.instance.initialize();
+      _isInitialized = true;
+      debugPrint('MobileAds initialized successfully');
 
-    await preloadRewardedAd();
+      await preloadRewardedAd();
+    } catch (e) {
+      debugPrint('MobileAds initialization failed: $e');
+    }
   }
 
   Future<void> loadBannerAd() async {
@@ -125,75 +130,139 @@ class AdHelper {
     _appOpenAd!.show();
   }
 
-  Future<void> preloadRewardedAd() async {
+  Future<bool> preloadRewardedAd() async {
+    debugPrint('preloadRewardedAd called');
+    debugPrint('shouldShowAds: $shouldShowAds');
+    debugPrint('_isAdLoading: $_isAdLoading');
+
     if (!shouldShowAds) {
+      debugPrint('Ads are disabled, not preloading');
       _rewardedAd?.dispose();
       _rewardedAd = null;
-      return;
+      return false;
     }
 
-    if (_isAdLoading) return;
+    if (_isAdLoading) {
+      debugPrint('Ad is already loading, skipping');
+      return false;
+    }
 
     _isAdLoading = true;
+    debugPrint('Starting to load ad with unit ID: ${Env.adMobRewardedId}');
 
-    await RewardedAd.load(
-      adUnitId: Env.adMobRewardedId,
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          debugPrint('RewardedAd loaded');
-          _rewardedAd = ad;
-          _isAdLoading = false;
-        },
-        onAdFailedToLoad: (error) {
-          debugPrint('RewardedAd failed to load: $error');
-          _rewardedAd = null;
-          _isAdLoading = false;
-        },
-      ),
-    );
+    final completer = Completer<bool>();
+
+    try {
+      await RewardedAd.load(
+        adUnitId: Env.adMobRewardedId,
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (ad) {
+            debugPrint('RewardedAd loaded successfully');
+            _rewardedAd = ad;
+            _isAdLoading = false;
+            if (!completer.isCompleted) {
+              completer.complete(true);
+            }
+          },
+          onAdFailedToLoad: (error) {
+            debugPrint('RewardedAd failed to load: $error');
+            debugPrint('Error code: ${error.code}');
+            debugPrint('Error message: ${error.message}');
+            _rewardedAd = null;
+            _isAdLoading = false;
+            if (!completer.isCompleted) {
+              completer.complete(false);
+            }
+          },
+        ),
+      );
+    } catch (e) {
+      debugPrint('RewardedAd load exception: $e');
+      _rewardedAd = null;
+      _isAdLoading = false;
+      if (!completer.isCompleted) {
+        completer.complete(false);
+      }
+    }
+
+    debugPrint('Waiting for preload to complete');
+    return await completer.future;
   }
 
   Future<bool> showRewardedAd({required String action}) async {
-    if (!shouldShowAds) return true;
+    debugPrint('showRewardedAd called for action: $action');
+    debugPrint('shouldShowAds: $shouldShowAds');
+
+    if (!shouldShowAds) {
+      debugPrint('Ads are disabled, proceeding without ad');
+      return true;
+    }
+
+    debugPrint('_rewardedAd is null: ${_rewardedAd == null}');
+
     if (_rewardedAd == null) {
-      await preloadRewardedAd();
-      return false;
+      debugPrint('No ad loaded, trying to preload');
+      final loaded = await preloadRewardedAd();
+      debugPrint('Preload result: $loaded');
+      debugPrint('_rewardedAd after preload is null: ${_rewardedAd == null}');
+
+      if (!loaded || _rewardedAd == null) {
+        debugPrint('Failed to load ad');
+        return false;
+      }
     }
 
     bool rewardEarned = false;
     final completer = Completer<bool>();
 
-    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (_) {
-        debugPrint('RewardedAd shown');
-      },
-      onAdDismissedFullScreenContent: (_) {
-        _rewardedAd = null;
-        if (rewardEarned) {
-          _analytics.logEvent(
-            name: 'reward_earned',
-            parameters: {'action': action},
-          );
-        }
-        preloadRewardedAd();
-        completer.complete(rewardEarned);
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        debugPrint('RewardedAd failed to show: $error');
-        _rewardedAd = null;
-        preloadRewardedAd();
+    try {
+      debugPrint('Setting up fullScreenContentCallback');
+      _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdShowedFullScreenContent: (_) {
+          debugPrint('RewardedAd shown successfully');
+        },
+        onAdDismissedFullScreenContent: (_) {
+          debugPrint('RewardedAd dismissed, rewardEarned: $rewardEarned');
+          _rewardedAd = null;
+          if (rewardEarned) {
+            _analytics.logEvent(
+              name: 'reward_earned',
+              parameters: {'action': action},
+            );
+          }
+          preloadRewardedAd();
+          if (!completer.isCompleted) {
+            completer.complete(rewardEarned);
+          }
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          debugPrint('RewardedAd failed to show: $error');
+          _rewardedAd = null;
+          ad.dispose();
+          preloadRewardedAd();
+          if (!completer.isCompleted) {
+            completer.complete(false);
+          }
+        },
+      );
+
+      debugPrint('Calling _rewardedAd.show()');
+      await _rewardedAd!.show(
+        onUserEarnedReward: (ad, reward) {
+          debugPrint('User earned reward: ${reward.amount} ${reward.type}');
+          rewardEarned = true;
+        },
+      );
+    } catch (e) {
+      debugPrint('RewardedAd show exception: $e');
+      _rewardedAd = null;
+      if (!completer.isCompleted) {
         completer.complete(false);
-      },
-    );
+      }
+    }
 
-    _rewardedAd!.show(
-      onUserEarnedReward: (ad, reward) {
-        debugPrint('User earned reward: ${reward.amount} ${reward.type}');
-        rewardEarned = true;
-      },
-    );
-
+    debugPrint('Waiting for completer future');
     return await completer.future;
   }
 

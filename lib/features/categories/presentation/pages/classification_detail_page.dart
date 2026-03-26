@@ -10,6 +10,7 @@ import '../../../../core/widgets/app_error_widget.dart';
 import '../../../../core/widgets/app_empty_state_widget.dart';
 import '../../../../core/widgets/app_shimmer_widget.dart';
 import '../../../wallpapers/presentation/widgets/wallpaper_grid.dart';
+import '../../domain/entities/category_entity.dart';
 import '../../../auth/presentation/cubit/subscription_cubit.dart';
 import '../cubit/classification_detail_cubit.dart';
 import '../cubit/classification_detail_state.dart';
@@ -72,7 +73,19 @@ class ClassificationDetailPage extends StatelessWidget {
           onLoadMore: () =>
               context.read<ClassificationDetailCubit>().loadMore(),
           onWallpaperTapped: (wallpaper) {
-            context.push('/wallpaper/${wallpaper.id}', extra: wallpaper);
+            final cubit = context.read<ClassificationDetailCubit>();
+            final wallpapers = state.wallpapers;
+            final index = wallpapers.indexOf(wallpaper);
+            context.push(
+              '/wallpaper/${wallpaper.id}',
+              extra: {
+                'wallpapers': wallpapers,
+                'initialIndex': index >= 0 ? index : 0,
+                'categoryId': cubit.classification.categoryId,
+                'categoryType': CategoryType.classification,
+                'classificationId': cubit.selectedClassificationId,
+              },
+            );
           },
           isPremium: context.read<SubscriptionCubit>().isPremium,
         );

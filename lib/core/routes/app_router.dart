@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:glowy_wallpaper/core/di/injection_container.dart';
 import 'package:glowy_wallpaper/features/home/presentation/cubit/home_cubit.dart';
+import '../../features/categories/domain/entities/category_entity.dart';
 import 'routes.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
@@ -100,6 +101,9 @@ abstract class AppRouter {
           }
           final wallpapers = extra['wallpapers'] as List<WallpaperEntity>;
           final initialIndex = extra['initialIndex'] as int? ?? 0;
+          final categoryType =
+              extra['categoryType'] as CategoryType? ?? CategoryType.image;
+          final classificationId = extra['classificationId'] as String? ?? "";
           return MultiBlocProvider(
             providers: [
               BlocProvider(
@@ -120,6 +124,9 @@ abstract class AppRouter {
             child: WallpaperDetailPage(
               wallpapers: wallpapers,
               initialIndex: initialIndex,
+              categoryId: extra['categoryId'] as String?,
+              categoryType: categoryType,
+              classificationId: classificationId,
             ),
           );
         },
@@ -154,24 +161,25 @@ abstract class AppRouter {
         },
       ),
       GoRoute(
-        path: AppRoutes.settings,
-        builder: (context, state) =>
-            Scaffold(body: Center(child: AutoSizeText('Route: settings'))),
-      ),
-      GoRoute(
         path: AppRoutes.about,
-        builder: (context, state) =>
-            const ContentPage(contentType: ContentType.about),
+        builder: (context, state) => ContentPage(
+          contentType: ContentType.about,
+          content: state.extra as String? ?? '',
+        ),
       ),
       GoRoute(
         path: AppRoutes.privacyPolicy,
-        builder: (context, state) =>
-            const ContentPage(contentType: ContentType.privacyPolicy),
+        builder: (context, state) => ContentPage(
+          contentType: ContentType.privacyPolicy,
+          content: state.extra as String? ?? '',
+        ),
       ),
       GoRoute(
         path: AppRoutes.termsOfUse,
-        builder: (context, state) =>
-            const ContentPage(contentType: ContentType.termsOfUse),
+        builder: (context, state) => ContentPage(
+          contentType: ContentType.termsOfUse,
+          content: state.extra as String? ?? '',
+        ),
       ),
       GoRoute(
         path: AppRoutes.onboarding,

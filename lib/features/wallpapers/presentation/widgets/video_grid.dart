@@ -38,6 +38,8 @@ class _VideoGridState extends State<VideoGrid> {
       _visibilityFractions.remove(index);
     }
 
+    if (!mounted) return;
+
     final sortedCandidates = _visibilityFractions.keys.toList()
       ..sort(
         (a, b) => (_visibilityFractions[b] ?? 0).compareTo(

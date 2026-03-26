@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/services/device_id_service.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../../../../features/notifications/domain/services/notification_service.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
@@ -13,6 +14,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   final ToggleFavorite _toggleFavorite;
   final IsFavorite _isFavorite;
   final GetFavorites _getFavorites;
+  final DeviceIdService _deviceIdService;
   final FirebaseAnalytics? _analytics;
   final NotificationService? _notificationService;
 
@@ -20,11 +22,13 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     required ToggleFavorite toggleFavorite,
     required IsFavorite isFavorite,
     required GetFavorites getFavorites,
+    required DeviceIdService deviceIdService,
     FirebaseAnalytics? analytics,
     NotificationService? notificationService,
   }) : _toggleFavorite = toggleFavorite,
        _isFavorite = isFavorite,
        _getFavorites = getFavorites,
+       _deviceIdService = deviceIdService,
        _analytics = analytics,
        _notificationService = notificationService,
        super(const FavoriteState());
@@ -34,8 +38,10 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     result.fold((_) {}, (isFav) => emit(state.copyWith(isFavorite: isFav)));
   }
 
-  Future<void> toggle(WallpaperEntity wallpaper, String? userId) async {
+  Future<void> toggle(WallpaperEntity wallpaper) async {
     if (state.isToggling) return;
+
+    final deviceId = _deviceIdService.getDeviceId();
 
     // Optimistic update
     final previousState = state.isFavorite;
@@ -45,11 +51,9 @@ class FavoriteCubit extends Cubit<FavoriteState> {
         ? FavoriteEntity(
             wallpaperId: wallpaper.id,
             wallpaper: wallpaper,
-            userId: userId,
+            userId: deviceId,
             favoritedAt: DateTime.now(),
-            syncStatus: userId != null
-                ? FavoriteSyncStatus.pending
-                : FavoriteSyncStatus.localOnly,
+            syncStatus: FavoriteSyncStatus.localOnly,
           )
         : null;
 
