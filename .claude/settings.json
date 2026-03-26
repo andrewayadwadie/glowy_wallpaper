@@ -65,7 +65,8 @@
       "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/setup-plan.ps1'' -Json\")",
       "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/update-agent-context.ps1'' -AgentType claude\")",
       "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json\")",
-      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")"
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")",
+      "Bash(find /c/Users/Dell/Documents/claude/glowy_wallpaper -name *.env* -o -name .env)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"
