@@ -24,17 +24,17 @@ class HomePage extends StatelessWidget {
         title: AutoSizeText(AppStrings.appName, maxLines: 1),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.person_outline),
-            onPressed: () => _onProfileTapped(context),
-          ),
+          if (isPremium)
+            IconButton(
+              icon: const Icon(Icons.person_outline),
+              onPressed: () => _onProfileTapped(context, isPremium),
+            ),
         ],
       ),
       drawer: const HomeDrawer(),
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           final homeCubit = context.read<HomeCubit>();
-
           return Column(
             children: [
               if (state.categoriesStatus == Status.success)
@@ -54,9 +54,17 @@ class HomePage extends StatelessWidget {
                   hasReachedEnd: state.hasReachedEnd,
                   onLoadMore: () => homeCubit.loadMore(),
                   onWallpaperTapped: (wallpaper) {
+                    final wallpapers = state.wallpapers;
+                    final index = wallpapers.indexOf(wallpaper);
                     context.push(
                       '/wallpaper/${wallpaper.id}',
-                      extra: wallpaper,
+                      extra: {
+                        'wallpapers': wallpapers,
+                        'initialIndex': index >= 0 ? index : 0,
+                        'categoryId': homeCubit.selectedCategoryId,
+                        'categoryType': homeCubit.selectedCategory?.type,
+                        'classificationId': '',
+                      },
                     );
                   },
                   onClassificationTapped: (classification) {
@@ -78,9 +86,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void _onProfileTapped(BuildContext context) {
-    final subscriptionCubit = context.read<SubscriptionCubit>();
-    if (subscriptionCubit.isPremium) {
+  void _onProfileTapped(BuildContext context, bool isPremium) {
+    if (isPremium) {
       context.push(AppRoutes.profile);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

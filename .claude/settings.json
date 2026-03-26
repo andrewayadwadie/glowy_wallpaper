@@ -57,7 +57,15 @@
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/update-agent-context.ps1'' -AgentType claude\")",
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json\")",
       "Bash(powershell.exe -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")",
-      "Bash(grep -E \"\\(entity|model\\)\\\\.dart$\")"
+      "Bash(grep -E \"\\(entity|model\\)\\\\.dart$\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" \"Fix runtime bugs: setState error on category switch, classification network error, invalid navigation params, remove settings from drawer, drawer data from bootstrap API\" -Json -ShortName \"fix-runtime-bugs\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"fix-runtime-bugs\" \"Fix runtime bugs: setState error on category switch, classification network error, invalid navigation params, remove settings from drawer, drawer data from bootstrap API\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''fix-runtime-bugs'' -FeatureDescription ''Fix runtime bugs including setState error on category switch, classification network error, invalid navigation params, remove settings from drawer, drawer data from bootstrap API''\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -PathsOnly\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/setup-plan.ps1'' -Json\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/update-agent-context.ps1'' -AgentType claude\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json\")",
+      "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''.specify/scripts/powershell/check-prerequisites.ps1'' -Json -RequireTasks -IncludeTasks\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

@@ -42,6 +42,11 @@ class HomeCubit extends Cubit<HomeState> {
       ? state.categories[state.selectedCategoryIndex]
       : null;
 
+  String get selectedCategoryId =>
+      state.categories.isNotEmpty
+          ? state.categories[state.selectedCategoryIndex].id
+          : '';
+
   Future<void> loadAppData() async {
     final result = await getAppData(NoParams());
     result.fold(

@@ -32,6 +32,7 @@ class CategorySelector extends StatelessWidget {
           return GestureDetector(
             onTap: () => onCategorySelected(index),
             child: Container(
+              alignment: Alignment.center,
               margin: EdgeInsets.only(
                 left: index == 0 ? AppDimens.paddingM : 0,
                 right: AppDimens.categoryChipGap,
@@ -40,11 +41,12 @@ class CategorySelector extends StatelessWidget {
                 horizontal: AppDimens.categoryChipPaddingH,
                 vertical: AppDimens.categoryChipPaddingV,
               ),
+
               decoration: BoxDecoration(
                 color: isSelected
                     ? colorScheme.primary
                     : colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(AppDimens.radiusM),
+                borderRadius: BorderRadius.circular(AppDimens.radiusS),
               ),
               child: AutoSizeText(
                 category.name,

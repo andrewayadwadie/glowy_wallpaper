@@ -228,7 +228,7 @@ Future<void> init() async {
     () => SimilarWallpaperRemoteDataSource(sl<Dio>(instanceName: 'publicDio')),
   );
   sl.registerLazySingleton<SimilarWallpaperRepository>(
-    () => SimilarWallpaperRepositoryImpl(sl(), sl()),
+    () => SimilarWallpaperRepositoryImpl(sl()),
   );
   sl.registerLazySingleton(() => GetSimilarWallpapers(sl()));
 

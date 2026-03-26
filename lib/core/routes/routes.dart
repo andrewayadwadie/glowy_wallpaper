@@ -9,7 +9,6 @@ abstract class AppRoutes {
   static const String wallpaperDetail = '/wallpaper/:id';
   static const String classificationDetail = '/classification/:id';
   static const String premium = '/premium';
-  static const String settings = '/settings';
   static const String about = '/about';
   static const String privacyPolicy = '/privacy';
   static const String termsOfUse = '/terms';

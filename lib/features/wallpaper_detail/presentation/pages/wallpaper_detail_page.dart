@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +8,7 @@ import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/app_cached_image.dart';
 import '../../../auth/presentation/cubit/subscription_cubit.dart';
 import '../../../auth/presentation/cubit/subscription_state.dart';
+import '../../../categories/domain/entities/category_entity.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../cubit/wallpaper_detail_cubit.dart';
 import '../cubit/wallpaper_detail_state.dart';
@@ -20,11 +23,17 @@ import '../../../favorites/presentation/cubit/favorite_state.dart';
 class WallpaperDetailPage extends StatefulWidget {
   final List<WallpaperEntity> wallpapers;
   final int initialIndex;
+  final String? categoryId;
+  final CategoryType categoryType;
+  final String? classificationId;
 
   const WallpaperDetailPage({
     super.key,
     required this.wallpapers,
     required this.initialIndex,
+    this.categoryId,
+    required this.categoryType,
+    this.classificationId,
   });
 
   @override
@@ -59,6 +68,7 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
       },
       child: BlocBuilder<WallpaperDetailCubit, WallpaperDetailState>(
         builder: (context, state) {
+          log("category id: ${widget.categoryId}");
           return Scaffold(
             backgroundColor: Colors.black,
             extendBodyBehindAppBar: true,
@@ -74,7 +84,8 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
               ),
               actions: [
                 if (state.wallpapers.isNotEmpty &&
-                    state.wallpapers[state.currentIndex].mediaType == MediaType.video)
+                    state.wallpapers[state.currentIndex].mediaType ==
+                        MediaType.video)
                   IconButton(
                     icon: Icon(
                       state.isMuted
@@ -94,9 +105,11 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                     tooltip: AppStrings.similarWallpapers,
                     onPressed: () {
                       final cubit = context.read<WallpaperDetailCubit>();
-                      final wallpaperId =
-                          state.wallpapers[state.currentIndex].id;
-                      cubit.loadSimilarWallpapers(wallpaperId);
+                      cubit.loadSimilarWallpapers(
+                        widget.categoryId ?? '',
+                        widget.categoryType,
+                        widget.classificationId ?? "",
+                      );
                       showModalBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,
@@ -122,8 +135,11 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                     s.similarWallpapers.indexOf(wallpaper),
                                   );
                                 },
-                                onRetry: () =>
-                                    cubit.loadSimilarWallpapers(wallpaperId),
+                                onRetry: () => cubit.loadSimilarWallpapers(
+                                  widget.categoryId ?? '',
+                                  widget.categoryType,
+                                  widget.classificationId ?? "",
+                                ),
                               ),
                             ),
                       );
@@ -218,8 +234,7 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                           opaque: false,
                                           pageBuilder: (ctx, anim, secondary) =>
                                               PhoneFramePreview(
-                                                imageUrl:
-                                                    currentWallpaper.url,
+                                                imageUrl: currentWallpaper.url,
                                               ),
                                         ),
                                       );

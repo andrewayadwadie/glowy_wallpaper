@@ -91,18 +91,9 @@ class HomeDrawer extends StatelessWidget {
                 },
               ),
             const Divider(),
-            _buildMenuItem(
-              context,
-              Icons.settings_outlined,
-              AppStrings.settings,
-              () {
-                Navigator.pop(context);
-                context.push(AppRoutes.settings);
-              },
-            ),
             _buildMenuItem(context, Icons.info_outline, AppStrings.about, () {
               Navigator.pop(context);
-              context.push(AppRoutes.about);
+              context.push(AppRoutes.about, extra: appMetadata?.about ?? '');
             }),
             _buildMenuItem(
               context,
@@ -110,7 +101,10 @@ class HomeDrawer extends StatelessWidget {
               AppStrings.privacyPolicy,
               () {
                 Navigator.pop(context);
-                context.push(AppRoutes.privacyPolicy);
+                context.push(
+                  AppRoutes.privacyPolicy,
+                  extra: appMetadata?.privacyPolicy ?? '',
+                );
               },
             ),
             _buildMenuItem(
@@ -119,13 +113,16 @@ class HomeDrawer extends StatelessWidget {
               AppStrings.termsOfUse,
               () {
                 Navigator.pop(context);
-                context.push(AppRoutes.termsOfUse);
+                context.push(
+                  AppRoutes.termsOfUse,
+                  extra: appMetadata?.termsOfUse ?? '',
+                );
               },
             ),
             const Divider(),
             _buildMenuItem(context, Icons.star_outline, AppStrings.rateApp, () {
               Navigator.pop(context);
-              _rateApp();
+              _rateApp(appMetadata);
             }),
             _buildMenuItem(
               context,
@@ -151,15 +148,17 @@ class HomeDrawer extends StatelessWidget {
     );
   }
 
-  Future<void> _rateApp() async {
+  Future<void> _rateApp(AppMetadataEntity? appMetadata) async {
     final Uri url;
     if (Platform.isIOS) {
       url = Uri.parse(
-        'https://apps.apple.com/app/id${AppConfig.iosAppId}?action=write-review',
+        appMetadata?.iphoneShareLink ??
+            'https://apps.apple.com/app/id${AppConfig.iosAppId}?action=write-review',
       );
     } else {
       url = Uri.parse(
-        'https://play.google.com/store/apps/details?id=${AppConfig.androidPackageName}',
+        appMetadata?.androidShareLink ??
+            'https://play.google.com/store/apps/details?id=${AppConfig.androidPackageName}',
       );
     }
     if (await canLaunchUrl(url)) {
