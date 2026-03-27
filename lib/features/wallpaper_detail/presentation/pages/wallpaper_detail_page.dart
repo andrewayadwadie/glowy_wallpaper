@@ -18,6 +18,7 @@ import '../../../downloads/presentation/cubit/download_cubit.dart';
 import '../../../downloads/presentation/cubit/download_state.dart';
 import '../../../favorites/presentation/cubit/favorite_cubit.dart';
 import '../../../favorites/presentation/cubit/favorite_state.dart';
+import '../../../../core/services/ad_helper.dart';
 
 class WallpaperDetailPage extends StatefulWidget {
   final List<WallpaperEntity> wallpapers;
@@ -222,9 +223,22 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                 onFavorite: currentWallpaper == null
                                     ? () {}
                                     : () {
-                                        context.read<FavoriteCubit>().toggle(
-                                          currentWallpaper,
-                                        );
+                                        if (favState.isToggling) return;
+                                        if (favState.isFavorite) {
+                                          // Removing favorite — no ad
+                                          context.read<FavoriteCubit>().toggle(
+                                            currentWallpaper,
+                                          );
+                                        } else {
+                                          // Adding favorite — show interstitial
+                                          AdHelper.instance.showInterstitialAd(
+                                            onComplete: () {
+                                              context.read<FavoriteCubit>().toggle(
+                                                currentWallpaper,
+                                              );
+                                            },
+                                          );
+                                        }
                                       },
                                 onPreview: currentWallpaper == null
                                     ? () {}

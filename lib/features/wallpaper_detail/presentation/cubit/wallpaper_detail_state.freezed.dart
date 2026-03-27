@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$WallpaperDetailState {
 
- List<WallpaperEntity> get wallpapers; int get currentIndex; bool get isFavorite; bool get isDownloading; double get downloadProgress; Status get similarWallpapersStatus; List<WallpaperEntity> get similarWallpapers; String? get errorMessage; bool get isMuted;
+ List<WallpaperEntity> get wallpapers; int get currentIndex; double get downloadProgress; Status get similarWallpapersStatus; List<WallpaperEntity> get similarWallpapers; String? get errorMessage; bool get isMuted;
 /// Create a copy of WallpaperDetailState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $WallpaperDetailStateCopyWith<WallpaperDetailState> get copyWith => _$WallpaperD
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WallpaperDetailState&&const DeepCollectionEquality().equals(other.wallpapers, wallpapers)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isDownloading, isDownloading) || other.isDownloading == isDownloading)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.similarWallpapersStatus, similarWallpapersStatus) || other.similarWallpapersStatus == similarWallpapersStatus)&&const DeepCollectionEquality().equals(other.similarWallpapers, similarWallpapers)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isMuted, isMuted) || other.isMuted == isMuted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WallpaperDetailState&&const DeepCollectionEquality().equals(other.wallpapers, wallpapers)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.similarWallpapersStatus, similarWallpapersStatus) || other.similarWallpapersStatus == similarWallpapersStatus)&&const DeepCollectionEquality().equals(other.similarWallpapers, similarWallpapers)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isMuted, isMuted) || other.isMuted == isMuted));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(wallpapers),currentIndex,isFavorite,isDownloading,downloadProgress,similarWallpapersStatus,const DeepCollectionEquality().hash(similarWallpapers),errorMessage,isMuted);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(wallpapers),currentIndex,downloadProgress,similarWallpapersStatus,const DeepCollectionEquality().hash(similarWallpapers),errorMessage,isMuted);
 
 @override
 String toString() {
-  return 'WallpaperDetailState(wallpapers: $wallpapers, currentIndex: $currentIndex, isFavorite: $isFavorite, isDownloading: $isDownloading, downloadProgress: $downloadProgress, similarWallpapersStatus: $similarWallpapersStatus, similarWallpapers: $similarWallpapers, errorMessage: $errorMessage, isMuted: $isMuted)';
+  return 'WallpaperDetailState(wallpapers: $wallpapers, currentIndex: $currentIndex, downloadProgress: $downloadProgress, similarWallpapersStatus: $similarWallpapersStatus, similarWallpapers: $similarWallpapers, errorMessage: $errorMessage, isMuted: $isMuted)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $WallpaperDetailStateCopyWith<$Res>  {
   factory $WallpaperDetailStateCopyWith(WallpaperDetailState value, $Res Function(WallpaperDetailState) _then) = _$WallpaperDetailStateCopyWithImpl;
 @useResult
 $Res call({
- List<WallpaperEntity> wallpapers, int currentIndex, bool isFavorite, bool isDownloading, double downloadProgress, Status similarWallpapersStatus, List<WallpaperEntity> similarWallpapers, String? errorMessage, bool isMuted
+ List<WallpaperEntity> wallpapers, int currentIndex, double downloadProgress, Status similarWallpapersStatus, List<WallpaperEntity> similarWallpapers, String? errorMessage, bool isMuted
 });
 
 
@@ -62,13 +62,11 @@ class _$WallpaperDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of WallpaperDetailState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? wallpapers = null,Object? currentIndex = null,Object? isFavorite = null,Object? isDownloading = null,Object? downloadProgress = null,Object? similarWallpapersStatus = null,Object? similarWallpapers = null,Object? errorMessage = freezed,Object? isMuted = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? wallpapers = null,Object? currentIndex = null,Object? downloadProgress = null,Object? similarWallpapersStatus = null,Object? similarWallpapers = null,Object? errorMessage = freezed,Object? isMuted = null,}) {
   return _then(_self.copyWith(
 wallpapers: null == wallpapers ? _self.wallpapers : wallpapers // ignore: cast_nullable_to_non_nullable
 as List<WallpaperEntity>,currentIndex: null == currentIndex ? _self.currentIndex : currentIndex // ignore: cast_nullable_to_non_nullable
-as int,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
-as bool,isDownloading: null == isDownloading ? _self.isDownloading : isDownloading // ignore: cast_nullable_to_non_nullable
-as bool,downloadProgress: null == downloadProgress ? _self.downloadProgress : downloadProgress // ignore: cast_nullable_to_non_nullable
+as int,downloadProgress: null == downloadProgress ? _self.downloadProgress : downloadProgress // ignore: cast_nullable_to_non_nullable
 as double,similarWallpapersStatus: null == similarWallpapersStatus ? _self.similarWallpapersStatus : similarWallpapersStatus // ignore: cast_nullable_to_non_nullable
 as Status,similarWallpapers: null == similarWallpapers ? _self.similarWallpapers : similarWallpapers // ignore: cast_nullable_to_non_nullable
 as List<WallpaperEntity>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
@@ -158,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<WallpaperEntity> wallpapers,  int currentIndex,  bool isFavorite,  bool isDownloading,  double downloadProgress,  Status similarWallpapersStatus,  List<WallpaperEntity> similarWallpapers,  String? errorMessage,  bool isMuted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<WallpaperEntity> wallpapers,  int currentIndex,  double downloadProgress,  Status similarWallpapersStatus,  List<WallpaperEntity> similarWallpapers,  String? errorMessage,  bool isMuted)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WallpaperDetailState() when $default != null:
-return $default(_that.wallpapers,_that.currentIndex,_that.isFavorite,_that.isDownloading,_that.downloadProgress,_that.similarWallpapersStatus,_that.similarWallpapers,_that.errorMessage,_that.isMuted);case _:
+return $default(_that.wallpapers,_that.currentIndex,_that.downloadProgress,_that.similarWallpapersStatus,_that.similarWallpapers,_that.errorMessage,_that.isMuted);case _:
   return orElse();
 
 }
@@ -179,10 +177,10 @@ return $default(_that.wallpapers,_that.currentIndex,_that.isFavorite,_that.isDow
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<WallpaperEntity> wallpapers,  int currentIndex,  bool isFavorite,  bool isDownloading,  double downloadProgress,  Status similarWallpapersStatus,  List<WallpaperEntity> similarWallpapers,  String? errorMessage,  bool isMuted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<WallpaperEntity> wallpapers,  int currentIndex,  double downloadProgress,  Status similarWallpapersStatus,  List<WallpaperEntity> similarWallpapers,  String? errorMessage,  bool isMuted)  $default,) {final _that = this;
 switch (_that) {
 case _WallpaperDetailState():
-return $default(_that.wallpapers,_that.currentIndex,_that.isFavorite,_that.isDownloading,_that.downloadProgress,_that.similarWallpapersStatus,_that.similarWallpapers,_that.errorMessage,_that.isMuted);case _:
+return $default(_that.wallpapers,_that.currentIndex,_that.downloadProgress,_that.similarWallpapersStatus,_that.similarWallpapers,_that.errorMessage,_that.isMuted);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +197,10 @@ return $default(_that.wallpapers,_that.currentIndex,_that.isFavorite,_that.isDow
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<WallpaperEntity> wallpapers,  int currentIndex,  bool isFavorite,  bool isDownloading,  double downloadProgress,  Status similarWallpapersStatus,  List<WallpaperEntity> similarWallpapers,  String? errorMessage,  bool isMuted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<WallpaperEntity> wallpapers,  int currentIndex,  double downloadProgress,  Status similarWallpapersStatus,  List<WallpaperEntity> similarWallpapers,  String? errorMessage,  bool isMuted)?  $default,) {final _that = this;
 switch (_that) {
 case _WallpaperDetailState() when $default != null:
-return $default(_that.wallpapers,_that.currentIndex,_that.isFavorite,_that.isDownloading,_that.downloadProgress,_that.similarWallpapersStatus,_that.similarWallpapers,_that.errorMessage,_that.isMuted);case _:
+return $default(_that.wallpapers,_that.currentIndex,_that.downloadProgress,_that.similarWallpapersStatus,_that.similarWallpapers,_that.errorMessage,_that.isMuted);case _:
   return null;
 
 }
@@ -214,7 +212,7 @@ return $default(_that.wallpapers,_that.currentIndex,_that.isFavorite,_that.isDow
 
 
 class _WallpaperDetailState implements WallpaperDetailState {
-  const _WallpaperDetailState({final  List<WallpaperEntity> wallpapers = const [], this.currentIndex = 0, this.isFavorite = false, this.isDownloading = false, this.downloadProgress = 0.0, this.similarWallpapersStatus = Status.loading, final  List<WallpaperEntity> similarWallpapers = const [], this.errorMessage, this.isMuted = false}): _wallpapers = wallpapers,_similarWallpapers = similarWallpapers;
+  const _WallpaperDetailState({final  List<WallpaperEntity> wallpapers = const [], this.currentIndex = 0, this.downloadProgress = 0.0, this.similarWallpapersStatus = Status.loading, final  List<WallpaperEntity> similarWallpapers = const [], this.errorMessage, this.isMuted = false}): _wallpapers = wallpapers,_similarWallpapers = similarWallpapers;
   
 
  final  List<WallpaperEntity> _wallpapers;
@@ -225,8 +223,6 @@ class _WallpaperDetailState implements WallpaperDetailState {
 }
 
 @override@JsonKey() final  int currentIndex;
-@override@JsonKey() final  bool isFavorite;
-@override@JsonKey() final  bool isDownloading;
 @override@JsonKey() final  double downloadProgress;
 @override@JsonKey() final  Status similarWallpapersStatus;
  final  List<WallpaperEntity> _similarWallpapers;
@@ -249,16 +245,16 @@ _$WallpaperDetailStateCopyWith<_WallpaperDetailState> get copyWith => __$Wallpap
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WallpaperDetailState&&const DeepCollectionEquality().equals(other._wallpapers, _wallpapers)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.isFavorite, isFavorite) || other.isFavorite == isFavorite)&&(identical(other.isDownloading, isDownloading) || other.isDownloading == isDownloading)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.similarWallpapersStatus, similarWallpapersStatus) || other.similarWallpapersStatus == similarWallpapersStatus)&&const DeepCollectionEquality().equals(other._similarWallpapers, _similarWallpapers)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isMuted, isMuted) || other.isMuted == isMuted));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WallpaperDetailState&&const DeepCollectionEquality().equals(other._wallpapers, _wallpapers)&&(identical(other.currentIndex, currentIndex) || other.currentIndex == currentIndex)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.similarWallpapersStatus, similarWallpapersStatus) || other.similarWallpapersStatus == similarWallpapersStatus)&&const DeepCollectionEquality().equals(other._similarWallpapers, _similarWallpapers)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isMuted, isMuted) || other.isMuted == isMuted));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_wallpapers),currentIndex,isFavorite,isDownloading,downloadProgress,similarWallpapersStatus,const DeepCollectionEquality().hash(_similarWallpapers),errorMessage,isMuted);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_wallpapers),currentIndex,downloadProgress,similarWallpapersStatus,const DeepCollectionEquality().hash(_similarWallpapers),errorMessage,isMuted);
 
 @override
 String toString() {
-  return 'WallpaperDetailState(wallpapers: $wallpapers, currentIndex: $currentIndex, isFavorite: $isFavorite, isDownloading: $isDownloading, downloadProgress: $downloadProgress, similarWallpapersStatus: $similarWallpapersStatus, similarWallpapers: $similarWallpapers, errorMessage: $errorMessage, isMuted: $isMuted)';
+  return 'WallpaperDetailState(wallpapers: $wallpapers, currentIndex: $currentIndex, downloadProgress: $downloadProgress, similarWallpapersStatus: $similarWallpapersStatus, similarWallpapers: $similarWallpapers, errorMessage: $errorMessage, isMuted: $isMuted)';
 }
 
 
@@ -269,7 +265,7 @@ abstract mixin class _$WallpaperDetailStateCopyWith<$Res> implements $WallpaperD
   factory _$WallpaperDetailStateCopyWith(_WallpaperDetailState value, $Res Function(_WallpaperDetailState) _then) = __$WallpaperDetailStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<WallpaperEntity> wallpapers, int currentIndex, bool isFavorite, bool isDownloading, double downloadProgress, Status similarWallpapersStatus, List<WallpaperEntity> similarWallpapers, String? errorMessage, bool isMuted
+ List<WallpaperEntity> wallpapers, int currentIndex, double downloadProgress, Status similarWallpapersStatus, List<WallpaperEntity> similarWallpapers, String? errorMessage, bool isMuted
 });
 
 
@@ -286,13 +282,11 @@ class __$WallpaperDetailStateCopyWithImpl<$Res>
 
 /// Create a copy of WallpaperDetailState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? wallpapers = null,Object? currentIndex = null,Object? isFavorite = null,Object? isDownloading = null,Object? downloadProgress = null,Object? similarWallpapersStatus = null,Object? similarWallpapers = null,Object? errorMessage = freezed,Object? isMuted = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? wallpapers = null,Object? currentIndex = null,Object? downloadProgress = null,Object? similarWallpapersStatus = null,Object? similarWallpapers = null,Object? errorMessage = freezed,Object? isMuted = null,}) {
   return _then(_WallpaperDetailState(
 wallpapers: null == wallpapers ? _self._wallpapers : wallpapers // ignore: cast_nullable_to_non_nullable
 as List<WallpaperEntity>,currentIndex: null == currentIndex ? _self.currentIndex : currentIndex // ignore: cast_nullable_to_non_nullable
-as int,isFavorite: null == isFavorite ? _self.isFavorite : isFavorite // ignore: cast_nullable_to_non_nullable
-as bool,isDownloading: null == isDownloading ? _self.isDownloading : isDownloading // ignore: cast_nullable_to_non_nullable
-as bool,downloadProgress: null == downloadProgress ? _self.downloadProgress : downloadProgress // ignore: cast_nullable_to_non_nullable
+as int,downloadProgress: null == downloadProgress ? _self.downloadProgress : downloadProgress // ignore: cast_nullable_to_non_nullable
 as double,similarWallpapersStatus: null == similarWallpapersStatus ? _self.similarWallpapersStatus : similarWallpapersStatus // ignore: cast_nullable_to_non_nullable
 as Status,similarWallpapers: null == similarWallpapers ? _self._similarWallpapers : similarWallpapers // ignore: cast_nullable_to_non_nullable
 as List<WallpaperEntity>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
