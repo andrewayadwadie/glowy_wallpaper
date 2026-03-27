@@ -71,7 +71,11 @@
       "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"fix-favorites-download-preview\" \"Fix favorites downloads and preview functionality\")",
       "Bash(powershell -ExecutionPolicy Bypass -Command \"& ''./.specify/scripts/powershell/create-new-feature.ps1'' -Json -ShortName ''fix-favorites-download-preview'' -Number 0 ''Fix favorites downloads and preview functionality''\")",
       "Bash(find c:/Users/Dell/Documents/claude/glowy_wallpaper/specs -type f -name *.md)",
-      "Bash(find c:/Users/Dell/Documents/claude/glowy_wallpaper/specs/009-* -type f)"
+      "Bash(find c:/Users/Dell/Documents/claude/glowy_wallpaper/specs/009-* -type f)",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 \"Integrate specific AdMob ad units: App Open \\(splash\\), Rewarded Interstitial \\(download gate\\), Interstitial \\(favorite gate\\), Banner \\(home bottom\\)\" -Json -ShortName \"admob-ad-units-setup\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"admob-ad-units-setup\" \"Integrate specific AdMob ad units with App Open splash Rewarded Interstitial download gate Interstitial favorite gate Banner home bottom\")",
+      "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"admob-ad-units-setup\" -FeatureDescription \"Integrate specific AdMob ad units with App Open splash Rewarded Interstitial download gate Interstitial favorite gate Banner home bottom\")",
+      "Bash(echo \"exit:$?\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

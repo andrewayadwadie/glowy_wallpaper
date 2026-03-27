@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:glowy_wallpaper/core/config/env.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-enum AdType { appOpen, banner, rewarded }
+enum AdType { appOpen, banner, rewardedInterstitial, interstitial }
 
 class AdHelper {
   static AdHelper? _instance;
@@ -13,15 +13,38 @@ class AdHelper {
 
   AdHelper._internal();
 
-  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+  /// Reset singleton for testing. Do not use in production code.
+  @visibleForTesting
+  static void resetInstance() {
+    _instance = null;
+  }
+
+  /// Expose cooldown setter for testing interstitial cooldown logic.
+  @visibleForTesting
+  set lastInterstitialShownForTest(DateTime? value) =>
+      _lastInterstitialShown = value;
+
+  // Lazy analytics to avoid FirebaseAnalytics.instance during test construction.
+  FirebaseAnalytics? _analyticsInstance;
+  FirebaseAnalytics get _analytics =>
+      _analyticsInstance ??= FirebaseAnalytics.instance;
 
   BannerAd? _bannerAd;
   AppOpenAd? _appOpenAd;
-  RewardedAd? _rewardedAd;
+  RewardedInterstitialAd? _rewardedInterstitialAd;
+  InterstitialAd? _interstitialAd;
 
   BannerAd? get bannerAd => _bannerAd;
   bool _isInitialized = false;
-  bool _isAdLoading = false;
+  bool _isAppOpenLoading = false;
+  bool _isRewardedInterstitialLoading = false;
+  bool _isInterstitialLoading = false;
+
+  /// Tracks last interstitial show time for 60-second cooldown.
+  DateTime? _lastInterstitialShown;
+
+  /// Notifies listeners when banner ad load state changes.
+  final ValueNotifier<bool> bannerAdLoaded = ValueNotifier(false);
 
   bool shouldShowAds = true;
 
@@ -33,11 +56,16 @@ class AdHelper {
       _isInitialized = true;
       debugPrint('MobileAds initialized successfully');
 
-      await preloadRewardedAd();
+      await preloadRewardedInterstitialAd();
+      await preloadInterstitialAd();
     } catch (e) {
       debugPrint('MobileAds initialization failed: $e');
     }
   }
+
+  // ---------------------------------------------------------------------------
+  // Banner Ad
+  // ---------------------------------------------------------------------------
 
   Future<void> loadBannerAd() async {
     if (!shouldShowAds) {
@@ -54,10 +82,12 @@ class AdHelper {
       listener: BannerAdListener(
         onAdLoaded: (_) {
           debugPrint('BannerAd loaded');
+          bannerAdLoaded.value = true;
         },
         onAdFailedToLoad: (ad, error) {
           debugPrint('BannerAd failed to load: $error');
           _bannerAd = null;
+          bannerAdLoaded.value = false;
         },
         onAdOpened: (_) {},
         onAdClosed: (_) {},
@@ -70,12 +100,18 @@ class AdHelper {
   void disposeBannerAd() {
     _bannerAd?.dispose();
     _bannerAd = null;
+    bannerAdLoaded.value = false;
   }
 
   Future<void> _disposeBannerAd() async {
     _bannerAd?.dispose();
     _bannerAd = null;
+    bannerAdLoaded.value = false;
   }
+
+  // ---------------------------------------------------------------------------
+  // App Open Ad
+  // ---------------------------------------------------------------------------
 
   Future<void> loadAppOpenAd() async {
     if (!shouldShowAds) {
@@ -84,9 +120,9 @@ class AdHelper {
       return;
     }
 
-    if (_isAdLoading) return;
+    if (_isAppOpenLoading) return;
 
-    _isAdLoading = true;
+    _isAppOpenLoading = true;
 
     AppOpenAd.load(
       adUnitId: Env.adMobAppOpenId,
@@ -95,12 +131,12 @@ class AdHelper {
         onAdLoaded: (ad) {
           debugPrint('AppOpenAd loaded');
           _appOpenAd = ad;
-          _isAdLoading = false;
+          _isAppOpenLoading = false;
         },
         onAdFailedToLoad: (error) {
           debugPrint('AppOpenAd failed to load: $error');
           _appOpenAd = null;
-          _isAdLoading = false;
+          _isAppOpenLoading = false;
         },
       ),
     );
@@ -130,47 +166,52 @@ class AdHelper {
     _appOpenAd!.show();
   }
 
-  Future<bool> preloadRewardedAd() async {
-    debugPrint('preloadRewardedAd called');
-    debugPrint('shouldShowAds: $shouldShowAds');
-    debugPrint('_isAdLoading: $_isAdLoading');
+  // ---------------------------------------------------------------------------
+  // Rewarded Interstitial Ad (download gate — blocking)
+  // ---------------------------------------------------------------------------
 
+  Future<bool> preloadRewardedInterstitialAd() async {
     if (!shouldShowAds) {
-      debugPrint('Ads are disabled, not preloading');
-      _rewardedAd?.dispose();
-      _rewardedAd = null;
+      _rewardedInterstitialAd?.dispose();
+      _rewardedInterstitialAd = null;
       return false;
     }
 
-    if (_isAdLoading) {
-      debugPrint('Ad is already loading, skipping');
-      return false;
-    }
+    if (_isRewardedInterstitialLoading) return false;
 
-    _isAdLoading = true;
-    debugPrint('Starting to load ad with unit ID: ${Env.adMobRewardedId}');
+    _isRewardedInterstitialLoading = true;
 
     final completer = Completer<bool>();
 
+    // 10-second timeout
+    final timer = Timer(const Duration(seconds: 10), () {
+      if (!completer.isCompleted) {
+        debugPrint('RewardedInterstitialAd load timed out');
+        _isRewardedInterstitialLoading = false;
+        completer.complete(false);
+      }
+    });
+
     try {
-      await RewardedAd.load(
-        adUnitId: Env.adMobRewardedId,
+      await RewardedInterstitialAd.load(
+        adUnitId: Env.adMobRewardedInterstitialId,
         request: const AdRequest(),
-        rewardedAdLoadCallback: RewardedAdLoadCallback(
+        rewardedInterstitialAdLoadCallback:
+            RewardedInterstitialAdLoadCallback(
           onAdLoaded: (ad) {
-            debugPrint('RewardedAd loaded successfully');
-            _rewardedAd = ad;
-            _isAdLoading = false;
+            debugPrint('RewardedInterstitialAd loaded');
+            _rewardedInterstitialAd = ad;
+            _isRewardedInterstitialLoading = false;
+            timer.cancel();
             if (!completer.isCompleted) {
               completer.complete(true);
             }
           },
           onAdFailedToLoad: (error) {
-            debugPrint('RewardedAd failed to load: $error');
-            debugPrint('Error code: ${error.code}');
-            debugPrint('Error message: ${error.message}');
-            _rewardedAd = null;
-            _isAdLoading = false;
+            debugPrint('RewardedInterstitialAd failed to load: $error');
+            _rewardedInterstitialAd = null;
+            _isRewardedInterstitialLoading = false;
+            timer.cancel();
             if (!completer.isCompleted) {
               completer.complete(false);
             }
@@ -178,37 +219,28 @@ class AdHelper {
         ),
       );
     } catch (e) {
-      debugPrint('RewardedAd load exception: $e');
-      _rewardedAd = null;
-      _isAdLoading = false;
+      debugPrint('RewardedInterstitialAd load exception: $e');
+      _rewardedInterstitialAd = null;
+      _isRewardedInterstitialLoading = false;
+      timer.cancel();
       if (!completer.isCompleted) {
         completer.complete(false);
       }
     }
 
-    debugPrint('Waiting for preload to complete');
     return await completer.future;
   }
 
-  Future<bool> showRewardedAd({required String action}) async {
-    debugPrint('showRewardedAd called for action: $action');
-    debugPrint('shouldShowAds: $shouldShowAds');
+  Future<bool> showRewardedInterstitialAd({required String action}) async {
+    if (!shouldShowAds) return true;
 
-    if (!shouldShowAds) {
-      debugPrint('Ads are disabled, proceeding without ad');
-      return true;
-    }
-
-    debugPrint('_rewardedAd is null: ${_rewardedAd == null}');
-
-    if (_rewardedAd == null) {
-      debugPrint('No ad loaded, trying to preload');
-      final loaded = await preloadRewardedAd();
-      debugPrint('Preload result: $loaded');
-      debugPrint('_rewardedAd after preload is null: ${_rewardedAd == null}');
-
-      if (!loaded || _rewardedAd == null) {
-        debugPrint('Failed to load ad');
+    if (_rewardedInterstitialAd == null) {
+      final loaded = await preloadRewardedInterstitialAd();
+      if (!loaded || _rewardedInterstitialAd == null) {
+        _analytics.logEvent(
+          name: 'ad_failed',
+          parameters: {'ad_type': 'rewarded_interstitial', 'action': action},
+        );
         return false;
       }
     }
@@ -217,60 +249,167 @@ class AdHelper {
     final completer = Completer<bool>();
 
     try {
-      debugPrint('Setting up fullScreenContentCallback');
-      _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+      _rewardedInterstitialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(
         onAdShowedFullScreenContent: (_) {
-          debugPrint('RewardedAd shown successfully');
+          debugPrint('RewardedInterstitialAd shown');
+          _analytics.logEvent(
+            name: 'ad_shown',
+            parameters: {'ad_type': 'rewarded_interstitial'},
+          );
         },
         onAdDismissedFullScreenContent: (_) {
-          debugPrint('RewardedAd dismissed, rewardEarned: $rewardEarned');
-          _rewardedAd = null;
+          _rewardedInterstitialAd = null;
           if (rewardEarned) {
             _analytics.logEvent(
               name: 'reward_earned',
               parameters: {'action': action},
             );
           }
-          preloadRewardedAd();
+          preloadRewardedInterstitialAd();
           if (!completer.isCompleted) {
             completer.complete(rewardEarned);
           }
         },
         onAdFailedToShowFullScreenContent: (ad, error) {
-          debugPrint('RewardedAd failed to show: $error');
-          _rewardedAd = null;
+          debugPrint('RewardedInterstitialAd failed to show: $error');
+          _rewardedInterstitialAd = null;
           ad.dispose();
-          preloadRewardedAd();
+          preloadRewardedInterstitialAd();
           if (!completer.isCompleted) {
             completer.complete(false);
           }
         },
       );
 
-      debugPrint('Calling _rewardedAd.show()');
-      await _rewardedAd!.show(
+      await _rewardedInterstitialAd!.show(
         onUserEarnedReward: (ad, reward) {
           debugPrint('User earned reward: ${reward.amount} ${reward.type}');
           rewardEarned = true;
         },
       );
     } catch (e) {
-      debugPrint('RewardedAd show exception: $e');
-      _rewardedAd = null;
+      debugPrint('RewardedInterstitialAd show exception: $e');
+      _rewardedInterstitialAd = null;
       if (!completer.isCompleted) {
         completer.complete(false);
       }
     }
 
-    debugPrint('Waiting for completer future');
     return await completer.future;
   }
+
+  // ---------------------------------------------------------------------------
+  // Interstitial Ad (favorite gate — non-blocking)
+  // ---------------------------------------------------------------------------
+
+  Future<bool> preloadInterstitialAd() async {
+    if (!shouldShowAds) {
+      _interstitialAd?.dispose();
+      _interstitialAd = null;
+      return false;
+    }
+
+    if (_isInterstitialLoading) return false;
+
+    _isInterstitialLoading = true;
+
+    final completer = Completer<bool>();
+
+    try {
+      await InterstitialAd.load(
+        adUnitId: Env.adMobInterstitialId,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            debugPrint('InterstitialAd loaded');
+            _interstitialAd = ad;
+            _isInterstitialLoading = false;
+            if (!completer.isCompleted) {
+              completer.complete(true);
+            }
+          },
+          onAdFailedToLoad: (error) {
+            debugPrint('InterstitialAd failed to load: $error');
+            _interstitialAd = null;
+            _isInterstitialLoading = false;
+            if (!completer.isCompleted) {
+              completer.complete(false);
+            }
+          },
+        ),
+      );
+    } catch (e) {
+      debugPrint('InterstitialAd load exception: $e');
+      _interstitialAd = null;
+      _isInterstitialLoading = false;
+      if (!completer.isCompleted) {
+        completer.complete(false);
+      }
+    }
+
+    return await completer.future;
+  }
+
+  /// Shows an interstitial ad for the favorite gate (non-blocking).
+  /// [onComplete] is always called — after ad dismiss, or immediately if
+  /// no ad is available, within cooldown, or user is premium.
+  void showInterstitialAd({required VoidCallback onComplete}) {
+    if (!shouldShowAds) {
+      onComplete();
+      return;
+    }
+
+    // 60-second cooldown
+    if (_lastInterstitialShown != null &&
+        DateTime.now().difference(_lastInterstitialShown!) <
+            const Duration(seconds: 60)) {
+      onComplete();
+      return;
+    }
+
+    if (_interstitialAd == null) {
+      onComplete();
+      return;
+    }
+
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (_) {
+        debugPrint('InterstitialAd shown');
+        _lastInterstitialShown = DateTime.now();
+        _analytics.logEvent(
+          name: 'ad_shown',
+          parameters: {'ad_type': 'interstitial'},
+        );
+      },
+      onAdDismissedFullScreenContent: (_) {
+        _interstitialAd = null;
+        preloadInterstitialAd();
+        onComplete();
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        debugPrint('InterstitialAd failed to show: $error');
+        _interstitialAd = null;
+        ad.dispose();
+        preloadInterstitialAd();
+        onComplete();
+      },
+    );
+
+    _interstitialAd!.show();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Lifecycle
+  // ---------------------------------------------------------------------------
 
   void dispose() {
     disposeBannerAd();
     _appOpenAd?.dispose();
     _appOpenAd = null;
-    _rewardedAd?.dispose();
-    _rewardedAd = null;
+    _rewardedInterstitialAd?.dispose();
+    _rewardedInterstitialAd = null;
+    _interstitialAd?.dispose();
+    _interstitialAd = null;
   }
 }

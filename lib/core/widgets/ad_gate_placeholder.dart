@@ -67,7 +67,7 @@ class _AdGateWidgetState extends State<AdGateWidget> {
 
     log("Starting to show rewarded ad for action: ${widget.action}");
 
-    final rewardEarned = await adHelper.showRewardedAd(action: widget.action);
+    final rewardEarned = await adHelper.showRewardedInterstitialAd(action: widget.action);
 
     log("Reward earned: $rewardEarned");
 

@@ -28,7 +28,7 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
 
   void onPageChanged(int index) {
     _disposeVideo();
-    emit(state.copyWith(currentIndex: index, isFavorite: false));
+    emit(state.copyWith(currentIndex: index));
     _initVideoForIndex(index);
   }
 
@@ -55,16 +55,6 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
     final muted = !state.isMuted;
     emit(state.copyWith(isMuted: muted));
     _videoController?.setVolume(muted ? 0 : 1);
-  }
-
-  void setFavorite(bool isFavorite) {
-    emit(state.copyWith(isFavorite: isFavorite));
-  }
-
-  void setDownloading({required bool isDownloading, double progress = 0.0}) {
-    emit(
-      state.copyWith(isDownloading: isDownloading, downloadProgress: progress),
-    );
   }
 
   void logPreviewWallpaper(String wallpaperId) {
@@ -131,7 +121,6 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
         currentIndex: index,
         similarWallpapers: const [],
         similarWallpapersStatus: Status.loading,
-        isFavorite: false,
       ),
     );
     _initVideoForIndex(index);
