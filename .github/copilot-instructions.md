@@ -1,0 +1,75 @@
+# Glowy Wallpapers — Copilot Instructions
+
+## Design Context
+
+### Users
+Creative, design-minded mobile users who care deeply about visual quality and curation. They browse wallpapers with intention — seeking images that express personality and elevate their device's look. The app should feel premium, polished, and inspiring. These users notice details: transitions, spacing, image quality, and overall craft.
+
+### Brand Personality
+**Clean, modern, elegant** — the UI stays out of the way so the wallpapers are the star. Every interaction should feel intentional and refined. The cyan accent (#06B6D4) adds a fresh, futuristic signature without overwhelming the content.
+
+### Aesthetic Direction
+- **Visual tone:** Minimal, refined, content-first. The interface is a gallery frame — not the art itself.
+- **References:** Unsplash (clean grid browsing, content-first layout, minimal chrome), Pinterest (discovery-oriented browsing), Apple Photos / Google Photos (polished system-native feel, smooth transitions, buttery gestures), Linear & Vercel (cyan accent on deep slate dark mode).
+- **Anti-references:** Cluttered wallpaper apps with aggressive ads, neon gradients, or chaotic layouts. Avoid anything that feels cheap, loud, or overwrought.
+- **Theme:** Full light/dark mode support. Dark mode (#0F172A deep slate backgrounds) is the natural home for a wallpaper app — images pop against dark surfaces.
+- **Typography:** Plus Jakarta Sans — a modern geometric sans-serif with warmth. Weight variation (200–800) creates hierarchy without complexity.
+- **Color:** Restrained palette. Primary cyan (#06B6D4 light, #22D3EE dark) for interactive elements and accents. Slate neutrals everywhere else. Let the wallpaper content provide the color.
+- **Spacing:** Generous, consistent. 4/8/16/24/32 scale via ScreenUtil. Breathing room signals quality.
+- **Corners:** Progressive radius scale (8/12/16/24) — softer for larger elements, crisper for small ones.
+- **Motion:** Subtle, purposeful. Transitions should feel smooth and fast (Apple Photos-like), not flashy. No gratuitous animation.
+- **Images:** Always cover-fit, always lazy-loaded with shimmer placeholders. Image quality is paramount — blurry thumbnails break the premium feel.
+
+### Design Principles
+
+1. **Content is king** — The wallpapers are the product. Every design decision should maximize how beautiful the content looks. UI chrome should be minimal and recede.
+
+2. **Quiet confidence** — The app should feel assured and polished without trying too hard. No unnecessary decoration, no visual noise. Quality speaks for itself.
+
+3. **Seamless flow** — Browsing should feel effortless. Smooth transitions between grid and detail, fast loading with elegant placeholders, intuitive gestures. Friction breaks the spell.
+
+4. **Consistent craft** — Every pixel matters. Spacing, alignment, color usage, and typography should be systematically consistent. Design tokens (AppColors, AppDimens, AppTypography) are not optional — they're the foundation.
+
+5. **Respect the user** — No dark patterns, no intrusive ads breaking the experience, no unnecessary interruptions. Premium features should feel like a natural upgrade, not a gate.
+
+### Technical Design System
+
+| Token | Light | Dark |
+|-------|-------|------|
+| Primary | `#06B6D4` | `#22D3EE` |
+| On Primary | `#FFFFFF` | `#0F172A` |
+| Background | `#F8FAFC` | `#0F172A` |
+| Surface | `#FFFFFF` | `#1E293B` |
+| On Surface | `#0F172A` | `#F1F5F9` |
+| Error | `#EF4444` | `#F87171` |
+| Border | `#E2E8F0` | — |
+| Text Secondary | `#64748B` | — |
+
+| Spacing | Value |
+|---------|-------|
+| XS | 4 |
+| S | 8 |
+| M | 16 |
+| L | 24 |
+| XL | 32 |
+
+| Radius | Value |
+|--------|-------|
+| S | 8 |
+| M | 12 |
+| L | 16 |
+| XL | 24 |
+
+| Typography (Plus Jakarta Sans) | Size | Weight |
+|-------------------------------|------|--------|
+| Headline Large | 28sp | 700 |
+| Headline Medium | 24sp | 600 |
+| Title Large | 20sp | 600 |
+| Title Medium | 16sp | 500 |
+| Body Large | 16sp | 400 |
+| Body Medium | 14sp | 400 |
+| Label Large | 14sp | 500 |
+| Label Small | 12sp | 400 |
+
+### Accessibility
+Standard Material 3 accessibility: built-in contrast ratios, minimum touch targets (48dp), semantic labels on interactive elements. No additional WCAG overrides required.
