@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 
 abstract class AppColors {
-  static const Color primary = Color(0xFF6C63FF);
+  // Light theme
+  static const Color primary = Color(0xFF06B6D4);
   static const Color onPrimary = Colors.white;
-  static const Color background = Color(0xFFF5F5F5);
+  static const Color background = Color(0xFFF8FAFC);
   static const Color surface = Colors.white;
-  static const Color onSurface = Color(0xFF1A1A2E);
-  static const Color error = Colors.red;
+  static const Color onSurface = Color(0xFF0F172A);
+  static const Color error = Color(0xFFEF4444);
 
-  static const Color darkPrimary = Color(0xFF6C63FF);
-  static const Color darkOnPrimary = Colors.white;
-  static const Color darkBackground = Color(0xFF121212);
-  static const Color darkSurface = Color(0xFF1E1E2E);
-  static const Color darkOnSurface = Colors.white;
-  static const Color darkError = Color(0xFFFF6B6B);
+  // Dark theme
+  static const Color darkPrimary = Color(0xFF22D3EE);
+  static const Color darkOnPrimary = Color(0xFF0F172A);
+  static const Color darkBackground = Color(0xFF0F172A);
+  static const Color darkSurface = Color(0xFF1E293B);
+  static const Color darkOnSurface = Color(0xFFF1F5F9);
+  static const Color darkError = Color(0xFFF87171);
 
-  static const Color textPrimary = Color(0xFF1A1A2E);
-  static const Color textSecondary = Color(0xFF757575);
-  static const Color border = Color(0xFFE0E0E0);
+  // Semantic text
+  static const Color textPrimary = Color(0xFF0F172A);
+  static const Color textSecondary = Color(0xFF64748B);
+  static const Color border = Color(0xFFE2E8F0);
 
   // Shimmer
-  static const Color shimmerBase = Color(0xFFE0E0E0);
-  static const Color shimmerHighlight = Color(0xFFF5F5F5);
-  static const Color darkShimmerBase = Color(0xFF2A2A3E);
-  static const Color darkShimmerHighlight = Color(0xFF3A3A5E);
+  static const Color shimmerBase = Color(0xFFE2E8F0);
+  static const Color shimmerHighlight = Color(0xFFF1F5F9);
+  static const Color darkShimmerBase = Color(0xFF334155);
+  static const Color darkShimmerHighlight = Color(0xFF475569);
 }

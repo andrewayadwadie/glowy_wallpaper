@@ -94,7 +94,7 @@ class _SplashPageState extends State<SplashPage> {
     if (_hasError) {
       return Scaffold(
         // Matches native splash background - intentionally hardcoded
-        backgroundColor: const Color(0xFF121212),
+        backgroundColor: const Color(0xFF0F172A),
         body: AppErrorWidget(
           message: _errorMessage,
           onRetry: () {
@@ -107,7 +107,7 @@ class _SplashPageState extends State<SplashPage> {
 
     return Scaffold(
       // Matches native splash background - intentionally hardcoded
-      backgroundColor: const Color(0xFF121212),
+      backgroundColor: const Color(0xFF0F172A),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
