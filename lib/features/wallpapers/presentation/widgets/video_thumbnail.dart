@@ -69,40 +69,50 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: widget.onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppDimens.radiusS),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            if (_controller != null &&
-                _controller!.value.isInitialized &&
-                widget.shouldAutoPlay)
-              FittedBox(
-                fit: BoxFit.cover,
-                child: SizedBox(
-                  width: _controller!.value.size.width,
-                  height: _controller!.value.size.height,
-                  child: VideoPlayer(_controller!),
+    return Semantics(
+      button: true,
+      label: 'Play video wallpaper',
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppDimens.radiusS),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              if (_controller != null &&
+                  _controller!.value.isInitialized &&
+                  widget.shouldAutoPlay)
+                FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _controller!.value.size.width,
+                    height: _controller!.value.size.height,
+                    child: VideoPlayer(_controller!),
+                  ),
+                )
+              else
+                LayoutBuilder(
+                  builder: (_, constraints) => AppCachedImage(
+                    imageUrl: widget.wallpaper.thumbUrl,
+                    width: constraints.maxWidth,
+                    height: constraints.maxHeight,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              )
-            else
-              AppCachedImage(
-                imageUrl: widget.wallpaper.thumbUrl,
-                fit: BoxFit.cover,
-              ),
-            if (!widget.shouldAutoPlay ||
-                _controller == null ||
-                !_controller!.value.isInitialized)
-              Center(
-                child: Icon(
-                  Icons.play_circle_outline,
-                  size: 40.sp,
-                  color: Theme.of(context).colorScheme.onSurface.withAlpha(200),
+              if (!widget.shouldAutoPlay ||
+                  _controller == null ||
+                  !_controller!.value.isInitialized)
+                Center(
+                  child: ExcludeSemantics(
+                    child: Icon(
+                      Icons.play_circle_outline,
+                      size: 40.sp,
+                      color: Theme.of(context).colorScheme.onSurface.withAlpha(200),
+                    ),
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

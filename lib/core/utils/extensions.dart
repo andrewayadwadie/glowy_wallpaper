@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/colors.dart';
 
 /// String Extensions
 extension StringExtension on String {
@@ -95,10 +96,11 @@ extension ContextExtension on BuildContext {
 
   /// Shows success snackbar
   void showSuccessSnackBar(String message) {
+    final isDark = Theme.of(this).brightness == Brightness.dark;
     ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.green,
+        backgroundColor: isDark ? AppColors.darkSuccess : AppColors.success,
         duration: const Duration(seconds: 3),
       ),
     );

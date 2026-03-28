@@ -24,10 +24,12 @@ class AppEmptyStateWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: 64.w,
-              color: Theme.of(context).colorScheme.onSurface.withAlpha(100),
+            ExcludeSemantics(
+              child: Icon(
+                icon,
+                size: 64.w,
+                color: Theme.of(context).colorScheme.onSurface.withAlpha(100),
+              ),
             ),
             Gap(AppDimens.paddingM),
             if (title != null) ...[

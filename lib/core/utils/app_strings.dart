@@ -74,6 +74,8 @@ abstract class AppStrings {
   static const String download = 'Download';
   static const String setAsWallpaper = 'Set as Wallpaper';
   static const String previewOnPhone = 'Preview';
+  static const String mute = 'Mute';
+  static const String unmute = 'Unmute';
   static const String addToFavorites = 'Add to Favorites';
   static const String removeFromFavorites = 'Remove from Favorites';
   static const String similarWallpapers = 'Similar Wallpapers';
@@ -133,6 +135,12 @@ abstract class AppStrings {
   static const String restoreNotFound = 'No active subscription found';
   static const String restoreError = 'Failed to restore purchase';
   static const String adUnavailable = 'Ad unavailable. Please try again later';
+  static const String choosePlan = 'Choose Your Plan';
+  static const String comparePlans = 'Compare Plans';
+  static const String perMonth = '/month';
+  static const String perYear = '/year';
+  static const String cannotOpenSubscriptionManager =
+      'Could not open subscription manager';
   static const String loadingProducts = 'Loading subscription plans...';
   static const String productsError = 'Failed to load subscription plans';
   static const String networkError =

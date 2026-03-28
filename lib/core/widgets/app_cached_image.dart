@@ -8,6 +8,9 @@ class AppCachedImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit fit;
+  final int? memCacheWidth;
+  final int? memCacheHeight;
+  final String? semanticLabel;
 
   const AppCachedImage({
     super.key,
@@ -15,17 +18,29 @@ class AppCachedImage extends StatelessWidget {
     this.width,
     this.height,
     this.fit = BoxFit.cover,
+    this.memCacheWidth,
+    this.memCacheHeight,
+    this.semanticLabel,
   });
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final dpr = MediaQuery.devicePixelRatioOf(context);
 
-    return CachedNetworkImage(
+    // Auto-calculate memory cache size from display dimensions if not provided
+    final cacheWidth =
+        memCacheWidth ?? (width != null ? (width! * dpr).round() : null);
+    final cacheHeight =
+        memCacheHeight ?? (height != null ? (height! * dpr).round() : null);
+
+    final image = CachedNetworkImage(
       imageUrl: imageUrl,
       width: width,
       height: height,
       fit: fit,
+      memCacheWidth: cacheWidth,
+      memCacheHeight: cacheHeight,
       placeholder: (context, url) => Shimmer.fromColors(
         baseColor: colorScheme.surfaceContainerHighest,
         highlightColor: colorScheme.surface,
@@ -41,5 +56,14 @@ class AppCachedImage extends StatelessWidget {
         color: colorScheme.onSurface.withAlpha(100),
       ),
     );
+
+    if (semanticLabel != null) {
+      return Semantics(
+        image: true,
+        label: semanticLabel,
+        child: image,
+      );
+    }
+    return image;
   }
 }

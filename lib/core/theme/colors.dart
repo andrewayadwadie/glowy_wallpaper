@@ -19,8 +19,12 @@ abstract class AppColors {
 
   // Semantic text
   static const Color textPrimary = Color(0xFF0F172A);
-  static const Color textSecondary = Color(0xFF64748B);
+  static const Color textSecondary = Color(0xFF475569);
   static const Color border = Color(0xFFE2E8F0);
+
+  // Semantic status
+  static const Color success = Color(0xFF10B981);
+  static const Color darkSuccess = Color(0xFF34D399);
 
   // Shimmer
   static const Color shimmerBase = Color(0xFFE2E8F0);

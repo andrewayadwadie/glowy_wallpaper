@@ -33,10 +33,12 @@ class HomeDrawer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Icon(
-                    Icons.wallpaper,
-                    size: 48.sp,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                  ExcludeSemantics(
+                    child: Icon(
+                      Icons.wallpaper,
+                      size: 48.sp,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
                   ),
                   SizedBox(height: 8.h),
                   AutoSizeText(
@@ -200,7 +202,7 @@ class HomeDrawer extends StatelessWidget {
     if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not open subscription manager')),
+          const SnackBar(content: Text(AppStrings.cannotOpenSubscriptionManager)),
         );
       }
     }

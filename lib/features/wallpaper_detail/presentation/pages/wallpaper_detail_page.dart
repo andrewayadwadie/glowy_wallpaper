@@ -2,8 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:glowy_wallpaper/core/theme/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/app_cached_image.dart';
@@ -79,10 +77,8 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                 title: AutoSizeText(
                   "${state.currentIndex + 1}/${state.wallpapers.length}",
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.onPrimary,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
                   ),
                 ),
                 leading: IconButton(
@@ -90,6 +86,7 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                     Icons.arrow_back_ios_rounded,
                     color: Colors.white,
                   ),
+                  tooltip: MaterialLocalizations.of(context).backButtonTooltip,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 actions: [
@@ -103,6 +100,9 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                             : Icons.volume_up_rounded,
                         color: Colors.white,
                       ),
+                      tooltip: state.isMuted
+                          ? AppStrings.unmute
+                          : AppStrings.mute,
                       onPressed: () =>
                           context.read<WallpaperDetailCubit>().toggleMute(),
                     ),
@@ -130,6 +130,11 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                 WallpaperDetailState
                               >(
                                 bloc: cubit,
+                                buildWhen: (prev, curr) =>
+                                    prev.similarWallpapers !=
+                                        curr.similarWallpapers ||
+                                    prev.similarWallpapersStatus !=
+                                        curr.similarWallpapersStatus,
                                 builder: (_, s) => SimilarWallpapersSheet(
                                   wallpapers: s.similarWallpapers,
                                   isLoading:

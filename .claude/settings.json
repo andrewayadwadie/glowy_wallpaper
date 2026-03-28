@@ -75,7 +75,9 @@
       "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 \"Integrate specific AdMob ad units: App Open \\(splash\\), Rewarded Interstitial \\(download gate\\), Interstitial \\(favorite gate\\), Banner \\(home bottom\\)\" -Json -ShortName \"admob-ad-units-setup\")",
       "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"admob-ad-units-setup\" \"Integrate specific AdMob ad units with App Open splash Rewarded Interstitial download gate Interstitial favorite gate Banner home bottom\")",
       "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"admob-ad-units-setup\" -FeatureDescription \"Integrate specific AdMob ad units with App Open splash Rewarded Interstitial download gate Interstitial favorite gate Banner home bottom\")",
-      "Bash(echo \"exit:$?\")"
+      "Bash(echo \"exit:$?\")",
+      "Bash(grep -rn \"//.*[a-zA-Z]\" lib/ --include=\"*.dart\")",
+      "Bash(grep -rn \"^\\\\s*//\" lib/features/ --include=\"*.dart\")"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

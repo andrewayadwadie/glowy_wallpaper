@@ -27,6 +27,7 @@ class HomePage extends StatelessWidget {
           if (isPremium)
             IconButton(
               icon: const Icon(Icons.person_outline),
+              tooltip: AppStrings.profile,
               onPressed: () => _onProfileTapped(context, isPremium),
             ),
         ],

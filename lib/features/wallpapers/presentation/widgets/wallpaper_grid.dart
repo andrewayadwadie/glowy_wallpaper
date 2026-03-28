@@ -22,13 +22,6 @@ class WallpaperGrid extends StatelessWidget {
     required this.isPremium,
   });
 
-  int _getColumnCount(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    if (width < 400) return 2;
-    if (width < 700) return 3;
-    return 4;
-  }
-
   @override
   Widget build(BuildContext context) {
     final displayWallpapers = wallpapers;
@@ -52,7 +45,7 @@ class WallpaperGrid extends StatelessWidget {
             padding: EdgeInsets.all(AppDimens.paddingM),
             sliver: SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: _getColumnCount(context),
+                crossAxisCount: AppDimens.gridColumnCount(context),
                 childAspectRatio: 0.75,
                 crossAxisSpacing: AppDimens.gridSpacing,
                 mainAxisSpacing: AppDimens.gridSpacing,

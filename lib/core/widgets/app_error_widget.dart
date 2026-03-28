@@ -23,10 +23,12 @@ class AppErrorWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.error_outline,
-              size: 64.w,
-              color: Theme.of(context).colorScheme.error,
+            ExcludeSemantics(
+              child: Icon(
+                Icons.error_outline,
+                size: 64.w,
+                color: Theme.of(context).colorScheme.error,
+              ),
             ),
             Gap(AppDimens.paddingM),
             AutoSizeText(

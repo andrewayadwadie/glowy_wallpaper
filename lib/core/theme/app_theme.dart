@@ -55,11 +55,19 @@ abstract class AppTheme {
       labelSmall: AppTextStyles.labelSmall(),
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.darkSurface,
+      backgroundColor: AppColors.darkBackground,
       foregroundColor: AppColors.darkOnSurface,
       elevation: 0,
     ),
     cardTheme: CardThemeData(color: AppColors.darkSurface, elevation: 0),
     iconTheme: IconThemeData(color: AppColors.darkOnSurface),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.darkSurface,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+    ),
+    dividerTheme: const DividerThemeData(
+      color: AppColors.darkShimmerBase,
+    ),
   );
 }

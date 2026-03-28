@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/theme/colors.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../cubit/premium_cubit.dart';
 import '../cubit/premium_state.dart';
@@ -38,7 +39,9 @@ class _GetPremiumPageState extends State<GetPremiumPage> {
               ..showSnackBar(
                 SnackBar(
                   content: Text(state.successMessage!),
-                  backgroundColor: Colors.green,
+                  backgroundColor: theme.brightness == Brightness.dark
+                      ? AppColors.darkSuccess
+                      : AppColors.success,
                 ),
               );
             context.read<PremiumCubit>().clearMessages();
@@ -74,7 +77,7 @@ class _GetPremiumPageState extends State<GetPremiumPage> {
                   ElevatedButton(
                     onPressed: () =>
                         context.read<PremiumCubit>().loadProducts(),
-                    child: const Text('Retry'),
+                    child: const Text(AppStrings.retry),
                   ),
                 ],
               ),
@@ -95,7 +98,7 @@ class _GetPremiumPageState extends State<GetPremiumPage> {
 
                 // Plan selection
                 Text(
-                  'Choose Your Plan',
+                  AppStrings.choosePlan,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -132,9 +135,9 @@ class _GetPremiumPageState extends State<GetPremiumPage> {
                           ? SizedBox(
                               height: 24.r,
                               width: 24.r,
-                              child: const CircularProgressIndicator(
+                              child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                color: Colors.white,
+                                color: theme.colorScheme.onPrimary,
                               ),
                             )
                           : const Text(AppStrings.subscribeNow),
