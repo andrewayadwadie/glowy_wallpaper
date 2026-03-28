@@ -15,6 +15,7 @@ abstract class DownloadRecordModel with _$DownloadRecordModel {
     required String title,
     @JsonKey(name: 'downloaded_at') required DateTime downloadedAt,
     @JsonKey(name: 'file_type') @Default('image') String fileType,
+    @JsonKey(name: 'is_top_rated') @Default(false) bool isTopRated,
   }) = _DownloadRecordModel;
 
   factory DownloadRecordModel.fromJson(Map<String, dynamic> json) =>
@@ -29,6 +30,7 @@ abstract class DownloadRecordModel with _$DownloadRecordModel {
     fileType: fileType == 'video'
         ? WallpaperFileType.video
         : WallpaperFileType.image,
+    isTopRated: isTopRated,
   );
 
   static DownloadRecordModel fromEntity(DownloadRecordEntity entity) =>
@@ -41,5 +43,6 @@ abstract class DownloadRecordModel with _$DownloadRecordModel {
         fileType: entity.fileType == WallpaperFileType.video
             ? 'video'
             : 'image',
+        isTopRated: entity.isTopRated,
       );
 }

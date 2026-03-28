@@ -9,6 +9,7 @@ class DownloadRecordEntity extends Equatable {
   final String title;
   final DateTime downloadedAt;
   final WallpaperFileType fileType;
+  final bool isTopRated;
 
   const DownloadRecordEntity({
     required this.wallpaperId,
@@ -17,6 +18,7 @@ class DownloadRecordEntity extends Equatable {
     required this.title,
     required this.downloadedAt,
     required this.fileType,
+    this.isTopRated = false,
   });
 
   @override
@@ -27,5 +29,6 @@ class DownloadRecordEntity extends Equatable {
     title,
     downloadedAt,
     fileType,
+    isTopRated,
   ];
 }

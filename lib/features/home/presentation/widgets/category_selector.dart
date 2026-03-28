@@ -40,6 +40,7 @@ class CategorySelector extends StatelessWidget {
                 margin: EdgeInsets.only(
                   left: index == 0 ? AppDimens.paddingM : 0,
                   right: AppDimens.categoryChipGap,
+                  top: AppDimens.paddingS,
                 ),
                 padding: EdgeInsets.symmetric(
                   horizontal: AppDimens.categoryChipPaddingH,

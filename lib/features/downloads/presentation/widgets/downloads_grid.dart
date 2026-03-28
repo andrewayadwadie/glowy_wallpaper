@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/app_cached_image.dart';
+import '../../../../core/widgets/exclusive_badge.dart';
 import '../../domain/entities/download_record_entity.dart';
 
 class DownloadsGrid extends StatelessWidget {
@@ -36,13 +38,24 @@ class DownloadsGrid extends StatelessWidget {
               tag: 'wallpaper_${record.wallpaperId}',
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(AppDimens.radiusS),
-                child: LayoutBuilder(
-                  builder: (_, constraints) => AppCachedImage(
-                    imageUrl: record.thumbnailUrl,
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    fit: BoxFit.cover,
-                  ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    LayoutBuilder(
+                      builder: (_, constraints) => AppCachedImage(
+                        imageUrl: record.thumbnailUrl,
+                        width: constraints.maxWidth,
+                        height: constraints.maxHeight,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    if (record.isTopRated)
+                      Positioned(
+                        top: 6.h,
+                        left: 6.w,
+                        child: const ExclusiveBadge(),
+                      ),
+                  ],
                 ),
               ),
             ),

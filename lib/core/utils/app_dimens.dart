@@ -19,7 +19,7 @@ abstract class AppDimens {
 
   static double get categoryChipHeight => 48.h;
   static double get categoryChipPaddingH => 12.w;
-  static double get categoryChipPaddingV => 10.h;
+  static double get categoryChipPaddingV => 5.h;
   static double get categoryChipGap => 8.w;
   static double get categorySelectorHeight => 48.h;
 
@@ -27,7 +27,7 @@ abstract class AppDimens {
   static double get bentoSmallCardHeight => 150.h;
   static double get bentoCardGap => 8.w;
 
-  static double get gridSpacing => 8.w;
+  static double get gridSpacing => 6.w;
   static double get paginationThreshold => 200.h;
 
   /// Adaptive grid column count based on screen width.

@@ -7,6 +7,7 @@ import '../../../../core/widgets/app_cached_image.dart';
 import '../../../../core/widgets/app_error_widget.dart';
 import '../../../../core/widgets/app_empty_state_widget.dart';
 import '../../../../core/widgets/app_shimmer_widget.dart';
+import '../../../../core/widgets/exclusive_badge.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 
 class SimilarWallpapersSheet extends StatelessWidget {
@@ -125,13 +126,24 @@ class SimilarWallpapersSheet extends StatelessWidget {
               tag: 'similar_${wallpaper.id}',
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(AppDimens.radiusS),
-                child: LayoutBuilder(
-                  builder: (_, constraints) => AppCachedImage(
-                    imageUrl: wallpaper.thumbUrl,
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    fit: BoxFit.cover,
-                  ),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    LayoutBuilder(
+                      builder: (_, constraints) => AppCachedImage(
+                        imageUrl: wallpaper.thumbUrl,
+                        width: constraints.maxWidth,
+                        height: constraints.maxHeight,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    if (wallpaper.isTopRated)
+                      Positioned(
+                        top: 6.h,
+                        left: 6.w,
+                        child: const ExclusiveBadge(),
+                      ),
+                  ],
                 ),
               ),
             ),

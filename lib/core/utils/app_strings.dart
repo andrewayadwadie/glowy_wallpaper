@@ -111,6 +111,9 @@ abstract class AppStrings {
   static const String phoneFramePreview = 'Preview';
   static const String closePreview = 'Close';
 
+  // Badges
+  static const String exclusive = 'Exclusive';
+
   // Similar Wallpapers
   static const String noSimilarWallpapers = 'No similar wallpapers found';
 
