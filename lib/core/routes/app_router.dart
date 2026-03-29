@@ -1,81 +1,191 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:glowy_wallpaper/core/di/injection_container.dart';
+import 'package:glowy_wallpaper/features/home/presentation/cubit/home_cubit.dart';
+import '../../features/categories/domain/entities/category_entity.dart';
 import 'routes.dart';
-import '../../features/splash/splash_screen.dart';
-import '../../features/onboarding/onboarding_screen.dart';
-import '../../features/home/views/home_screen.dart';
+import '../../features/splash/presentation/pages/splash_page.dart';
+import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/categories/domain/entities/classification_entity.dart';
+import '../../features/categories/presentation/cubit/classification_detail_cubit.dart';
+import '../../features/categories/presentation/pages/classification_detail_page.dart';
+import '../../features/wallpapers/domain/usecases/get_wallpapers_by_category.dart';
+import '../../features/wallpapers/domain/entities/wallpaper_entity.dart';
+import '../../features/wallpaper_detail/presentation/cubit/wallpaper_detail_cubit.dart';
+import '../../features/wallpaper_detail/presentation/pages/wallpaper_detail_page.dart';
+import '../../features/downloads/presentation/cubit/download_cubit.dart';
+import '../../features/favorites/presentation/cubit/favorite_cubit.dart';
+import '../../features/favorites/presentation/pages/favorites_page.dart';
+import '../../features/downloads/presentation/pages/downloads_page.dart';
+import '../../features/auth/presentation/cubit/subscription_cubit.dart';
+import '../../features/auth/presentation/cubit/subscription_state.dart';
+import '../../features/home/presentation/pages/content_page.dart';
+import '../../features/notifications/domain/services/notification_service.dart';
+import '../../features/premium/presentation/cubit/premium_cubit.dart';
+import '../../features/premium/presentation/pages/get_premium_page.dart';
+import '../../core/enums/content_type.dart';
 
-/// Application Router
-class AppRouter {
-  AppRouter._();
-
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case Routes.splash:
-        return _buildRoute(const SplashScreen(), settings);
-      case Routes.onboarding:
-        return _buildRoute(const OnboardingScreen(), settings);
-      case Routes.home:
-        return _buildRoute(const HomeScreen(), settings);
-      default:
-        return _buildRoute(
-          Scaffold(
-            body: Center(child: Text('No route defined for ${settings.name}')),
-          ),
-          settings,
-        );
-    }
-  }
-
-  static PageRouteBuilder _buildRoute(Widget page, RouteSettings settings) {
-    return PageRouteBuilder(
-      settings: settings,
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0);
-        const end = Offset.zero;
-        const curve = Curves.easeInOutCubic;
-
-        var tween = Tween(
-          begin: begin,
-          end: end,
-        ).chain(CurveTween(curve: curve));
-
-        return SlideTransition(position: animation.drive(tween), child: child);
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-    );
-  }
-
-  static void navigateTo(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    Navigator.pushNamed(context, routeName, arguments: arguments);
-  }
-
-  static void navigateAndReplace(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    Navigator.pushReplacementNamed(context, routeName, arguments: arguments);
-  }
-
-  static void navigateAndRemoveUntil(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      routeName,
-      (route) => false,
-      arguments: arguments,
-    );
-  }
-
-  static void goBack(BuildContext context) {
-    Navigator.pop(context);
-  }
+abstract class AppRouter {
+  static final GoRouter router = GoRouter(
+    initialLocation: AppRoutes.splash,
+    errorBuilder: (context, state) => Scaffold(
+      body: Center(child: AutoSizeText('Page not found: ${state.uri}')),
+    ),
+    redirect: (context, state) {
+      if (state.matchedLocation == AppRoutes.home) {
+        final notificationService = sl<NotificationService>();
+        final pendingRoute = notificationService.pendingRoute;
+        if (pendingRoute != null) {
+          try {
+            final subscriptionCubit = context.read<SubscriptionCubit>();
+            if (subscriptionCubit.state is! SubscriptionGuest) {
+              notificationService.clearPendingRoute();
+              return pendingRoute;
+            }
+          } catch (_) {}
+        }
+      }
+      return null;
+    },
+    routes: [
+      GoRoute(
+        path: AppRoutes.splash,
+        builder: (context, state) => const SplashPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.home,
+        builder: (context, state) => BlocProvider(
+          create: (context) => sl<HomeCubit>()..loadAppData(),
+          child: const HomePage(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: login'))),
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: register'))),
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: profile'))),
+      ),
+      GoRoute(
+        path: AppRoutes.favorites,
+        builder: (context, state) => BlocProvider(
+          create: (_) => sl<FavoriteCubit>(),
+          child: const FavoritesPage(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.downloads,
+        builder: (context, state) => BlocProvider(
+          create: (_) => sl<DownloadCubit>(),
+          child: const DownloadsPage(),
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.wallpaperDetail,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is! Map<String, dynamic>) {
+            return const Scaffold(
+              body: Center(child: Text('Invalid navigation parameters')),
+            );
+          }
+          final wallpapers = extra['wallpapers'] as List<WallpaperEntity>;
+          final initialIndex = extra['initialIndex'] as int? ?? 0;
+          final categoryType =
+              extra['categoryType'] as CategoryType? ?? CategoryType.image;
+          final classificationId = extra['classificationId'] as String? ?? "";
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) => sl<WallpaperDetailCubit>()
+                  ..init(wallpapers: wallpapers, initialIndex: initialIndex),
+              ),
+              BlocProvider(create: (_) => sl<DownloadCubit>()),
+              BlocProvider(
+                create: (_) {
+                  final cubit = sl<FavoriteCubit>();
+                  if (wallpapers.isNotEmpty) {
+                    cubit.checkIsFavorite(wallpapers[initialIndex].id);
+                  }
+                  return cubit;
+                },
+              ),
+            ],
+            child: WallpaperDetailPage(
+              wallpapers: wallpapers,
+              initialIndex: initialIndex,
+              categoryId: extra['categoryId'] as String?,
+              categoryType: categoryType,
+              classificationId: classificationId,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.classificationDetail,
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is! ClassificationEntity) {
+            return const Scaffold(
+              body: Center(child: Text('Invalid navigation parameters')),
+            );
+          }
+          final classification = extra;
+          return BlocProvider(
+            create: (context) => ClassificationDetailCubit(
+              getWallpapersByCategory: sl<GetWallpapersByCategory>(),
+              classification: classification,
+            )..loadWallpapers(),
+            child: const ClassificationDetailPage(),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.premium,
+        builder: (context, state) {
+          final subscriptionCubit = context.read<SubscriptionCubit>();
+          return BlocProvider(
+            create: (_) => sl<PremiumCubit>(param1: subscriptionCubit),
+            child: const GetPremiumPage(),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.about,
+        builder: (context, state) => ContentPage(
+          contentType: ContentType.about,
+          content: state.extra as String? ?? '',
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.privacyPolicy,
+        builder: (context, state) => ContentPage(
+          contentType: ContentType.privacyPolicy,
+          content: state.extra as String? ?? '',
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.termsOfUse,
+        builder: (context, state) => ContentPage(
+          contentType: ContentType.termsOfUse,
+          content: state.extra as String? ?? '',
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.onboarding,
+        builder: (context, state) =>
+            Scaffold(body: Center(child: AutoSizeText('Route: onboarding'))),
+      ),
+    ],
+  );
 }

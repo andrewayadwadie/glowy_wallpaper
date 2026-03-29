@@ -5,10 +5,14 @@ class AppConstants {
   AppConstants._();
 
   // API Configuration
-  static const String baseUrl = 'https://api.example.com';
+  static const String baseUrl = 'http://localhost:3001';
   static const String apiVersion = 'v1';
   static const Duration connectionTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
+
+  // Hive Box Names
+  static const String favoritesBoxName = 'favorites';
+  static const String downloadsBoxName = 'downloads';
 
   // Storage Keys
   static const String accessTokenKey = 'access_token';

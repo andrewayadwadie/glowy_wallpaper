@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": "wp-uuid-41",
+        "url": "https://cdn.example.com/wallpapers/neon-41-full.jpg",
+        "thumbUrl": "https://cdn.example.com/wallpapers/neon-41-thumb.jpg",
+        "isTopRated": false,
+        "mediaType": "IMAGE",
+        "classificationId": null,
+        "classificationName": null,
+        "classificationThumbnailUrl": null,
+        "createdAt": "2025-10-01T08:00:00.000Z"
+      }
+    ],
+    "pagination": {
+      "page": 3,
+      "limit": 20,
+      "total": 50,
+      "totalPages": 3
+    }
+  },
+  "message": "Content retrieved successfully"
+}
