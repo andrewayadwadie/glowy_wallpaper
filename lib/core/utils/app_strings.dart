@@ -1,5 +1,6 @@
 abstract class AppStrings {
   static const String appName = 'Glowy Wallpapers';
+  static const String appNameHome = 'Glowy';
   static const String retry = 'Retry';
   static const String error = 'Something went wrong';
   static const String noInternet = 'No internet connection';

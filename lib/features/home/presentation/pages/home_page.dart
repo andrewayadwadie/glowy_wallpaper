@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/widgets/banner_ad_widget.dart';
+import '../../../../core/widgets/neon_text.dart';
 import '../../../auth/presentation/cubit/subscription_cubit.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
@@ -23,7 +24,7 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: AutoSizeText(AppStrings.appName, maxLines: 1),
+        title: NeonText(AppStrings.appNameHome),
         centerTitle: true,
         actions: [
           if (isPremium)
