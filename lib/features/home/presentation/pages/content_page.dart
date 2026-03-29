@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:glowy_wallpaper/core/enums/content_type.dart';
+import 'package:glowy_wallpaper/core/utils/app_dimens.dart';
+import 'package:glowy_wallpaper/core/utils/app_strings.dart';
 
 class ContentPage extends StatelessWidget {
   final ContentType contentType;
@@ -16,11 +17,11 @@ class ContentPage extends StatelessWidget {
   String get _title {
     switch (contentType) {
       case ContentType.about:
-        return 'About';
+        return AppStrings.about;
       case ContentType.privacyPolicy:
-        return 'Privacy Policy';
+        return AppStrings.privacyPolicy;
       case ContentType.termsOfUse:
-        return 'Terms of Use';
+        return AppStrings.termsOfUse;
     }
   }
 
@@ -32,8 +33,11 @@ class ContentPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20.w),
-        child: Text(content, style: TextStyle(fontSize: 15.sp, height: 1.6)),
+        padding: EdgeInsets.all(AppDimens.paddingL),
+        child: Text(
+          content,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.6),
+        ),
       ),
     );
   }

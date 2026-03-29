@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/utils/app_strings.dart';
@@ -81,16 +80,16 @@ class _DownloadsPageState extends State<DownloadsPage> {
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: AppDimens.paddingS,
-                    mainAxisSpacing: AppDimens.paddingS,
-                    childAspectRatio: 0.65,
+                    crossAxisCount: AppDimens.gridColumnCount(context),
+                    crossAxisSpacing: AppDimens.gridSpacing,
+                    mainAxisSpacing: AppDimens.gridSpacing,
+                    childAspectRatio: 0.75,
                   ),
                   itemCount: 6,
                   itemBuilder: (context, index) => Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.r),
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(AppDimens.radiusM),
                     ),
                   ),
                 ),

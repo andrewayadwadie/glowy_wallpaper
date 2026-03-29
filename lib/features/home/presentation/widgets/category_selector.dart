@@ -29,32 +29,37 @@ class CategorySelector extends StatelessWidget {
           final category = categories[index];
           final isSelected = index == selectedIndex;
 
-          return GestureDetector(
-            onTap: () => onCategorySelected(index),
-            child: Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(
-                left: index == 0 ? AppDimens.paddingM : 0,
-                right: AppDimens.categoryChipGap,
-              ),
-              padding: EdgeInsets.symmetric(
-                horizontal: AppDimens.categoryChipPaddingH,
-                vertical: AppDimens.categoryChipPaddingV,
-              ),
-
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? colorScheme.primary
-                    : colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(AppDimens.radiusS),
-              ),
-              child: AutoSizeText(
-                category.name,
-                maxLines: 1,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          return Semantics(
+            button: true,
+            selected: isSelected,
+            label: category.name,
+            child: GestureDetector(
+              onTap: () => onCategorySelected(index),
+              child: Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(
+                  left: index == 0 ? AppDimens.paddingM : 0,
+                  right: AppDimens.categoryChipGap,
+                  top: AppDimens.paddingS,
+                ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppDimens.categoryChipPaddingH,
+                  vertical: AppDimens.categoryChipPaddingV,
+                ),
+                decoration: BoxDecoration(
                   color: isSelected
-                      ? colorScheme.onPrimary
-                      : colorScheme.onSurface,
+                      ? colorScheme.primary
+                      : colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(AppDimens.radiusS),
+                ),
+                child: AutoSizeText(
+                  category.name,
+                  maxLines: 1,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: isSelected
+                        ? colorScheme.onPrimary
+                        : colorScheme.onSurface,
+                  ),
                 ),
               ),
             ),

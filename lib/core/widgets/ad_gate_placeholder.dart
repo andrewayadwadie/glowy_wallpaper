@@ -100,8 +100,9 @@ class _AdGateWidgetState extends State<AdGateWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: colorScheme.scrim.withAlpha(140),
       body: Center(
         child: _isShowingAd
             ? const CircularProgressIndicator()
@@ -110,9 +111,9 @@ class _AdGateWidgetState extends State<AdGateWidget> {
                 children: [
                   Text(
                     _message,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodyLarge?.copyWith(color: Colors.white),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: colorScheme.onSurface,
+                    ),
                   ),
                 ],
               ),

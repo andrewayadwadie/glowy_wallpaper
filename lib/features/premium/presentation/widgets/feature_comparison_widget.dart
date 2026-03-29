@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
+
 
 class FeatureComparisonWidget extends StatelessWidget {
   const FeatureComparisonWidget({super.key});
@@ -10,21 +12,21 @@ class FeatureComparisonWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: EdgeInsets.symmetric(horizontal: AppDimens.paddingM, vertical: AppDimens.paddingS),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimens.radiusM)),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppDimens.paddingM),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AutoSizeText(
-              'Compare Plans',
+              AppStrings.comparePlans,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
               maxLines: 1,
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: AppDimens.paddingM),
             _buildHeader(theme),
             const Divider(height: 1),
             _buildRow(theme, 'Ads', AppStrings.adsIncluded, AppStrings.adFree),
@@ -50,7 +52,7 @@ class FeatureComparisonWidget extends StatelessWidget {
 
   Widget _buildHeader(ThemeData theme) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: EdgeInsets.only(bottom: AppDimens.paddingS),
       child: Row(
         children: [
           const Expanded(flex: 2, child: SizedBox()),
@@ -71,7 +73,7 @@ class FeatureComparisonWidget extends StatelessWidget {
             flex: 2,
             child: Center(
               child: AutoSizeText(
-                'Premium',
+                AppStrings.premiumBadge,
                 style: theme.textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.primary,
@@ -92,7 +94,7 @@ class FeatureComparisonWidget extends StatelessWidget {
     String premiumValue,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: EdgeInsets.symmetric(vertical: AppDimens.radiusM),
       child: Row(
         children: [
           Expanded(

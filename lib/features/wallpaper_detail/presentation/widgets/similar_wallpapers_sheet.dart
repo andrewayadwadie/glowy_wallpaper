@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
-
 import '../../../../core/widgets/app_cached_image.dart';
 import '../../../../core/widgets/app_error_widget.dart';
 import '../../../../core/widgets/app_empty_state_widget.dart';
 import '../../../../core/widgets/app_shimmer_widget.dart';
+import '../../../../core/widgets/exclusive_badge.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 
 class SimilarWallpapersSheet extends StatelessWidget {
@@ -78,20 +78,21 @@ class SimilarWallpapersSheet extends StatelessWidget {
     ScrollController scrollController,
   ) {
     if (isLoading) {
+      final columns = AppDimens.gridColumnCount(context);
       return AppShimmerWidget(
         child: GridView.builder(
           padding: EdgeInsets.all(AppDimens.paddingM),
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
             childAspectRatio: 0.75,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
+            crossAxisSpacing: AppDimens.gridSpacing,
+            mainAxisSpacing: AppDimens.gridSpacing,
           ),
           itemCount: 6,
           itemBuilder: (context, index) => Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(AppDimens.radiusS),
             ),
           ),
@@ -108,7 +109,7 @@ class SimilarWallpapersSheet extends StatelessWidget {
       controller: scrollController,
       padding: EdgeInsets.all(AppDimens.paddingM),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
+        crossAxisCount: AppDimens.gridColumnCount(context),
         childAspectRatio: 0.75,
         crossAxisSpacing: AppDimens.gridSpacing,
         mainAxisSpacing: AppDimens.gridSpacing,
@@ -116,15 +117,34 @@ class SimilarWallpapersSheet extends StatelessWidget {
       itemCount: wallpapers.length,
       itemBuilder: (context, index) {
         final wallpaper = wallpapers[index];
-        return GestureDetector(
-          onTap: () => onTap(wallpaper),
-          child: Hero(
-            tag: 'similar_${wallpaper.id}',
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppDimens.radiusS),
-              child: AppCachedImage(
-                imageUrl: wallpaper.thumbUrl,
-                fit: BoxFit.cover,
+        return Semantics(
+          button: true,
+          label: wallpaper.classificationName ?? AppStrings.wallpaperDetail,
+          child: GestureDetector(
+            onTap: () => onTap(wallpaper),
+            child: Hero(
+              tag: 'similar_${wallpaper.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppDimens.radiusS),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    LayoutBuilder(
+                      builder: (_, constraints) => AppCachedImage(
+                        imageUrl: wallpaper.thumbUrl,
+                        width: constraints.maxWidth,
+                        height: constraints.maxHeight,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    if (wallpaper.isTopRated)
+                      Positioned(
+                        top: 6.h,
+                        left: 6.w,
+                        child: const ExclusiveBadge(),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -18,6 +18,10 @@ class FavoriteCubit extends Cubit<FavoriteState> {
   final FirebaseAnalytics? _analytics;
   final NotificationService? _notificationService;
 
+  /// Local cache of favorite status per wallpaper to avoid redundant API calls
+  /// during rapid swiping in the detail page.
+  final Map<String, bool> _favoriteCache = {};
+
   FavoriteCubit({
     required ToggleFavorite toggleFavorite,
     required IsFavorite isFavorite,
@@ -34,8 +38,17 @@ class FavoriteCubit extends Cubit<FavoriteState> {
        super(const FavoriteState());
 
   Future<void> checkIsFavorite(String wallpaperId) async {
+    // Return cached result immediately if available
+    if (_favoriteCache.containsKey(wallpaperId)) {
+      emit(state.copyWith(isFavorite: _favoriteCache[wallpaperId]!));
+      return;
+    }
+
     final result = await _isFavorite(IsFavoriteParams(wallpaperId));
-    result.fold((_) {}, (isFav) => emit(state.copyWith(isFavorite: isFav)));
+    result.fold((_) {}, (isFav) {
+      _favoriteCache[wallpaperId] = isFav;
+      emit(state.copyWith(isFavorite: isFav));
+    });
   }
 
   Future<void> toggle(WallpaperEntity wallpaper) async {
@@ -67,6 +80,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
     result.fold(
       (failure) {
         // Revert on failure
+        _favoriteCache[wallpaper.id] = previousState;
         emit(
           state.copyWith(
             isFavorite: previousState,
@@ -76,6 +90,7 @@ class FavoriteCubit extends Cubit<FavoriteState> {
         );
       },
       (newIsFav) {
+        _favoriteCache[wallpaper.id] = newIsFav;
         emit(
           state.copyWith(
             isFavorite: newIsFav,

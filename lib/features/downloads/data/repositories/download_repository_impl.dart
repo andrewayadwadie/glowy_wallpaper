@@ -74,6 +74,7 @@ class DownloadRepositoryImpl implements DownloadRepository {
         title: wallpaper.id,
         downloadedAt: DateTime.now(),
         fileType: isVideo ? WallpaperFileType.video : WallpaperFileType.image,
+        isTopRated: wallpaper.isTopRated,
       );
       await _localDataSource.saveRecord(record);
 

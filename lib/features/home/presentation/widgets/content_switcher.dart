@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/widgets/app_error_widget.dart';
 import '../../../../core/widgets/app_shimmer_widget.dart';
 import '../../../../core/widgets/app_empty_state_widget.dart';
@@ -52,16 +51,16 @@ class ContentSwitcher extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: AppDimens.paddingS,
-            mainAxisSpacing: AppDimens.paddingS,
-            childAspectRatio: 0.65,
+            crossAxisCount: AppDimens.gridColumnCount(context),
+            crossAxisSpacing: AppDimens.gridSpacing,
+            mainAxisSpacing: AppDimens.gridSpacing,
+            childAspectRatio: 0.75,
           ),
           itemCount: 6,
           itemBuilder: (context, index) => Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.r),
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(AppDimens.radiusM),
             ),
           ),
         ),

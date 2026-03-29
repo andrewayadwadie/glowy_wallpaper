@@ -62,13 +62,6 @@ class _VideoGridState extends State<VideoGrid> {
     return a.every(b.contains);
   }
 
-  int _getColumnCount(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    if (width < 400) return 2;
-    if (width < 700) return 3;
-    return 4;
-  }
-
   @override
   Widget build(BuildContext context) {
     final displayWallpapers = widget.wallpapers;
@@ -92,7 +85,7 @@ class _VideoGridState extends State<VideoGrid> {
             padding: EdgeInsets.all(AppDimens.paddingM),
             sliver: SliverGrid(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: _getColumnCount(context),
+                crossAxisCount: AppDimens.gridColumnCount(context),
                 childAspectRatio: 0.75,
                 crossAxisSpacing: AppDimens.gridSpacing,
                 mainAxisSpacing: AppDimens.gridSpacing,

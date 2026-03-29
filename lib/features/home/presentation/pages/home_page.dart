@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/widgets/banner_ad_widget.dart';
+import '../../../../core/widgets/neon_text.dart';
 import '../../../auth/presentation/cubit/subscription_cubit.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
@@ -21,12 +24,13 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: AutoSizeText(AppStrings.appName, maxLines: 1),
+        title: NeonText(AppStrings.appNameHome),
         centerTitle: true,
         actions: [
           if (isPremium)
             IconButton(
               icon: const Icon(Icons.person_outline),
+              tooltip: AppStrings.profile,
               onPressed: () => _onProfileTapped(context, isPremium),
             ),
         ],
@@ -44,6 +48,7 @@ class HomePage extends StatelessWidget {
                   onCategorySelected: (index) =>
                       homeCubit.selectCategory(index),
                 ),
+              Gap(10.h),
               Expanded(
                 child: ContentSwitcher(
                   categoryType: homeCubit.selectedCategory?.type,

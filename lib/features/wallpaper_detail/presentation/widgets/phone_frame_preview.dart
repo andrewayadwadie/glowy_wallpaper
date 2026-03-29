@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/app_cached_image.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 
@@ -64,79 +65,83 @@ class _PhoneFramePreviewState extends State<PhoneFramePreview> {
     final screenRadius = BorderRadius.circular(24.r);
     final isIOS = Platform.isIOS;
 
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pop(),
-      child: Scaffold(
-        backgroundColor: Colors.black.withAlpha(200),
-        body: Center(
-          child: Container(
-            width: frameWidth,
-            height: frameHeight,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A),
-              borderRadius: BorderRadius.circular(32.r),
-              border: Border.all(color: const Color(0xFF333333), width: 3.w),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(120),
-                  blurRadius: 30,
-                  spreadRadius: 5,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
-              child: Column(
-                children: [
-                  // Top notch / dynamic island
-                  SizedBox(height: 8.h),
-                  if (isIOS)
-                    Container(
-                      width: 72.w,
-                      height: 20.h,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF111111),
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                    )
-                  else
-                    Container(
-                      width: 12.w,
-                      height: 12.w,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF111111),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  SizedBox(height: 8.h),
-                  // Screen area
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: screenRadius,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          _buildWallpaper(),
-                          if (isIOS)
-                            _IOSHomeOverlay()
-                          else
-                            _AndroidHomeOverlay(),
-                        ],
-                      ),
-                    ),
+    return Semantics(
+      button: true,
+      label: AppStrings.closePreview,
+      child: GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: Scaffold(
+          backgroundColor: Colors.black.withAlpha(200),
+          body: Center(
+            child: Container(
+              width: frameWidth,
+              height: frameHeight,
+              decoration: BoxDecoration(
+                color: const Color(0xFF1A1A1A),
+                borderRadius: BorderRadius.circular(32.r),
+                border: Border.all(color: const Color(0xFF333333), width: 3.w),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(120),
+                    blurRadius: 30,
+                    spreadRadius: 5,
                   ),
-                  SizedBox(height: 8.h),
-                  // Bottom bar
-                  Container(
-                    width: 100.w,
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF444444),
-                      borderRadius: BorderRadius.circular(2.r),
-                    ),
-                  ),
-                  SizedBox(height: 6.h),
                 ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
+                child: Column(
+                  children: [
+                    // Top notch / dynamic island
+                    SizedBox(height: 8.h),
+                    if (isIOS)
+                      Container(
+                        width: 72.w,
+                        height: 20.h,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF111111),
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      )
+                    else
+                      Container(
+                        width: 12.w,
+                        height: 12.w,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF111111),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    SizedBox(height: 8.h),
+                    // Screen area
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: screenRadius,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            _buildWallpaper(),
+                            if (isIOS)
+                              _IOSHomeOverlay()
+                            else
+                              _AndroidHomeOverlay(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    // Bottom bar
+                    Container(
+                      width: 100.w,
+                      height: 4.h,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF444444),
+                        borderRadius: BorderRadius.circular(2.r),
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                  ],
+                ),
               ),
             ),
           ),

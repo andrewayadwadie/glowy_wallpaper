@@ -179,6 +179,11 @@ class AdHelper {
 
     if (_isRewardedInterstitialLoading) return false;
 
+    // Dispose any stale native ad instance (e.g. after hot-restart) before
+    // requesting a new one — prevents "Ad for adId already exists" crash.
+    _rewardedInterstitialAd?.dispose();
+    _rewardedInterstitialAd = null;
+
     _isRewardedInterstitialLoading = true;
 
     final completer = Completer<bool>();
@@ -311,6 +316,11 @@ class AdHelper {
     }
 
     if (_isInterstitialLoading) return false;
+
+    // Dispose any stale native ad instance (e.g. after hot-restart) before
+    // requesting a new one — prevents "Ad for adId already exists" crash.
+    _interstitialAd?.dispose();
+    _interstitialAd = null;
 
     _isInterstitialLoading = true;
 
