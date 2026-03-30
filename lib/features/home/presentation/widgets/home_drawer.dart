@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:io' show Platform;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,7 @@ import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/neon_text.dart';
 import '../../../app/domain/entities/app_metadata_entity.dart';
-import '../../../auth/presentation/cubit/subscription_cubit.dart';
+
 import '../cubit/home_cubit.dart';
 
 class HomeDrawer extends StatelessWidget {
