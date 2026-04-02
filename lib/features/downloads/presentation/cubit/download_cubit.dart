@@ -1,5 +1,3 @@
-// ignore_for_file: unused_field
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/network/network_info.dart';
@@ -54,7 +52,16 @@ class DownloadCubit extends Cubit<DownloadState> {
   Future<void> download(WallpaperEntity wallpaper) async {
     if (state.isDownloading) return;
 
-    // Step 1: Attempt the rewarded ad gate. Proceed with download regardless
+    // Step 1: Guard against no internet — check real reachability, not just radio.
+    final hasConnection = await _networkInfo.isConnected;
+    if (!hasConnection) {
+      emit(
+        state.copyWith(errorMessage: AppStrings.networkUnavailable),
+      );
+      return;
+    }
+
+    // Step 2: Attempt the rewarded ad gate. Proceed with download regardless
     // of ad outcome — ad errors must never block core functionality.
     await AdHelper.instance.showRewardedInterstitialAd(action: 'download');
 

@@ -47,3 +47,21 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Android signing secrets — never commit these
+android/key.properties
+*.jks
+*.keystore
+
+# iOS signing secrets
+ios/Certificates/
+*.p12
+*.mobileprovision
+
+# Firebase — prod google-services if you have a separate one
+# google-services.json is committed intentionally (no private keys)
+
+# Fastlane secrets
+fastlane/.env
+fastlane/report.xml
+fastlane/screenshots/
