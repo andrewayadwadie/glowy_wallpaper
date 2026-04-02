@@ -104,6 +104,8 @@ abstract class AppRouter {
           final categoryType =
               extra['categoryType'] as CategoryType? ?? CategoryType.image;
           final classificationId = extra['classificationId'] as String? ?? "";
+          final showAppBarActions =
+              extra['showAppBarActions'] as bool? ?? true;
           return MultiBlocProvider(
             providers: [
               BlocProvider(
@@ -127,6 +129,7 @@ abstract class AppRouter {
               categoryId: extra['categoryId'] as String?,
               categoryType: categoryType,
               classificationId: classificationId,
+              showAppBarActions: showAppBarActions,
             ),
           );
         },

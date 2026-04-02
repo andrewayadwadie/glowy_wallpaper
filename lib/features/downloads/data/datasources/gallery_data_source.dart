@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:gal/gal.dart';
+import 'package:gallery_saver_plus/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
 
@@ -16,20 +16,29 @@ abstract class GalleryDataSource {
 class GalleryDataSourceImpl implements GalleryDataSource {
   @override
   Future<bool> requestPermission() async {
-    final hasAccess = await Gal.hasAccess(toAlbum: false);
-    if (hasAccess) return true;
-    return Gal.requestAccess(toAlbum: false);
+    // On Android 13+ (API 33+), photos permission is used; on older versions
+    // it's storage. permission_handler resolves the correct permission per SDK.
+    final status = await ph.Permission.photos.request();
+    if (status.isGranted || status.isLimited) return true;
+    // Fallback for Android < 13
+    final storage = await ph.Permission.storage.request();
+    return storage.isGranted;
   }
 
   @override
   Future<bool> checkPermission() async {
-    return Gal.hasAccess(toAlbum: false);
+    final photos = await ph.Permission.photos.status;
+    if (photos.isGranted || photos.isLimited) return true;
+    final storage = await ph.Permission.storage.status;
+    return storage.isGranted;
   }
 
   @override
   Future<bool> isPermanentlyDenied() async {
-    final status = await ph.Permission.storage.status;
-    return status.isPermanentlyDenied;
+    final photos = await ph.Permission.photos.status;
+    if (photos.isPermanentlyDenied) return true;
+    final storage = await ph.Permission.storage.status;
+    return storage.isPermanentlyDenied;
   }
 
   @override
@@ -39,18 +48,25 @@ class GalleryDataSourceImpl implements GalleryDataSource {
 
   @override
   Future<void> putImageBytes(Uint8List bytes, {String? name}) async {
-    await Gal.putImageBytes(bytes, name: name ?? 'wallpaper');
+    final tmpDir = await getTemporaryDirectory();
+    final fileName = '${name ?? 'wallpaper'}.jpg';
+    final tmpFile = File('${tmpDir.path}/$fileName');
+    await tmpFile.writeAsBytes(bytes);
+    try {
+      await GallerySaver.saveImage(tmpFile.path);
+    } finally {
+      await tmpFile.delete();
+    }
   }
 
   @override
   Future<void> putVideoBytes(Uint8List bytes, {String? name}) async {
-    // gal only supports saving videos from file paths, so write to temp first
     final tmpDir = await getTemporaryDirectory();
     final fileName = '${name ?? 'wallpaper'}.mp4';
     final tmpFile = File('${tmpDir.path}/$fileName');
     await tmpFile.writeAsBytes(bytes);
     try {
-      await Gal.putVideo(tmpFile.path);
+      await GallerySaver.saveVideo(tmpFile.path);
     } finally {
       await tmpFile.delete();
     }

@@ -48,6 +48,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         'initialIndex': index,
         'categoryType': CategoryType.image,
         'classificationId': null,
+        'showAppBarActions': false,
       },
     );
   }

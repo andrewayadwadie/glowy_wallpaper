@@ -31,12 +31,9 @@ class DownloadRepositoryImpl implements DownloadRepository {
         final isPermanentlyDenied = await _galleryDataSource
             .isPermanentlyDenied();
         if (isPermanentlyDenied) {
-          await _galleryDataSource.openAppSettings();
-          return Left(
-            CacheFailure(
-              'Storage permission permanently denied. Please enable it in settings.',
-            ),
-          );
+          // Return a sentinel message the presentation layer detects to show
+          // the "Open Settings" dialog instead of a plain snackbar.
+          return Left(CacheFailure('permission_permanently_denied'));
         }
         return Left(CacheFailure('Storage permission denied'));
       }

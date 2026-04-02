@@ -258,6 +258,7 @@ Future<void> init() async {
     () => DownloadCubit(
       downloadWallpaper: sl(),
       getDownloadHistory: sl(),
+      networkInfo: sl(),
       analytics: sl(),
       notificationService: sl(),
     ),
