@@ -1,6 +1,6 @@
 ﻿# glowy_wallpaper Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-03-27
+Auto-generated from all feature plans. Last updated: 2026-04-02
 
 ## Active Technologies
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, flutter_secure_storage, auto_size_text, flutter_screenutil, dartz, equatable (002-auth-user-profile)
@@ -21,6 +21,8 @@ Auto-generated from all feature plans. Last updated: 2026-03-27
 - Hive (favorites box, downloads box) — local device storage (009-fix-favorites-download-preview)
 - Dart 3.11.3 / Flutter 3.41.5 + google_mobile_ads (existing), flutter_bloc (Cubit + Freezed), get_it + injectable, firebase_analytics (010-admob-ad-units-setup)
 - Hive (ad_frequency box for cooldown tracking), flutter_secure_storage (tokens) (010-admob-ad-units-setup)
+- Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), dio, dartz, get_it, permission_handler, internet_connection_checker, connectivity_plus, google_mobile_ads, firebase_analytics, image_gallery_saver_plus (NEW), flutter_screenutil (011-download-connectivity-ux)
+- Hive (downloads box, app_bootstrap), flutter_secure_storage (auth tokens) (011-download-connectivity-ux)
 
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, hive + flutter_secure_storage, flutter_screenutil, envied, dartz, google_fonts (Poppins), cached_network_image, auto_size_text, loader_overlay + flutter_spinkit, easy_localization (001-phase1-foundation)
 
@@ -40,9 +42,9 @@ tests/
 Dart 3.11.3 / Flutter 3.41.5: Follow standard conventions
 
 ## Recent Changes
+- 011-download-connectivity-ux: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), dio, dartz, get_it, permission_handler, internet_connection_checker, connectivity_plus, google_mobile_ads, firebase_analytics, image_gallery_saver_plus (NEW), flutter_screenutil
 - 010-admob-ad-units-setup: Added Dart 3.11.3 / Flutter 3.41.5 + google_mobile_ads (existing), flutter_bloc (Cubit + Freezed), get_it + injectable, firebase_analytics
 - 009-fix-favorites-download-preview: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), go_router, dio, hive + hive_flutter, cached_network_image, video_player, gal, permission_handler, injectable + get_it, dartz, flutter_screenutil, auto_size_text
-- 008-fix-runtime-bugs: Added Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc (Cubit + Freezed), go_router, dio, hive, injectable + get_it, cached_network_image, auto_size_text, flutter_screenutil, share_plus, url_launcher
 
 
 <!-- MANUAL ADDITIONS START -->

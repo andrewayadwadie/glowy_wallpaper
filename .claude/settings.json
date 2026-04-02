@@ -77,7 +77,16 @@
       "Bash(powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"admob-ad-units-setup\" -FeatureDescription \"Integrate specific AdMob ad units with App Open splash Rewarded Interstitial download gate Interstitial favorite gate Banner home bottom\")",
       "Bash(echo \"exit:$?\")",
       "Bash(grep -rn \"//.*[a-zA-Z]\" lib/ --include=\"*.dart\")",
-      "Bash(grep -rn \"^\\\\s*//\" lib/features/ --include=\"*.dart\")"
+      "Bash(grep -rn \"^\\\\s*//\" lib/features/ --include=\"*.dart\")",
+      "Bash(powershell -Command \".specify/scripts/powershell/create-new-feature.ps1 'i want to edit on some features: change on download logic -> start with check on internet connection status and stability not just connected, if user has no internet return shouldProcess=false and display unavailable snackbar, if user has connection but there is problem in adGatePlaceholder or ad has error in display user can download image normally; use package image_gallery_saver_plus in download process; avoid circular indicator displayed in center with black screen use another way' -Json -ShortName 'download-connectivity-ux' 'Improve Download Connectivity Check and UX'\")",
+      "Bash(powershell -Command \"& '.specify/scripts/powershell/create-new-feature.ps1' -Json -ShortName 'download-connectivity-ux' -FeatureDescription 'Improve download with internet connectivity check, graceful ad gate fallback, image gallery saver, and non-blocking download progress UX'\")",
+      "Bash(powershell -Command \"& '.specify/scripts/powershell/check-prerequisites.ps1' -Json -PathsOnly\")",
+      "Bash(powershell -Command \"& '.specify/scripts/powershell/setup-plan.ps1' -Json\")",
+      "Bash(powershell -Command \"& '.specify/scripts/powershell/update-agent-context.ps1' -AgentType claude\")",
+      "Bash(powershell -Command \"& '.specify/scripts/powershell/check-prerequisites.ps1' -Json\")",
+      "Bash(powershell -Command \"& '.specify/scripts/powershell/check-prerequisites.ps1' -Json -RequireTasks -IncludeTasks\")",
+      "Bash(ls -la /c/Users/Dell/Documents/claude/glowy_wallpaper/.env*)",
+      "Bash(xargs ls:*)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"

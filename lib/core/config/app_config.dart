@@ -1,3 +1,5 @@
+import 'env.dart';
+
 /// Application Configuration
 class AppConfig {
   AppConfig._();
@@ -14,24 +16,12 @@ class AppConfig {
       'support@glowywallpapers.com'; // fallback only — real value from bootstrap API
 
   // Backend App ID — used in all API routes: /api/v1/mobile/apps/{appId}/...
-  // Replace with actual backend app ID before publishing
-  static const String appId = 'dcb4ac5f-17b9-4938-b0a9-8f1e78c4beb6';
+  static const String appId = '809a555c-34b9-4899-9c07-d0e295e2b2e5';
 
   // Environment
-  static const bool isProduction = false;
-  static const bool enableLogging = true;
+  static const bool isProduction = true;
+  static const bool enableLogging = false;
 
-  // API Configuration
-  // NOTE: On Android emulator, "localhost" resolves to the emulator itself, not the host machine.
-  // Use 10.0.2.2 to reach the host machine's localhost from within the emulator.
-  // On iOS simulator, "localhost" works fine.
-  // For a physical device, use your machine's local network IP (e.g. 192.168.x.x).
-  static const String _devHost = '10.0.2.2';
-  static const int _devPort = 3001;
-
-  static String get baseUrl {
-    return isProduction
-        ? 'https://api.glowywallpapers.com'
-        : 'http://$_devHost:$_devPort';
-  }
+  // API base URL is driven by the .env.prod file via envied — no hardcoded URLs.
+  static String get baseUrl => Env.apiBaseUrl;
 }

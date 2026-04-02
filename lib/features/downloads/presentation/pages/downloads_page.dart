@@ -62,6 +62,7 @@ class _DownloadsPageState extends State<DownloadsPage> {
         'initialIndex': index,
         'categoryType': categoryType,
         'classificationId': null,
+        'showAppBarActions': false,
       },
     );
   }
