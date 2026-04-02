@@ -36,8 +36,10 @@ class _PhoneFramePreviewState extends State<PhoneFramePreview> {
   }
 
   Future<void> _initializeVideoPlayer() async {
-    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
     try {
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoUrl),
+      );
       await _controller!.initialize();
       await _controller!.setLooping(true);
       await _controller!.setVolume(0);
@@ -45,7 +47,8 @@ class _PhoneFramePreviewState extends State<PhoneFramePreview> {
       if (mounted) {
         setState(() => _isInitialized = true);
       }
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Video initialization error: $e');
       if (mounted) {
         setState(() => _isInitialized = false);
       }

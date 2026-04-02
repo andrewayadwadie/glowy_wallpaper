@@ -12,4 +12,11 @@ abstract class LoginRequestModel with _$LoginRequestModel {
 
   factory LoginRequestModel.fromJson(Map<String, dynamic> json) =>
       _$LoginRequestModelFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => when(
+    (email, password) => _$LoginRequestModelToJson(
+      _LoginRequestModel(email: email, password: password),
+    ),
+  );
 }

@@ -11,6 +11,13 @@ abstract class FavoriteRequestModel with _$FavoriteRequestModel {
 
   factory FavoriteRequestModel.fromJson(Map<String, dynamic> json) =>
       _$FavoriteRequestModelFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => when(
+    (wallpaperId) => _$FavoriteRequestModelToJson(
+      _FavoriteRequestModel(wallpaperId: wallpaperId),
+    ),
+  );
 }
 
 @freezed
@@ -21,4 +28,11 @@ abstract class MergeFavoritesRequestModel with _$MergeFavoritesRequestModel {
 
   factory MergeFavoritesRequestModel.fromJson(Map<String, dynamic> json) =>
       _$MergeFavoritesRequestModelFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => when(
+    (wallpaperIds) => _$MergeFavoritesRequestModelToJson(
+      _MergeFavoritesRequestModel(wallpaperIds: wallpaperIds),
+    ),
+  );
 }

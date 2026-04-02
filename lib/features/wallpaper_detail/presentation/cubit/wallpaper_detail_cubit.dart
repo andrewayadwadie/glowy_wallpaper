@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import '../../../categories/domain/entities/category_entity.dart';
@@ -36,16 +37,28 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
     if (index < 0 || index >= state.wallpapers.length) return;
     final wallpaper = state.wallpapers[index];
     if (wallpaper.mediaType == MediaType.video) {
+      debugPrint(
+        'Initializing video for wallpaper ${wallpaper.id}: ${wallpaper.url}',
+      );
       _videoController =
           VideoPlayerController.networkUrl(Uri.parse(wallpaper.url))
-            ..initialize().then((_) {
-              if (!isClosed) {
-                _videoController!
-                  ..setLooping(true)
-                  ..setVolume(0)
-                  ..play();
-              }
-            });
+            ..initialize()
+                .then((_) {
+                  if (!isClosed) {
+                    _videoController!
+                      ..setLooping(true)
+                      ..setVolume(0)
+                      ..play();
+                    debugPrint(
+                      'Video initialized successfully for ${wallpaper.id}',
+                    );
+                  }
+                })
+                .catchError((error) {
+                  debugPrint(
+                    'Error initializing video for ${wallpaper.id}: $error',
+                  );
+                });
     }
   }
 
