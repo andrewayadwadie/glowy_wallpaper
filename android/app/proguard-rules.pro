@@ -20,3 +20,6 @@
 -keepclassmembers class ** {
     @com.google.gson.annotations.SerializedName <fields>;
 }
+
+# Play Core
+-dontwarn com.google.android.play.core.**

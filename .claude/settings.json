@@ -86,7 +86,10 @@
       "Bash(powershell -Command \"& '.specify/scripts/powershell/check-prerequisites.ps1' -Json\")",
       "Bash(powershell -Command \"& '.specify/scripts/powershell/check-prerequisites.ps1' -Json -RequireTasks -IncludeTasks\")",
       "Bash(ls -la /c/Users/Dell/Documents/claude/glowy_wallpaper/.env*)",
-      "Bash(xargs ls:*)"
+      "Bash(xargs ls:*)",
+      "Bash(where flutter:*)",
+      "Read(//c//**)",
+      "Read(//c/tools//**)"
     ],
     "additionalDirectories": [
       "C:\\Users\\Dell\\.claude"
