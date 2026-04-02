@@ -37,28 +37,28 @@ A cross-platform mobile wallpaper application built with Flutter, featuring imag
 
 ## Tech Stack
 
-| Category | Libraries |
-|---|---|
-| **Framework** | Flutter 3.41.5, Dart 3.11.3 |
-| **State Management** | flutter_bloc 9.1.1 (Cubits) |
-| **DI** | get_it 9.2.1, injectable 2.5.0 |
-| **Navigation** | go_router 17.1.0 |
-| **Networking** | dio 5.9.2, retrofit 4.4.2 |
-| **Local Storage** | hive 2.2.3, flutter_secure_storage 9.2.4 |
-| **Code Generation** | freezed 3.0.0, json_serializable 6.9.5, build_runner 2.4.15 |
-| **Functional** | dartz 0.10.1 (Either type) |
-| **UI** | flutter_screenutil 5.9.3, auto_size_text 3.0.0, cached_network_image 3.4.1 |
-| **Fonts** | google_fonts 8.0.2 (Poppins) |
-| **Loading** | loader_overlay 4.0.3, flutter_spinkit 5.2.1, shimmer 3.0.0 |
-| **Animation** | lottie 3.3.2, animate_do 4.2.0 |
-| **Media** | video_player 2.9.2, visibility_detector 0.4.0+2 |
-| **Downloads** | gal 2.3.0, permission_handler 11.3.1, path_provider 2.1.5 |
-| **Firebase** | firebase_core, firebase_analytics, firebase_messaging, firebase_crashlytics |
-| **Monetization** | google_mobile_ads 5.3.0, in_app_purchase 3.2.0 |
-| **Notifications** | flutter_local_notifications 18.0.1 |
-| **Localization** | easy_localization 3.0.8 |
-| **Utilities** | url_launcher, share_plus, connectivity_plus, envied |
-| **Testing** | mocktail 1.0.4, bloc_test 10.0.0 |
+| Category             | Libraries                                                                   |
+| -------------------- | --------------------------------------------------------------------------- |
+| **Framework**        | Flutter 3.41.5, Dart 3.11.3                                                 |
+| **State Management** | flutter_bloc 9.1.1 (Cubits)                                                 |
+| **DI**               | get_it 9.2.1, injectable 2.5.0                                              |
+| **Navigation**       | go_router 17.1.0                                                            |
+| **Networking**       | dio 5.9.2, retrofit 4.4.2                                                   |
+| **Local Storage**    | hive 2.2.3, flutter_secure_storage 9.2.4                                    |
+| **Code Generation**  | freezed 3.0.0, json_serializable 6.9.5, build_runner 2.4.15                 |
+| **Functional**       | dartz 0.10.1 (Either type)                                                  |
+| **UI**               | flutter_screenutil 5.9.3, auto_size_text 3.0.0, cached_network_image 3.4.1  |
+| **Fonts**            | google_fonts 8.0.2 (Poppins)                                                |
+| **Loading**          | loader_overlay 4.0.3, flutter_spinkit 5.2.1, shimmer 3.0.0                  |
+| **Animation**        | lottie 3.3.2, animate_do 4.2.0                                              |
+| **Media**            | video_player 2.9.2, visibility_detector 0.4.0+2                             |
+| **Downloads**        | gal 2.3.0, permission_handler 11.3.1, path_provider 2.1.5                   |
+| **Firebase**         | firebase_core, firebase_analytics, firebase_messaging, firebase_crashlytics |
+| **Monetization**     | google_mobile_ads 5.3.0, in_app_purchase 3.2.0                              |
+| **Notifications**    | flutter_local_notifications 18.0.1                                          |
+| **Localization**     | easy_localization 3.0.8                                                     |
+| **Utilities**        | url_launcher, share_plus, connectivity_plus, envied                         |
+| **Testing**          | mocktail 1.0.4, bloc_test 10.0.0                                            |
 
 ## Architecture
 
@@ -133,23 +133,28 @@ lib/
 ### Setup
 
 1. **Clone the repository:**
+
    ```bash
    git clone <repository-url>
    cd glowy_wallpaper
    ```
 
 2. **Create environment files:**
+
    ```bash
    cp .env.example .env.dev
    ```
+
    Fill in the required values (see [Configuration](#configuration)).
 
 3. **Install dependencies:**
+
    ```bash
    flutter pub get
    ```
 
 4. **Run code generation:**
+
    ```bash
    dart run build_runner build --delete-conflicting-outputs
    ```
@@ -163,16 +168,16 @@ lib/
 
 The following Hive boxes are initialized at startup:
 
-| Box | Purpose |
-|---|---|
-| `user_cache` | Cached user data |
-| `categories` | Category cache (legacy) |
-| `favorites` | Local favorite wallpaper IDs |
-| `downloads` | Download history records |
-| `subscription_cache` | Premium subscription status |
-| `ad_frequency` | Ad display frequency tracking |
-| `app_bootstrap` | AppMetadataModel JSON cache |
-| `notification_prefs` | Notification permission flag |
+| Box                  | Purpose                       |
+| -------------------- | ----------------------------- |
+| `user_cache`         | Cached user data              |
+| `categories`         | Category cache (legacy)       |
+| `favorites`          | Local favorite wallpaper IDs  |
+| `downloads`          | Download history records      |
+| `subscription_cache` | Premium subscription status   |
+| `ad_frequency`       | Ad display frequency tracking |
+| `app_bootstrap`      | AppMetadataModel JSON cache   |
+| `notification_prefs` | Notification permission flag  |
 
 ## Configuration
 
@@ -180,25 +185,25 @@ The following Hive boxes are initialized at startup:
 
 Environment-specific `.env` files (`.env.dev`, `.env.prod`, `.env.staging`) are loaded via the `envied` package:
 
-| Variable | Description |
-|---|---|
-| `API_BASE_URL` | Backend API base URL |
-| `ADMOB_APP_ID` | AdMob application ID |
-| `ADMOB_BANNER_ID` | Banner ad unit ID |
-| `ADMOB_REWARDED_ID` | Rewarded ad unit ID |
-| `ADMOB_APP_OPEN_ID` | App open ad unit ID |
+| Variable                 | Description                     |
+| ------------------------ | ------------------------------- |
+| `API_BASE_URL`           | Backend API base URL            |
+| `ADMOB_APP_ID`           | AdMob application ID            |
+| `ADMOB_BANNER_ID`        | Banner ad unit ID               |
+| `ADMOB_REWARDED_ID`      | Rewarded ad unit ID             |
+| `ADMOB_APP_OPEN_ID`      | App open ad unit ID             |
 | `IAP_MONTHLY_PRODUCT_ID` | Monthly subscription product ID |
-| `IAP_YEARLY_PRODUCT_ID` | Yearly subscription product ID |
-| `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key |
+| `IAP_YEARLY_PRODUCT_ID`  | Yearly subscription product ID  |
+| `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key          |
 
 ### App Config
 
 Static configuration is defined in `lib/core/config/app_config.dart`:
 
 - **Package name:** `com.glowy.wallpaper`
-- **App ID:** `dcb4ac5f-17b9-4938-b0a9-8f1e78c4beb6`
+- **App ID:** `809a555c-34b9-4899-9c07-d0e295e2b2e5`
 - **Dev base URL:** `http://10.0.2.2:3001`
-- **Prod base URL:** `https://api.glowywallpapers.com`
+- **Prod base URL:** `http://16.171.121.31:3000`
 
 ### Firebase
 
@@ -213,36 +218,47 @@ ScreenUtil is configured with a design size of **375x812** (iPhone 11).
 ## Feature Modules
 
 ### App Bootstrap (`features/app/`)
+
 Fetches and caches application metadata from the API on startup. Provides categories, content metadata, and app configuration to the rest of the app. Supports background refresh with callback notification to the `HomeCubit`.
 
 ### Authentication (`features/auth/`)
+
 User authentication with login/register flows. Manages auth tokens via `flutter_secure_storage`. Provides `SubscriptionCubit` as a global provider that tracks guest vs. premium user state using Freezed sealed states (`SubscriptionGuest`, `SubscriptionPremium`).
 
 ### Categories (`features/categories/`)
+
 Manages category data and classification entities. Categories have three types: `image`, `video`, and `classification`. Classification categories contain sub-groups that can be browsed individually on a dedicated detail page with its own pagination.
 
 ### Wallpapers (`features/wallpapers/`)
+
 Handles wallpaper grid display with support for both image and video content. Video wallpapers use `video_player` with `visibility_detector` for lifecycle management. Paginated loading with `PaginatedResponse<T>`.
 
 ### Wallpaper Detail (`features/wallpaper_detail/`)
+
 Full-screen wallpaper preview with `PageView` swipe navigation. Features video playback (auto-play, loop, mute toggle), similar wallpapers discovery via bottom sheet, phone frame preview mode, and integration with download and favorite actions.
 
 ### Downloads (`features/downloads/`)
+
 Downloads wallpapers to the device gallery using the `gal` package. Manages download history via Hive local storage. Handles storage permissions through `permission_handler`. Tracks download progress with real-time UI updates.
 
 ### Favorites (`features/favorites/`)
+
 Local-first favorites with remote sync for premium users. Toggle functionality with optimistic UI updates. Guest users store favorites locally in Hive; premium users sync to the backend with merge capability on login.
 
 ### Home (`features/home/`)
+
 Main application screen with category tab selector, content switcher (wallpaper grids / classification grids), navigation drawer with links to favorites, downloads, premium, about, privacy policy, and terms of use. Hosts the `HomeCubit` which orchestrates category selection and content loading.
 
 ### Premium (`features/premium/`)
+
 In-app purchase management using the `in_app_purchase` package. Displays subscription products (monthly/yearly), handles purchase flow, receipt verification with backend, and purchase restoration. Integrates with `SubscriptionCubit` to toggle premium state.
 
 ### Notifications (`features/notifications/`)
+
 Firebase Cloud Messaging integration with local notification fallback. Supports deep linking from notification payloads to specific app routes. Handles notification permissions and stores preference state in Hive.
 
 ### Splash (`features/splash/`)
+
 Initial loading screen that validates auth tokens, initializes services, and navigates to the home page.
 
 ## State Management
@@ -261,15 +277,15 @@ Each state maps to a dedicated UI widget: shimmer placeholder, content view, err
 
 ### Global vs. Scoped Cubits
 
-| Cubit | Scope | Provided By |
-|---|---|---|
-| `SubscriptionCubit` | Global | `app.dart` |
-| `HomeCubit` | Home route | GoRouter builder |
-| `WallpaperDetailCubit` | Detail route | GoRouter builder |
-| `ClassificationDetailCubit` | Classification route | GoRouter builder |
-| `DownloadCubit` | Detail / Downloads route | GoRouter builder |
-| `FavoriteCubit` | Detail / Favorites route | GoRouter builder |
-| `PremiumCubit` | Premium route | GoRouter builder |
+| Cubit                       | Scope                    | Provided By      |
+| --------------------------- | ------------------------ | ---------------- |
+| `SubscriptionCubit`         | Global                   | `app.dart`       |
+| `HomeCubit`                 | Home route               | GoRouter builder |
+| `WallpaperDetailCubit`      | Detail route             | GoRouter builder |
+| `ClassificationDetailCubit` | Classification route     | GoRouter builder |
+| `DownloadCubit`             | Detail / Downloads route | GoRouter builder |
+| `FavoriteCubit`             | Detail / Favorites route | GoRouter builder |
+| `PremiumCubit`              | Premium route            | GoRouter builder |
 
 ## Error Handling
 
@@ -281,13 +297,13 @@ Future<Either<Failure, List<WallpaperEntity>>> getWallpapers(...);
 
 ### Failure Types
 
-| Type | Trigger |
-|---|---|
-| `ServerFailure` | API errors (non-2xx responses) |
-| `CacheFailure` | Hive read/write failures |
-| `NetworkFailure` | No internet connection |
-| `UnauthorizedFailure` | 401 responses, expired tokens |
-| `CancelledFailure` | Dio request cancellation |
+| Type                  | Trigger                        |
+| --------------------- | ------------------------------ |
+| `ServerFailure`       | API errors (non-2xx responses) |
+| `CacheFailure`        | Hive read/write failures       |
+| `NetworkFailure`      | No internet connection         |
+| `UnauthorizedFailure` | 401 responses, expired tokens  |
+| `CancelledFailure`    | Dio request cancellation       |
 
 Cubits fold the `Either` result to emit appropriate states:
 
@@ -314,12 +330,12 @@ Theme mode follows the system preference via `ThemeMode.system`.
 
 All dimensions use **flutter_screenutil** extensions:
 
-| Extension | Purpose |
-|---|---|
-| `.w` | Width-based scaling |
-| `.h` | Height-based scaling |
-| `.sp` | Font size scaling |
-| `.r` | Radius scaling |
+| Extension | Purpose              |
+| --------- | -------------------- |
+| `.w`      | Width-based scaling  |
+| `.h`      | Height-based scaling |
+| `.sp`     | Font size scaling    |
+| `.r`      | Radius scaling       |
 
 Predefined constants in `AppDimens` provide consistent spacing, radii, icon sizes, and component dimensions across the app.
 
@@ -347,6 +363,7 @@ Predefined constants in `AppDimens` provide consistent spacing, radii, icon size
 ### Analytics
 
 Firebase Analytics logs events for:
+
 - Wallpaper previews and downloads
 - Favorite toggles
 - Similar wallpaper views
@@ -374,6 +391,7 @@ flutter test test/features/premium/presentation/cubit/premium_cubit_test.dart
 ```
 
 Current test coverage includes:
+
 - Premium repository implementation
 - Premium use cases (get products, purchase, subscription status, restore)
 - Premium cubit state transitions
@@ -407,6 +425,7 @@ dart run build_runner build --delete-conflicting-outputs
 ### Dependency Injection
 
 All dependencies are registered in `lib/core/di/injection_container.dart` using GetIt. Two Dio instances are configured:
+
 - **Authenticated Dio** -- includes `AuthInterceptor` for token injection
 - **Public Dio** (named `publicDio`) -- for unauthenticated endpoints (bootstrap, categories, wallpapers)
 

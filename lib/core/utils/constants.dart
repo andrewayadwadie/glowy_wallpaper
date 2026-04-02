@@ -5,7 +5,7 @@ class AppConstants {
   AppConstants._();
 
   // API Configuration
-  static const String baseUrl = 'http://localhost:3001';
+  static const String baseUrl = 'http://16.171.121.31:3000';
   static const String apiVersion = 'v1';
   static const Duration connectionTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);

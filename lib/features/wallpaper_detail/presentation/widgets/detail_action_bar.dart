@@ -48,12 +48,26 @@ class DetailActionBar extends StatelessWidget {
             onTap: isDownloading ? null : onDownload,
             child: isDownloading
                 ? SizedBox(
-                    width: 24.w,
-                    height: 24.w,
-                    child: CircularProgressIndicator(
-                      value: downloadProgress > 0 ? downloadProgress : null,
-                      color: Colors.white,
-                      strokeWidth: 2.5,
+                    width: 28.w,
+                    height: 28.w,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          value: downloadProgress > 0 ? downloadProgress : null,
+                          color: Colors.white,
+                          strokeWidth: 2.5,
+                        ),
+                        if (downloadProgress > 0)
+                          Text(
+                            '${(downloadProgress * 100).toInt()}%',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 7.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                      ],
                     ),
                   )
                 : null,

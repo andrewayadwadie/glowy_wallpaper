@@ -87,6 +87,10 @@ abstract class AppStrings {
   static const String wallpaperSaved = 'Wallpaper saved to gallery';
   static const String downloadFailed = 'Download failed. Please try again.';
   static const String downloadAlreadyExists = 'Already downloaded';
+  static const String networkUnavailable =
+      'Network unavailable. Please check your connection and try again.';
+  static const String permissionPermanentlyDenied =
+      'Storage permission is permanently denied. Please enable it in Settings to save wallpapers.';
 
   // Favorites
   static const String noFavorites = 'No favorites yet';

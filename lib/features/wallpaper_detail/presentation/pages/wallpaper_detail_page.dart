@@ -16,6 +16,7 @@ import '../../../downloads/presentation/cubit/download_cubit.dart';
 import '../../../downloads/presentation/cubit/download_state.dart';
 import '../../../favorites/presentation/cubit/favorite_cubit.dart';
 import '../../../favorites/presentation/cubit/favorite_state.dart';
+import 'package:permission_handler/permission_handler.dart' as ph;
 import '../../../../core/services/ad_helper.dart';
 
 class WallpaperDetailPage extends StatefulWidget {
@@ -24,6 +25,7 @@ class WallpaperDetailPage extends StatefulWidget {
   final String? categoryId;
   final CategoryType categoryType;
   final String? classificationId;
+  final bool showAppBarActions;
 
   const WallpaperDetailPage({
     super.key,
@@ -32,6 +34,7 @@ class WallpaperDetailPage extends StatefulWidget {
     this.categoryId,
     required this.categoryType,
     this.classificationId,
+    this.showAppBarActions = true,
   });
 
   @override
@@ -90,7 +93,8 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 actions: [
-                  if (state.wallpapers.isNotEmpty &&
+                  if (widget.showAppBarActions &&
+                      state.wallpapers.isNotEmpty &&
                       state.wallpapers[state.currentIndex].mediaType ==
                           MediaType.video)
                     IconButton(
@@ -106,7 +110,7 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                       onPressed: () =>
                           context.read<WallpaperDetailCubit>().toggleMute(),
                     ),
-                  if (state.wallpapers.isNotEmpty)
+                  if (widget.showAppBarActions && state.wallpapers.isNotEmpty)
                     IconButton(
                       icon: const Icon(
                         Icons.grid_view_rounded,
@@ -196,16 +200,46 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                             );
                             context.read<DownloadCubit>().clearMessages();
                           } else if (downloadState.errorMessage != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(downloadState.errorMessage!),
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.error,
-                                duration: const Duration(seconds: 3),
-                              ),
-                            );
-                            context.read<DownloadCubit>().clearMessages();
+                            if (downloadState.errorMessage ==
+                                'permission_permanently_denied') {
+                              context.read<DownloadCubit>().clearMessages();
+                              showDialog<void>(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text(
+                                    AppStrings.permissionRequired,
+                                  ),
+                                  content: Text(
+                                    AppStrings.permissionPermanentlyDenied,
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        ph.openAppSettings();
+                                      },
+                                      child: const Text('Open Settings'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(downloadState.errorMessage!),
+                                  backgroundColor: Theme.of(
+                                    context,
+                                  ).colorScheme.error,
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                              context.read<DownloadCubit>().clearMessages();
+                            }
                           }
                         },
                         builder: (context, downloadState) {
@@ -224,7 +258,7 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                     ? () {}
                                     : () => context
                                           .read<DownloadCubit>()
-                                          .download(currentWallpaper, context),
+                                          .download(currentWallpaper),
                                 onFavorite: currentWallpaper == null
                                     ? () {}
                                     : () {
