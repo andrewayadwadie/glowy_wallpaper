@@ -155,7 +155,8 @@ class FavoriteRepositoryImpl implements FavoriteRepository {
 
       // Add/update server entries
       for (final serverModel in serverFavorites) {
-        await _local.add(serverModel.copyWith(syncStatus: 'synced').toEntity());
+        final updatedModel = serverModel.copyWith(syncStatus: 'synced');
+        await _local.add(updatedModel.toEntity());
       }
 
       final updated = await _local.getAll();

@@ -13,4 +13,15 @@ abstract class RegisterRequestModel with _$RegisterRequestModel {
 
   factory RegisterRequestModel.fromJson(Map<String, dynamic> json) =>
       _$RegisterRequestModelFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => when(
+    (displayName, email, password) => _$RegisterRequestModelToJson(
+      _RegisterRequestModel(
+        displayName: displayName,
+        email: email,
+        password: password,
+      ),
+    ),
+  );
 }
