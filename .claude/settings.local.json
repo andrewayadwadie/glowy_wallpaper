@@ -3,7 +3,10 @@
     "allow": [
       "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" \"Phase 1 Foundation and Scaffolding\" -Json -ShortName \"phase1-foundation\")",
       "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"phase1-foundation\" \"Phase 1 Foundation and Scaffolding\")",
-      "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"phase1-foundation\" -FeatureDescription \"Phase 1 Foundation and Scaffolding\")"
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"phase1-foundation\" -FeatureDescription \"Phase 1 Foundation and Scaffolding\")",
+      "Bash(flutter clean:*)",
+      "Bash(flutter run:*)",
+      "Bash(flutter build:*)"
     ]
   }
 }
