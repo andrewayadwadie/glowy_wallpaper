@@ -164,8 +164,7 @@ class _SplashPageState extends State<SplashPage>
         final pendingRoute = notificationService.pendingRoute;
 
         // Only consume pending route if user is authenticated
-        final isAuthenticated =
-            subscriptionCubit.state is! SubscriptionGuest;
+        final isAuthenticated = subscriptionCubit.state is! SubscriptionGuest;
         if (pendingRoute != null && isAuthenticated) {
           notificationService.clearPendingRoute();
           context.go(pendingRoute);
@@ -221,14 +220,16 @@ class _SplashPageState extends State<SplashPage>
                         borderRadius: BorderRadius.circular(24.r),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.darkPrimary
-                                .withValues(alpha: 0.5 * _glowOpacity.value),
+                            color: AppColors.darkPrimary.withValues(
+                              alpha: 0.5 * _glowOpacity.value,
+                            ),
                             blurRadius: 40 * _glowOpacity.value,
                             spreadRadius: 8 * _glowOpacity.value,
                           ),
                           BoxShadow(
-                            color: AppColors.darkPrimary
-                                .withValues(alpha: 0.25 * _glowOpacity.value),
+                            color: AppColors.darkPrimary.withValues(
+                              alpha: 0.25 * _glowOpacity.value,
+                            ),
                             blurRadius: 80 * _glowOpacity.value,
                             spreadRadius: 16 * _glowOpacity.value,
                           ),
@@ -369,18 +370,12 @@ class _FeaturePill extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.darkSurface,
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(
-          color: AppColors.darkPrimary.withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: AppColors.darkPrimary.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 14.sp,
-            color: AppColors.darkPrimary,
-          ),
+          Icon(icon, size: 14.sp, color: AppColors.darkPrimary),
           SizedBox(width: 6.w),
           Text(
             label,

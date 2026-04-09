@@ -58,11 +58,7 @@ class AppCachedImage extends StatelessWidget {
     );
 
     if (semanticLabel != null) {
-      return Semantics(
-        image: true,
-        label: semanticLabel,
-        child: image,
-      );
+      return Semantics(image: true, label: semanticLabel, child: image);
     }
     return image;
   }

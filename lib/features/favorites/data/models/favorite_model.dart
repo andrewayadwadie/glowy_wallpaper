@@ -41,8 +41,7 @@ abstract class FavoriteModel with _$FavoriteModel {
           : 'IMAGE',
       classificationId: entity.wallpaper.classificationId,
       classificationName: entity.wallpaper.classificationName,
-      classificationThumbnailUrl:
-          entity.wallpaper.classificationThumbnailUrl,
+      classificationThumbnailUrl: entity.wallpaper.classificationThumbnailUrl,
       createdAt: entity.wallpaper.createdAt.toIso8601String(),
     ),
     userId: entity.userId,

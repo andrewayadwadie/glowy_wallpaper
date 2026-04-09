@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../../../core/widgets/app_error_widget.dart';
 import '../../../../core/widgets/app_shimmer_widget.dart';
 import '../../../../core/widgets/app_empty_state_widget.dart';
@@ -46,21 +47,21 @@ class ContentSwitcher extends StatelessWidget {
   Widget build(BuildContext context) {
     if (contentStatus == Status.loading) {
       return AppShimmerWidget(
-        child: GridView.builder(
+        child: MasonryGridView.count(
           padding: EdgeInsets.all(AppDimens.paddingM),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: AppDimens.gridColumnCount(context),
-            crossAxisSpacing: AppDimens.gridSpacing,
-            mainAxisSpacing: AppDimens.gridSpacing,
-            childAspectRatio: 0.75,
-          ),
+          crossAxisCount: 2,
+          crossAxisSpacing: AppDimens.gridSpacing,
+          mainAxisSpacing: AppDimens.gridSpacing,
           itemCount: 6,
-          itemBuilder: (context, index) => Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(AppDimens.radiusM),
+          itemBuilder: (context, index) => AspectRatio(
+            aspectRatio: 0.75,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(AppDimens.radiusS),
+              ),
             ),
           ),
         ),

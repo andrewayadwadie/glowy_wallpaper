@@ -20,7 +20,8 @@ abstract class Env {
   static const String adMobAppOpenId = _Env.adMobAppOpenId;
 
   @EnviedField(varName: 'ADMOB_REWARDED_INTERSTITIAL_ID')
-  static const String adMobRewardedInterstitialId = _Env.adMobRewardedInterstitialId;
+  static const String adMobRewardedInterstitialId =
+      _Env.adMobRewardedInterstitialId;
 
   @EnviedField(varName: 'ADMOB_INTERSTITIAL_ID')
   static const String adMobInterstitialId = _Env.adMobInterstitialId;

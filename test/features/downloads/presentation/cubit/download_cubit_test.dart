@@ -43,16 +43,14 @@ void main() {
     AdHelper.instance.shouldShowAds = false;
 
     registerFallbackValue(NoParams());
-    registerFallbackValue(
-      DownloadWallpaperParams(wallpaper: _wallpaper),
-    );
+    registerFallbackValue(DownloadWallpaperParams(wallpaper: _wallpaper));
   });
 
   DownloadCubit buildCubit() => DownloadCubit(
-        downloadWallpaper: mockDownloadWallpaper,
-        getDownloadHistory: mockGetDownloadHistory,
-        networkInfo: mockNetworkInfo,
-      );
+    downloadWallpaper: mockDownloadWallpaper,
+    getDownloadHistory: mockGetDownloadHistory,
+    networkInfo: mockNetworkInfo,
+  );
 
   group('connectivity guard', () {
     blocTest<DownloadCubit, DownloadState>(
@@ -79,14 +77,22 @@ void main() {
       build: buildCubit,
       setUp: () {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(() => mockDownloadWallpaper(any())).thenAnswer(
-          (_) async => const Right(null),
-        );
+        when(
+          () => mockDownloadWallpaper(any()),
+        ).thenAnswer((_) async => const Right(null));
       },
       act: (cubit) => cubit.download(_wallpaper),
       expect: () => [
-        isA<DownloadState>().having((s) => s.isDownloading, 'isDownloading', true),
-        isA<DownloadState>().having((s) => s.isDownloading, 'isDownloading', false),
+        isA<DownloadState>().having(
+          (s) => s.isDownloading,
+          'isDownloading',
+          true,
+        ),
+        isA<DownloadState>().having(
+          (s) => s.isDownloading,
+          'isDownloading',
+          false,
+        ),
       ],
     );
   });
@@ -114,16 +120,24 @@ void main() {
       setUp: () {
         // shouldShowAds=false set in setUp — showRewardedInterstitialAd returns true immediately.
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(() => mockDownloadWallpaper(any())).thenAnswer(
-          (_) async => const Right(null),
-        );
+        when(
+          () => mockDownloadWallpaper(any()),
+        ).thenAnswer((_) async => const Right(null));
       },
       act: (cubit) => cubit.download(_wallpaper),
       expect: () => [
-        isA<DownloadState>().having((s) => s.isDownloading, 'isDownloading', true),
+        isA<DownloadState>().having(
+          (s) => s.isDownloading,
+          'isDownloading',
+          true,
+        ),
         isA<DownloadState>()
             .having((s) => s.isDownloading, 'isDownloading', false)
-            .having((s) => s.successMessage, 'successMessage', AppStrings.wallpaperSaved),
+            .having(
+              (s) => s.successMessage,
+              'successMessage',
+              AppStrings.wallpaperSaved,
+            ),
       ],
     );
   });
@@ -134,13 +148,17 @@ void main() {
       build: buildCubit,
       setUp: () {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        when(() => mockDownloadWallpaper(any())).thenAnswer(
-          (_) async => Left(NetworkFailure('Download failed')),
-        );
+        when(
+          () => mockDownloadWallpaper(any()),
+        ).thenAnswer((_) async => Left(NetworkFailure('Download failed')));
       },
       act: (cubit) => cubit.download(_wallpaper),
       expect: () => [
-        isA<DownloadState>().having((s) => s.isDownloading, 'isDownloading', true),
+        isA<DownloadState>().having(
+          (s) => s.isDownloading,
+          'isDownloading',
+          true,
+        ),
         isA<DownloadState>()
             .having((s) => s.isDownloading, 'isDownloading', false)
             .having((s) => s.errorMessage, 'errorMessage', 'Download failed'),
@@ -158,7 +176,11 @@ void main() {
       },
       act: (cubit) => cubit.download(_wallpaper),
       expect: () => [
-        isA<DownloadState>().having((s) => s.isDownloading, 'isDownloading', true),
+        isA<DownloadState>().having(
+          (s) => s.isDownloading,
+          'isDownloading',
+          true,
+        ),
         isA<DownloadState>()
             .having((s) => s.isDownloading, 'isDownloading', false)
             .having(
