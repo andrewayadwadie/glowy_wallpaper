@@ -42,10 +42,9 @@ class HomeCubit extends Cubit<HomeState> {
       ? state.categories[state.selectedCategoryIndex]
       : null;
 
-  String get selectedCategoryId =>
-      state.categories.isNotEmpty
-          ? state.categories[state.selectedCategoryIndex].id
-          : '';
+  String get selectedCategoryId => state.categories.isNotEmpty
+      ? state.categories[state.selectedCategoryIndex].id
+      : '';
 
   Future<void> loadAppData() async {
     final result = await getAppData(NoParams());
@@ -112,7 +111,10 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> _loadWallpapers(String categoryId, {String? classificationId}) async {
+  Future<void> _loadWallpapers(
+    String categoryId, {
+    String? classificationId,
+  }) async {
     _activeCancelToken = CancelToken();
     final result = await getWallpapersByCategory(
       GetWallpapersByCategoryParams(

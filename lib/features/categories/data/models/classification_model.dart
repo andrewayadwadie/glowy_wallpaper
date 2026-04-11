@@ -18,11 +18,12 @@ abstract class ClassificationModel with _$ClassificationModel {
   factory ClassificationModel.fromJson(Map<String, dynamic> json) =>
       _$ClassificationModelFromJson(json);
 
-  ClassificationEntity toEntity({required String categoryId}) => ClassificationEntity(
-    id: id,
-    categoryId: categoryId,
-    name: name,
-    thumbnailUrl: thumbnailUrl,
-    itemCount: itemCount,
-  );
+  ClassificationEntity toEntity({required String categoryId}) =>
+      ClassificationEntity(
+        id: id,
+        categoryId: categoryId,
+        name: name,
+        thumbnailUrl: thumbnailUrl,
+        itemCount: itemCount,
+      );
 }

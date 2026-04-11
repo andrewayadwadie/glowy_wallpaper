@@ -55,9 +55,7 @@ class DownloadCubit extends Cubit<DownloadState> {
     // Step 1: Guard against no internet — check real reachability, not just radio.
     final hasConnection = await _networkInfo.isConnected;
     if (!hasConnection) {
-      emit(
-        state.copyWith(errorMessage: AppStrings.networkUnavailable),
-      );
+      emit(state.copyWith(errorMessage: AppStrings.networkUnavailable));
       return;
     }
 

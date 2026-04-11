@@ -47,7 +47,9 @@ void main() {
     });
 
     test('requestPermission returns bool', () async {
-      when(() => mockDataSource.requestPermission()).thenAnswer((_) async => true);
+      when(
+        () => mockDataSource.requestPermission(),
+      ).thenAnswer((_) async => true);
 
       final result = await mockDataSource.requestPermission();
 
@@ -55,7 +57,9 @@ void main() {
     });
 
     test('isPermanentlyDenied returns bool', () async {
-      when(() => mockDataSource.isPermanentlyDenied()).thenAnswer((_) async => true);
+      when(
+        () => mockDataSource.isPermanentlyDenied(),
+      ).thenAnswer((_) async => true);
 
       final result = await mockDataSource.isPermanentlyDenied();
 

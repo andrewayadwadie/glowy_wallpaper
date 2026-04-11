@@ -1,13 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
-import '../../../../core/widgets/app_cached_image.dart';
 import '../../../../core/widgets/app_error_widget.dart';
 import '../../../../core/widgets/app_empty_state_widget.dart';
 import '../../../../core/widgets/app_shimmer_widget.dart';
 import '../../../../core/widgets/exclusive_badge.dart';
+import '../../../../core/widgets/staggered_wallpaper_card.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 
 class SimilarWallpapersSheet extends StatelessWidget {
@@ -78,22 +79,22 @@ class SimilarWallpapersSheet extends StatelessWidget {
     ScrollController scrollController,
   ) {
     if (isLoading) {
-      final columns = AppDimens.gridColumnCount(context);
       return AppShimmerWidget(
-        child: GridView.builder(
+        child: MasonryGridView.count(
           padding: EdgeInsets.all(AppDimens.paddingM),
           physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
-            childAspectRatio: 0.75,
-            crossAxisSpacing: AppDimens.gridSpacing,
-            mainAxisSpacing: AppDimens.gridSpacing,
-          ),
+          shrinkWrap: true,
+          crossAxisCount: 2,
+          crossAxisSpacing: AppDimens.gridSpacing,
+          mainAxisSpacing: AppDimens.gridSpacing,
           itemCount: 6,
-          itemBuilder: (context, index) => Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(AppDimens.radiusS),
+          itemBuilder: (context, index) => AspectRatio(
+            aspectRatio: 0.75,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(AppDimens.radiusS),
+              ),
             ),
           ),
         ),
@@ -105,49 +106,22 @@ class SimilarWallpapersSheet extends StatelessWidget {
     if (wallpapers.isEmpty) {
       return AppEmptyStateWidget(message: AppStrings.noSimilarWallpapers);
     }
-    return GridView.builder(
+    return MasonryGridView.count(
       controller: scrollController,
       padding: EdgeInsets.all(AppDimens.paddingM),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: AppDimens.gridColumnCount(context),
-        childAspectRatio: 0.75,
-        crossAxisSpacing: AppDimens.gridSpacing,
-        mainAxisSpacing: AppDimens.gridSpacing,
-      ),
+      crossAxisCount: 2,
+      crossAxisSpacing: AppDimens.gridSpacing,
+      mainAxisSpacing: AppDimens.gridSpacing,
       itemCount: wallpapers.length,
       itemBuilder: (context, index) {
         final wallpaper = wallpapers[index];
-        return Semantics(
-          button: true,
-          label: wallpaper.classificationName ?? AppStrings.wallpaperDetail,
-          child: GestureDetector(
-            onTap: () => onTap(wallpaper),
-            child: Hero(
-              tag: 'similar_${wallpaper.id}',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(AppDimens.radiusS),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    LayoutBuilder(
-                      builder: (_, constraints) => AppCachedImage(
-                        imageUrl: wallpaper.thumbUrl,
-                        width: constraints.maxWidth,
-                        height: constraints.maxHeight,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    if (wallpaper.isTopRated)
-                      Positioned(
-                        top: 6.h,
-                        left: 6.w,
-                        child: const ExclusiveBadge(),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        return StaggeredWallpaperCard(
+          imageUrl: wallpaper.thumbUrl,
+          onTap: () => onTap(wallpaper),
+          heroTag: 'similar_${wallpaper.id}',
+          overlay: wallpaper.isTopRated ? const ExclusiveBadge() : null,
+          semanticLabel:
+              wallpaper.classificationName ?? AppStrings.wallpaperDetail,
         );
       },
     );

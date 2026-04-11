@@ -201,8 +201,7 @@ class AdHelper {
       await RewardedInterstitialAd.load(
         adUnitId: Env.adMobRewardedInterstitialId,
         request: const AdRequest(),
-        rewardedInterstitialAdLoadCallback:
-            RewardedInterstitialAdLoadCallback(
+        rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
           onAdLoaded: (ad) {
             debugPrint('RewardedInterstitialAd loaded');
             _rewardedInterstitialAd = ad;
@@ -256,36 +255,36 @@ class AdHelper {
     try {
       _rewardedInterstitialAd!.fullScreenContentCallback =
           FullScreenContentCallback(
-        onAdShowedFullScreenContent: (_) {
-          debugPrint('RewardedInterstitialAd shown');
-          _analytics.logEvent(
-            name: 'ad_shown',
-            parameters: {'ad_type': 'rewarded_interstitial'},
+            onAdShowedFullScreenContent: (_) {
+              debugPrint('RewardedInterstitialAd shown');
+              _analytics.logEvent(
+                name: 'ad_shown',
+                parameters: {'ad_type': 'rewarded_interstitial'},
+              );
+            },
+            onAdDismissedFullScreenContent: (_) {
+              _rewardedInterstitialAd = null;
+              if (rewardEarned) {
+                _analytics.logEvent(
+                  name: 'reward_earned',
+                  parameters: {'action': action},
+                );
+              }
+              preloadRewardedInterstitialAd();
+              if (!completer.isCompleted) {
+                completer.complete(rewardEarned);
+              }
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              debugPrint('RewardedInterstitialAd failed to show: $error');
+              _rewardedInterstitialAd = null;
+              ad.dispose();
+              preloadRewardedInterstitialAd();
+              if (!completer.isCompleted) {
+                completer.complete(false);
+              }
+            },
           );
-        },
-        onAdDismissedFullScreenContent: (_) {
-          _rewardedInterstitialAd = null;
-          if (rewardEarned) {
-            _analytics.logEvent(
-              name: 'reward_earned',
-              parameters: {'action': action},
-            );
-          }
-          preloadRewardedInterstitialAd();
-          if (!completer.isCompleted) {
-            completer.complete(rewardEarned);
-          }
-        },
-        onAdFailedToShowFullScreenContent: (ad, error) {
-          debugPrint('RewardedInterstitialAd failed to show: $error');
-          _rewardedInterstitialAd = null;
-          ad.dispose();
-          preloadRewardedInterstitialAd();
-          if (!completer.isCompleted) {
-            completer.complete(false);
-          }
-        },
-      );
 
       await _rewardedInterstitialAd!.show(
         onUserEarnedReward: (ad, reward) {

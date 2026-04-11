@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import '../../../../core/utils/app_dimens.dart';
-import '../../../../core/widgets/app_loading.dart';
+
+import '../../../../core/widgets/staggered_wallpaper_card.dart';
+import '../../../../core/widgets/staggered_wallpaper_grid.dart';
 import '../../domain/entities/wallpaper_entity.dart';
 import 'video_thumbnail.dart';
 
@@ -64,58 +65,22 @@ class _VideoGridState extends State<VideoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    final displayWallpapers = widget.wallpapers;
-
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {
-        if (notification is ScrollEndNotification) {
-          if (notification.metrics.pixels >=
-                  notification.metrics.maxScrollExtent -
-                      AppDimens.paginationThreshold &&
-              !widget.hasReachedEnd &&
-              !widget.isLoadingMore) {
-            widget.onLoadMore();
-          }
-        }
-        return false;
-      },
-      child: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: EdgeInsets.all(AppDimens.paddingM),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: AppDimens.gridColumnCount(context),
-                childAspectRatio: 0.75,
-                crossAxisSpacing: AppDimens.gridSpacing,
-                mainAxisSpacing: AppDimens.gridSpacing,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                childCount: displayWallpapers.length,
-                (context, index) {
-                  final wallpaper = displayWallpapers[index];
-                  return VisibilityDetector(
-                    key: Key('video_${wallpaper.id}'),
-                    onVisibilityChanged: (info) =>
-                        _onVisibilityChanged(index, info),
-                    child: VideoThumbnail(
-                      wallpaper: wallpaper,
-                      onTap: () => widget.onWallpaperTapped(wallpaper),
-                      shouldAutoPlay: _autoPlayIndices.contains(index),
-                    ),
-                  );
-                },
-              ),
-            ),
+    return StaggeredWallpaperGrid<WallpaperEntity>(
+      items: widget.wallpapers,
+      isLoadingMore: widget.isLoadingMore,
+      hasReachedEnd: widget.hasReachedEnd,
+      onLoadMore: widget.onLoadMore,
+      itemBuilder: (context, wallpaper, index) => VisibilityDetector(
+        key: Key('video_${wallpaper.id}'),
+        onVisibilityChanged: (info) => _onVisibilityChanged(index, info),
+        child: StaggeredWallpaperCard(
+          imageUrl: wallpaper.thumbUrl,
+          child: VideoThumbnail(
+            wallpaper: wallpaper,
+            onTap: () => widget.onWallpaperTapped(wallpaper),
+            shouldAutoPlay: _autoPlayIndices.contains(index),
           ),
-          if (widget.isLoadingMore)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(AppDimens.paddingM),
-                child: const Center(child: AppLoading()),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

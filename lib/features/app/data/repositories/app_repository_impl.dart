@@ -55,11 +55,14 @@ class AppRepositoryImpl implements AppRepository {
   }
 
   void _refreshInBackground() {
-    remoteDataSource.getAppData().then((model) async {
-      await localDataSource.saveAppMetadata(model);
-      onMetadataRefreshed?.call(model.toEntity());
-    }).catchError((_) {
-      // Silently fail — stale cache continues to serve
-    });
+    remoteDataSource
+        .getAppData()
+        .then((model) async {
+          await localDataSource.saveAppMetadata(model);
+          onMetadataRefreshed?.call(model.toEntity());
+        })
+        .catchError((_) {
+          // Silently fail — stale cache continues to serve
+        });
   }
 }

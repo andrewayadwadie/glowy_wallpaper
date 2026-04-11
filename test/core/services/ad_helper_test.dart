@@ -88,15 +88,17 @@ void main() {
   group('showRewardedInterstitialAd — premium bypass', () {
     test('returns true immediately when shouldShowAds is false', () async {
       adHelper.shouldShowAds = false;
-      final result =
-          await adHelper.showRewardedInterstitialAd(action: 'download');
+      final result = await adHelper.showRewardedInterstitialAd(
+        action: 'download',
+      );
       expect(result, isTrue);
     });
 
     test('returns true for any action string when premium', () async {
       adHelper.shouldShowAds = false;
-      final result =
-          await adHelper.showRewardedInterstitialAd(action: 'anything');
+      final result = await adHelper.showRewardedInterstitialAd(
+        action: 'anything',
+      );
       expect(result, isTrue);
     });
   });
@@ -140,13 +142,15 @@ void main() {
   // Premium bypass — banner (US4)
   // ---------------------------------------------------------------------------
   group('loadBannerAd — premium bypass', () {
-    test('disposes banner and keeps notifier false when shouldShowAds is false',
-        () async {
-      adHelper.shouldShowAds = false;
-      await adHelper.loadBannerAd();
-      expect(adHelper.bannerAd, isNull);
-      expect(adHelper.bannerAdLoaded.value, isFalse);
-    });
+    test(
+      'disposes banner and keeps notifier false when shouldShowAds is false',
+      () async {
+        adHelper.shouldShowAds = false;
+        await adHelper.loadBannerAd();
+        expect(adHelper.bannerAd, isNull);
+        expect(adHelper.bannerAdLoaded.value, isFalse);
+      },
+    );
   });
 
   // ---------------------------------------------------------------------------
@@ -169,29 +173,34 @@ void main() {
     test('calls onComplete immediately when within 60-second cooldown', () {
       adHelper.shouldShowAds = true;
       // Simulate ad was shown 10 seconds ago
-      adHelper.lastInterstitialShownForTest =
-          DateTime.now().subtract(const Duration(seconds: 10));
+      adHelper.lastInterstitialShownForTest = DateTime.now().subtract(
+        const Duration(seconds: 10),
+      );
 
       bool completed = false;
       adHelper.showInterstitialAd(onComplete: () => completed = true);
       expect(completed, isTrue);
     });
 
-    test('calls onComplete immediately at exactly 59 seconds (within cooldown)',
-        () {
-      adHelper.shouldShowAds = true;
-      adHelper.lastInterstitialShownForTest =
-          DateTime.now().subtract(const Duration(seconds: 59));
+    test(
+      'calls onComplete immediately at exactly 59 seconds (within cooldown)',
+      () {
+        adHelper.shouldShowAds = true;
+        adHelper.lastInterstitialShownForTest = DateTime.now().subtract(
+          const Duration(seconds: 59),
+        );
 
-      bool completed = false;
-      adHelper.showInterstitialAd(onComplete: () => completed = true);
-      expect(completed, isTrue);
-    });
+        bool completed = false;
+        adHelper.showInterstitialAd(onComplete: () => completed = true);
+        expect(completed, isTrue);
+      },
+    );
 
     test('passes cooldown check after 61 seconds (falls to null-ad check)', () {
       adHelper.shouldShowAds = true;
-      adHelper.lastInterstitialShownForTest =
-          DateTime.now().subtract(const Duration(seconds: 61));
+      adHelper.lastInterstitialShownForTest = DateTime.now().subtract(
+        const Duration(seconds: 61),
+      );
 
       // Cooldown expired, but _interstitialAd is still null → onComplete called
       bool completed = false;
@@ -219,7 +228,11 @@ void main() {
       adHelper.shouldShowAds = false;
       bool completed1 = false;
       adHelper.showInterstitialAd(onComplete: () => completed1 = true);
-      expect(completed1, isTrue, reason: 'premium bypass should call onComplete');
+      expect(
+        completed1,
+        isTrue,
+        reason: 'premium bypass should call onComplete',
+      );
 
       // Reset for path 2
       adHelper.shouldShowAds = true;
@@ -329,8 +342,9 @@ void main() {
         adHelper.shouldShowAds = true;
         // _rewardedInterstitialAd is null, preload will fail in test env
         // The method should return false (ad not available)
-        final result =
-            await adHelper.showRewardedInterstitialAd(action: 'download');
+        final result = await adHelper.showRewardedInterstitialAd(
+          action: 'download',
+        );
         expect(result, isFalse);
       },
       // This test calls RewardedInterstitialAd.load which needs platform channels
