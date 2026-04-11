@@ -28,7 +28,8 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
   @override
   void initState() {
     super.initState();
-    if (widget.shouldAutoPlay && widget.wallpaper.mediaType == MediaType.video) {
+    if (widget.shouldAutoPlay &&
+        widget.wallpaper.mediaType == MediaType.video) {
       _initializeController();
     }
   }
@@ -108,16 +109,14 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
                     child: Icon(
                       Icons.play_circle_outline,
                       size: 40.sp,
-                      color: Theme.of(context).colorScheme.onSurface.withAlpha(200),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(200),
                     ),
                   ),
                 ),
               if (widget.wallpaper.isTopRated)
-                Positioned(
-                  top: 6.h,
-                  left: 6.w,
-                  child: const ExclusiveBadge(),
-                ),
+                Positioned(top: 6.h, left: 6.w, child: const ExclusiveBadge()),
             ],
           ),
         ),

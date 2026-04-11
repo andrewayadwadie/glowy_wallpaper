@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/utils/app_dimens.dart';
@@ -35,21 +36,21 @@ class ClassificationDetailPage extends StatelessWidget {
     switch (state.status) {
       case Status.loading:
         return AppShimmerWidget(
-          child: GridView.builder(
+          child: MasonryGridView.count(
             padding: EdgeInsets.all(AppDimens.paddingM),
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: AppDimens.gridColumnCount(context),
-              crossAxisSpacing: AppDimens.gridSpacing,
-              mainAxisSpacing: AppDimens.gridSpacing,
-              childAspectRatio: 0.75,
-            ),
+            crossAxisCount: 2,
+            crossAxisSpacing: AppDimens.gridSpacing,
+            mainAxisSpacing: AppDimens.gridSpacing,
             itemCount: 6,
-            itemBuilder: (context, idx) => Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(AppDimens.radiusM),
+            itemBuilder: (context, idx) => AspectRatio(
+              aspectRatio: 0.75,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(AppDimens.radiusS),
+                ),
               ),
             ),
           ),

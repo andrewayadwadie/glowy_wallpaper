@@ -21,11 +21,7 @@ class ExclusiveBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.star_rounded,
-            size: 10.sp,
-            color: colorScheme.onPrimary,
-          ),
+          Icon(Icons.star_rounded, size: 10.sp, color: colorScheme.onPrimary),
           SizedBox(width: 2.w),
           Text(
             AppStrings.exclusive,

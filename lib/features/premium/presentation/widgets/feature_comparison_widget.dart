@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
 
-
 class FeatureComparisonWidget extends StatelessWidget {
   const FeatureComparisonWidget({super.key});
 
@@ -12,8 +11,13 @@ class FeatureComparisonWidget extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: AppDimens.paddingM, vertical: AppDimens.paddingS),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimens.radiusM)),
+      margin: EdgeInsets.symmetric(
+        horizontal: AppDimens.paddingM,
+        vertical: AppDimens.paddingS,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppDimens.radiusM),
+      ),
       child: Padding(
         padding: EdgeInsets.all(AppDimens.paddingM),
         child: Column(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
-import '../../../../core/widgets/app_cached_image.dart';
 import '../../../../core/widgets/exclusive_badge.dart';
+import '../../../../core/widgets/staggered_wallpaper_card.dart';
 import '../../domain/entities/download_record_entity.dart';
 
 class DownloadsGrid extends StatelessWidget {
@@ -18,48 +18,20 @@ class DownloadsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
+    return MasonryGridView.count(
       padding: EdgeInsets.all(AppDimens.paddingM),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: AppDimens.gridColumnCount(context),
-        childAspectRatio: 0.75,
-        crossAxisSpacing: AppDimens.gridSpacing,
-        mainAxisSpacing: AppDimens.gridSpacing,
-      ),
+      crossAxisCount: 2,
+      crossAxisSpacing: AppDimens.gridSpacing,
+      mainAxisSpacing: AppDimens.gridSpacing,
       itemCount: downloads.length,
       itemBuilder: (context, index) {
         final record = downloads[index];
-        return Semantics(
-          button: true,
-          label: AppStrings.wallpaperDetail,
-          child: GestureDetector(
-            onTap: () => onTap(record),
-            child: Hero(
-              tag: 'wallpaper_${record.wallpaperId}',
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(AppDimens.radiusS),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    LayoutBuilder(
-                      builder: (_, constraints) => AppCachedImage(
-                        imageUrl: record.thumbnailUrl,
-                        width: constraints.maxWidth,
-                        height: constraints.maxHeight,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    if (record.isTopRated)
-                      Positioned(
-                        top: 6.h,
-                        left: 6.w,
-                        child: const ExclusiveBadge(),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        return StaggeredWallpaperCard(
+          imageUrl: record.thumbnailUrl,
+          onTap: () => onTap(record),
+          heroTag: 'wallpaper_${record.wallpaperId}',
+          overlay: record.isTopRated ? const ExclusiveBadge() : null,
+          semanticLabel: AppStrings.wallpaperDetail,
         );
       },
     );

@@ -66,8 +66,6 @@ abstract class AppTheme {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
     ),
-    dividerTheme: const DividerThemeData(
-      color: AppColors.darkShimmerBase,
-    ),
+    dividerTheme: const DividerThemeData(color: AppColors.darkShimmerBase),
   );
 }

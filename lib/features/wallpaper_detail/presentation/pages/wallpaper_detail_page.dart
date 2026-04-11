@@ -80,9 +80,9 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                 title: AutoSizeText(
                   "${state.currentIndex + 1}/${state.wallpapers.length}",
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(color: Colors.white),
                 ),
                 leading: IconButton(
                   icon: const Icon(
@@ -272,9 +272,9 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                           // Adding favorite — show interstitial
                                           AdHelper.instance.showInterstitialAd(
                                             onComplete: () {
-                                              context.read<FavoriteCubit>().toggle(
-                                                currentWallpaper,
-                                              );
+                                              context
+                                                  .read<FavoriteCubit>()
+                                                  .toggle(currentWallpaper);
                                             },
                                           );
                                         }

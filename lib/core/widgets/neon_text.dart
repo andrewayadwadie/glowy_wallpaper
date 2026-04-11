@@ -24,10 +24,9 @@ class NeonText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final baseStyle = style ??
-        Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Colors.white,
-            );
+    final baseStyle =
+        style ??
+        Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white);
 
     return AutoSizeText(
       text,
@@ -36,20 +35,11 @@ class NeonText extends StatelessWidget {
       style: baseStyle?.copyWith(
         shadows: [
           // Inner crisp glow
-          Shadow(
-            color: glowColor.withValues(alpha: 0.8),
-            blurRadius: 8,
-          ),
+          Shadow(color: glowColor.withValues(alpha: 0.8), blurRadius: 8),
           // Mid-range bloom
-          Shadow(
-            color: glowColor.withValues(alpha: 0.5),
-            blurRadius: 20,
-          ),
+          Shadow(color: glowColor.withValues(alpha: 0.5), blurRadius: 20),
           // Outer ambient glow
-          Shadow(
-            color: glowColor.withValues(alpha: 0.3),
-            blurRadius: 40,
-          ),
+          Shadow(color: glowColor.withValues(alpha: 0.3), blurRadius: 40),
         ],
       ),
     );

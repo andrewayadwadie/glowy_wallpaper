@@ -7,9 +7,7 @@ class BootstrapRemoteDataSource {
   BootstrapRemoteDataSource(this._dio);
 
   Future<AppMetadataModel> getAppData() async {
-    final response = await _dio.get(
-      '/api/v1/mobile/apps/${AppConfig.appId}',
-    );
+    final response = await _dio.get('/api/v1/mobile/apps/${AppConfig.appId}');
     final appJson =
         (response.data['data'] as Map<String, dynamic>)['app']
             as Map<String, dynamic>;
