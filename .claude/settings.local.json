@@ -6,7 +6,15 @@
       "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"phase1-foundation\" -FeatureDescription \"Phase 1 Foundation and Scaffolding\")",
       "Bash(flutter clean:*)",
       "Bash(flutter run:*)",
-      "Bash(flutter build:*)"
+      "Bash(flutter build:*)",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/create-new-feature.ps1 'استخدم flutter_staggered_grid_view: ^0.7.0 عشان تعمل الgridview اللى فى الابليكيشن كله بطريقة Pinterest' -Json -ShortName 'pinterest-staggered-grid' 'Pinterest-Style Staggered Grid'\")",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"pinterest-staggered-grid\" \"Pinterest-style staggered grid layout across the entire application\")",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"pinterest-staggered-grid\" -FeatureDescription \"Pinterest-style staggered grid layout across the entire application\")",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -PathsOnly)",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/setup-plan.ps1\" -Json)",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/update-agent-context.ps1\" -AgentType claude)",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json)",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)"
     ]
   }
 }
