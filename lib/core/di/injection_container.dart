@@ -81,7 +81,16 @@ Future<void> init() async {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   //! External
-  sl.registerLazySingleton(() => InternetConnectionChecker.createInstance());
+  sl.registerLazySingleton(
+    () => InternetConnectionChecker.createInstance(
+      checkTimeout: const Duration(seconds: 5),
+      addresses: [
+        AddressCheckOption(uri: Uri.parse('https://www.google.com')),
+        AddressCheckOption(uri: Uri.parse('https://www.cloudflare.com')),
+        AddressCheckOption(uri: Uri.parse('https://www.apple.com')),
+      ],
+    ),
+  );
   sl.registerLazySingleton(() => const FlutterSecureStorage());
 
   // Authenticated Dio (with AuthInterceptor) — for protected endpoints
