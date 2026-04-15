@@ -14,7 +14,8 @@
       "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/setup-plan.ps1\" -Json)",
       "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/update-agent-context.ps1\" -AgentType claude)",
       "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json)",
-      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)"
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)",
+      "WebSearch"
     ]
   }
 }
