@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:glowy_wallpaper/core/ads/managers/app_open_ad_manager.dart';
 import 'package:glowy_wallpaper/core/routes/routes.dart';
-import 'package:glowy_wallpaper/core/services/ad_helper.dart';
 import 'package:glowy_wallpaper/core/widgets/app_error_widget.dart';
 import 'package:glowy_wallpaper/core/di/injection_container.dart';
 import 'package:glowy_wallpaper/core/theme/colors.dart';
@@ -155,8 +155,11 @@ class _SplashPageState extends State<SplashPage>
       final currentState = subscriptionCubit.state;
 
       if (currentState is SubscriptionGuest) {
-        final adHelper = AdHelper.instance;
-        await adHelper.showAppOpenAd();
+        // App-open ad after splash if one is preloaded; non-blocking when
+        // none is ready (US2, FR-007).
+        await sl<AppOpenAdManager>().showIfAvailable(
+          source: AppOpenAdManager.sourceSplash,
+        );
       }
 
       if (mounted) {

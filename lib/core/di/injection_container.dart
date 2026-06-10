@@ -57,7 +57,13 @@ import '../../features/premium/data/datasources/premium_local_source.dart';
 import '../../features/premium/data/datasources/premium_remote_source.dart';
 import '../../features/premium/data/repositories/premium_repository_impl.dart';
 import '../../features/premium/domain/repositories/premium_repository.dart';
-import '../services/ad_helper.dart';
+import '../ads/ad_gatekeeper.dart';
+import '../ads/ad_ids.dart';
+import '../ads/ads_initializer.dart';
+import '../ads/consent_manager.dart';
+import '../ads/managers/app_open_ad_manager.dart';
+import '../ads/managers/interstitial_ad_manager.dart';
+import '../ads/managers/rewarded_ad_manager.dart';
 import '../services/device_id_service.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../../features/premium/domain/usecases/get_products.dart';
@@ -153,6 +159,23 @@ Future<void> init() async {
   //! Firebase & Ads
   sl.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
   sl.registerLazySingleton<MobileAds>(() => MobileAds.instance);
+
+  //! Ads layer (016) — cross-cutting core/ads, replaces AdHelper
+  sl.registerLazySingleton<AdIds>(() => AdIds());
+  sl.registerLazySingleton<AdGatekeeper>(() => AdGatekeeper());
+  sl.registerLazySingleton<ConsentManager>(() => ConsentManager());
+  sl.registerLazySingleton<AdsInitializer>(
+    () => AdsInitializer(sl(), sl<MobileAds>()),
+  );
+  sl.registerLazySingleton<RewardedAdManager>(
+    () => RewardedAdManager(sl(), sl(), analytics: sl()),
+  );
+  sl.registerLazySingleton<AppOpenAdManager>(
+    () => AppOpenAdManager(sl(), sl(), analytics: sl()),
+  );
+  sl.registerLazySingleton<InterstitialAdManager>(
+    () => InterstitialAdManager(sl(), sl(), analytics: sl()),
+  );
 
   // Auth Data Sources
   sl.registerLazySingleton(() => Hive.box('user_cache'));
@@ -268,6 +291,7 @@ Future<void> init() async {
       downloadWallpaper: sl(),
       getDownloadHistory: sl(),
       networkInfo: sl(),
+      rewardedAdManager: sl(),
       analytics: sl(),
       notificationService: sl(),
     ),
@@ -310,9 +334,6 @@ Future<void> init() async {
   );
 
   //! Phase 5 — Premium & Monetization
-
-  // AdHelper
-  sl.registerLazySingleton<AdHelper>(() => AdHelper.instance);
 
   // Premium Hive Boxes
   final subscriptionCacheBox = Hive.box<String>('subscription_cache');
