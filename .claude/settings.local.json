@@ -15,7 +15,19 @@
       "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/update-agent-context.ps1\" -AgentType claude)",
       "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json)",
       "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)",
-      "WebSearch"
+      "WebSearch",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\create-new-feature.ps1 -Json -ShortName \"admob-ads-integration\" \"Implement Google AdMob ads \\(rewarded on download, app open after splash, home bottom banner, interstitial on category navigation\\) via core ads layer\")",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\create-new-feature.ps1 \"Implement Google AdMob ads: rewarded on download, app open after splash, home bottom banner, interstitial on category navigation, via core ads layer\" -Json -ShortName \"admob-ads-integration\")",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\create-new-feature.ps1 -Json -ShortName \"admob-ads-integration\" -FeatureDescription \"Implement Google AdMob ads: rewarded on download, app open after splash, home bottom banner, interstitial on category navigation, via core ads layer\")",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\check-prerequisites.ps1 -Json -PathsOnly)",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\setup-plan.ps1 -Json)",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\update-agent-context.ps1 -AgentType claude)",
+      "PowerShell(.specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks)",
+      "PowerShell(flutter *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Set-Content *)",
+      "PowerShell(Select-String *)",
+      "PowerShell(git worktree *)"
     ]
   }
 }
