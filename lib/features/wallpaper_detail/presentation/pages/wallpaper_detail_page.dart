@@ -16,8 +16,11 @@ import '../../../downloads/presentation/cubit/download_cubit.dart';
 import '../../../downloads/presentation/cubit/download_state.dart';
 import '../../../favorites/presentation/cubit/favorite_cubit.dart';
 import '../../../favorites/presentation/cubit/favorite_state.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
-import '../../../../core/services/ad_helper.dart';
+import '../../../../core/ads/managers/interstitial_ad_manager.dart';
+import '../../../../core/di/injection_container.dart';
+import '../../../../core/widgets/app_loading.dart';
 
 class WallpaperDetailPage extends StatefulWidget {
   final List<WallpaperEntity> wallpapers;
@@ -69,249 +72,266 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
       },
       child: BlocBuilder<WallpaperDetailCubit, WallpaperDetailState>(
         builder: (context, state) {
-          return SafeArea(
-            child: Scaffold(
-              backgroundColor: Colors.black,
-              extendBodyBehindAppBar: true,
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                centerTitle: true,
-                title: AutoSizeText(
-                  "${state.currentIndex + 1}/${state.wallpapers.length}",
-                  textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: Colors.white),
-                ),
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back_ios_rounded,
-                    color: Colors.white,
+          return LoaderOverlay(
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.black,
+                extendBodyBehindAppBar: true,
+                appBar: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  centerTitle: true,
+                  title: AutoSizeText(
+                    "${state.currentIndex + 1}/${state.wallpapers.length}",
+                    textAlign: TextAlign.center,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleMedium?.copyWith(color: Colors.white),
                   ),
-                  tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                actions: [
-                  if (widget.showAppBarActions &&
-                      state.wallpapers.isNotEmpty &&
-                      state.wallpapers[state.currentIndex].mediaType ==
-                          MediaType.video)
-                    IconButton(
-                      icon: Icon(
-                        state.isMuted
-                            ? Icons.volume_off_rounded
-                            : Icons.volume_up_rounded,
-                        color: Colors.white,
-                      ),
-                      tooltip: state.isMuted
-                          ? AppStrings.unmute
-                          : AppStrings.mute,
-                      onPressed: () =>
-                          context.read<WallpaperDetailCubit>().toggleMute(),
+                  leading: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_rounded,
+                      color: Colors.white,
                     ),
-                  if (widget.showAppBarActions && state.wallpapers.isNotEmpty)
-                    IconButton(
-                      icon: const Icon(
-                        Icons.grid_view_rounded,
-                        color: Colors.white,
-                      ),
-                      tooltip: AppStrings.similarWallpapers,
-                      onPressed: () {
-                        final cubit = context.read<WallpaperDetailCubit>();
-                        cubit.loadSimilarWallpapers(
-                          widget.categoryId ?? '',
-                          widget.categoryType,
-                          widget.classificationId ?? "",
-                        );
-                        showModalBottomSheet<void>(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (_) =>
-                              BlocBuilder<
-                                WallpaperDetailCubit,
-                                WallpaperDetailState
-                              >(
-                                bloc: cubit,
-                                buildWhen: (prev, curr) =>
-                                    prev.similarWallpapers !=
-                                        curr.similarWallpapers ||
-                                    prev.similarWallpapersStatus !=
-                                        curr.similarWallpapersStatus,
-                                builder: (_, s) => SimilarWallpapersSheet(
-                                  wallpapers: s.similarWallpapers,
-                                  isLoading:
-                                      s.similarWallpapersStatus ==
-                                      Status.loading,
-                                  errorMessage:
-                                      s.similarWallpapersStatus == Status.error
-                                      ? s.errorMessage
-                                      : null,
-                                  onTap: (wallpaper) {
-                                    Navigator.pop(context);
-                                    cubit.switchToSimilarContext(
-                                      s.similarWallpapers,
-                                      s.similarWallpapers.indexOf(wallpaper),
-                                    );
-                                  },
-                                  onRetry: () => cubit.loadSimilarWallpapers(
-                                    widget.categoryId ?? '',
-                                    widget.categoryType,
-                                    widget.classificationId ?? "",
-                                  ),
-                                ),
-                              ),
-                        );
-                      },
-                    ),
-                ],
-              ),
-              body: Stack(
-                children: [
-                  PageView.builder(
-                    itemCount: state.wallpapers.length,
-                    controller: _pageController,
-                    onPageChanged: (index) => context
-                        .read<WallpaperDetailCubit>()
-                        .onPageChanged(index),
-                    itemBuilder: (context, index) {
-                      final wallpaper = state.wallpapers[index];
-                      return _WallpaperPage(
-                        wallpaper: wallpaper,
-                        cubit: context.read<WallpaperDetailCubit>(),
-                        isCurrentPage: index == state.currentIndex,
-                      );
-                    },
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: SafeArea(
-                      child: BlocConsumer<DownloadCubit, DownloadState>(
-                        listener: (context, downloadState) {
-                          if (downloadState.successMessage != null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(downloadState.successMessage!),
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
-                            context.read<DownloadCubit>().clearMessages();
-                          } else if (downloadState.errorMessage != null) {
-                            if (downloadState.errorMessage ==
-                                'permission_permanently_denied') {
-                              context.read<DownloadCubit>().clearMessages();
-                              showDialog<void>(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                  title: const Text(
-                                    AppStrings.permissionRequired,
-                                  ),
-                                  content: Text(
-                                    AppStrings.permissionPermanentlyDenied,
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(),
-                                      child: const Text('Cancel'),
+                  actions: [
+                    if (widget.showAppBarActions &&
+                        state.wallpapers.isNotEmpty &&
+                        state.wallpapers[state.currentIndex].mediaType ==
+                            MediaType.video)
+                      IconButton(
+                        icon: Icon(
+                          state.isMuted
+                              ? Icons.volume_off_rounded
+                              : Icons.volume_up_rounded,
+                          color: Colors.white,
+                        ),
+                        tooltip: state.isMuted
+                            ? AppStrings.unmute
+                            : AppStrings.mute,
+                        onPressed: () =>
+                            context.read<WallpaperDetailCubit>().toggleMute(),
+                      ),
+                    if (widget.showAppBarActions && state.wallpapers.isNotEmpty)
+                      IconButton(
+                        icon: const Icon(
+                          Icons.grid_view_rounded,
+                          color: Colors.white,
+                        ),
+                        tooltip: AppStrings.similarWallpapers,
+                        onPressed: () {
+                          final cubit = context.read<WallpaperDetailCubit>();
+                          cubit.loadSimilarWallpapers(
+                            widget.categoryId ?? '',
+                            widget.categoryType,
+                            widget.classificationId ?? "",
+                          );
+                          showModalBottomSheet<void>(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) =>
+                                BlocBuilder<
+                                  WallpaperDetailCubit,
+                                  WallpaperDetailState
+                                >(
+                                  bloc: cubit,
+                                  buildWhen: (prev, curr) =>
+                                      prev.similarWallpapers !=
+                                          curr.similarWallpapers ||
+                                      prev.similarWallpapersStatus !=
+                                          curr.similarWallpapersStatus,
+                                  builder: (_, s) => SimilarWallpapersSheet(
+                                    wallpapers: s.similarWallpapers,
+                                    isLoading:
+                                        s.similarWallpapersStatus ==
+                                        Status.loading,
+                                    errorMessage:
+                                        s.similarWallpapersStatus ==
+                                            Status.error
+                                        ? s.errorMessage
+                                        : null,
+                                    onTap: (wallpaper) {
+                                      Navigator.pop(context);
+                                      cubit.switchToSimilarContext(
+                                        s.similarWallpapers,
+                                        s.similarWallpapers.indexOf(wallpaper),
+                                      );
+                                    },
+                                    onRetry: () => cubit.loadSimilarWallpapers(
+                                      widget.categoryId ?? '',
+                                      widget.categoryType,
+                                      widget.classificationId ?? "",
                                     ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        ph.openAppSettings();
-                                      },
-                                      child: const Text('Open Settings'),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(downloadState.errorMessage!),
-                                  backgroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.error,
-                                  duration: const Duration(seconds: 3),
-                                ),
-                              );
-                              context.read<DownloadCubit>().clearMessages();
-                            }
-                          }
-                        },
-                        builder: (context, downloadState) {
-                          final currentWallpaper = state.wallpapers.isNotEmpty
-                              ? state.wallpapers[state.currentIndex]
-                              : null;
-                          return BlocBuilder<FavoriteCubit, FavoriteState>(
-                            builder: (context, favState) {
-                              return DetailActionBar(
-                                isFavorite: favState.isFavorite,
-                                isDownloading: downloadState.isDownloading,
-                                downloadProgress:
-                                    downloadState.downloadProgress,
-                                isToggling: favState.isToggling,
-                                onDownload: currentWallpaper == null
-                                    ? () {}
-                                    : () => context
-                                          .read<DownloadCubit>()
-                                          .download(currentWallpaper),
-                                onFavorite: currentWallpaper == null
-                                    ? () {}
-                                    : () {
-                                        if (favState.isToggling) return;
-                                        if (favState.isFavorite) {
-                                          // Removing favorite — no ad
-                                          context.read<FavoriteCubit>().toggle(
-                                            currentWallpaper,
-                                          );
-                                        } else {
-                                          // Adding favorite — show interstitial
-                                          AdHelper.instance.showInterstitialAd(
-                                            onComplete: () {
-                                              context
-                                                  .read<FavoriteCubit>()
-                                                  .toggle(currentWallpaper);
-                                            },
-                                          );
-                                        }
-                                      },
-                                onPreview: currentWallpaper == null
-                                    ? () {}
-                                    : () {
-                                        context
-                                            .read<WallpaperDetailCubit>()
-                                            .logPreviewWallpaper(
-                                              currentWallpaper.id,
-                                            );
-                                        Navigator.of(context).push(
-                                          PageRouteBuilder(
-                                            opaque: false,
-                                            pageBuilder:
-                                                (ctx, anim, secondary) =>
-                                                    PhoneFramePreview(
-                                                      imageUrl:
-                                                          currentWallpaper.url,
-                                                      mediaType:
-                                                          currentWallpaper
-                                                              .mediaType,
-                                                      videoUrl:
-                                                          currentWallpaper.url,
-                                                    ),
-                                          ),
-                                        );
-                                      },
-                              );
-                            },
                           );
                         },
                       ),
+                  ],
+                ),
+                body: Stack(
+                  children: [
+                    PageView.builder(
+                      itemCount: state.wallpapers.length,
+                      controller: _pageController,
+                      onPageChanged: (index) => context
+                          .read<WallpaperDetailCubit>()
+                          .onPageChanged(index),
+                      itemBuilder: (context, index) {
+                        final wallpaper = state.wallpapers[index];
+                        return _WallpaperPage(
+                          wallpaper: wallpaper,
+                          cubit: context.read<WallpaperDetailCubit>(),
+                          isCurrentPage: index == state.currentIndex,
+                        );
+                      },
                     ),
-                  ),
-                ],
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: SafeArea(
+                        child: BlocConsumer<DownloadCubit, DownloadState>(
+                          listener: (context, downloadState) {
+                            // Cold-start rewarded-ad wait (~5s max): spinkit
+                            // overlay while the gate resolves (US1, R3).
+                            if (downloadState.isAdGateActive) {
+                              AppLoading.show(context);
+                            } else if (context.loaderOverlay.visible) {
+                              AppLoading.hide(context);
+                            }
+                            if (downloadState.successMessage != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(downloadState.successMessage!),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                              context.read<DownloadCubit>().clearMessages();
+                            } else if (downloadState.errorMessage != null) {
+                              if (downloadState.errorMessage ==
+                                  'permission_permanently_denied') {
+                                context.read<DownloadCubit>().clearMessages();
+                                showDialog<void>(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    title: const Text(
+                                      AppStrings.permissionRequired,
+                                    ),
+                                    content: Text(
+                                      AppStrings.permissionPermanentlyDenied,
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          ph.openAppSettings();
+                                        },
+                                        child: const Text('Open Settings'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(downloadState.errorMessage!),
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.error,
+                                    duration: const Duration(seconds: 3),
+                                  ),
+                                );
+                                context.read<DownloadCubit>().clearMessages();
+                              }
+                            }
+                          },
+                          builder: (context, downloadState) {
+                            final currentWallpaper = state.wallpapers.isNotEmpty
+                                ? state.wallpapers[state.currentIndex]
+                                : null;
+                            return BlocBuilder<FavoriteCubit, FavoriteState>(
+                              builder: (context, favState) {
+                                return DetailActionBar(
+                                  isFavorite: favState.isFavorite,
+                                  isDownloading: downloadState.isDownloading,
+                                  downloadProgress:
+                                      downloadState.downloadProgress,
+                                  isToggling: favState.isToggling,
+                                  onDownload: currentWallpaper == null
+                                      ? () {}
+                                      : () => context
+                                            .read<DownloadCubit>()
+                                            .download(currentWallpaper),
+                                  onFavorite: currentWallpaper == null
+                                      ? () {}
+                                      : () {
+                                          if (favState.isToggling) return;
+                                          if (favState.isFavorite) {
+                                            // Removing favorite — no ad
+                                            context
+                                                .read<FavoriteCubit>()
+                                                .toggle(currentWallpaper);
+                                          } else {
+                                            // Adding favorite — show interstitial
+                                            sl<InterstitialAdManager>()
+                                                .showOnAction(
+                                                  onComplete: () {
+                                                    context
+                                                        .read<FavoriteCubit>()
+                                                        .toggle(
+                                                          currentWallpaper,
+                                                        );
+                                                  },
+                                                );
+                                          }
+                                        },
+                                  onPreview: currentWallpaper == null
+                                      ? () {}
+                                      : () {
+                                          context
+                                              .read<WallpaperDetailCubit>()
+                                              .logPreviewWallpaper(
+                                                currentWallpaper.id,
+                                              );
+                                          Navigator.of(context).push(
+                                            PageRouteBuilder(
+                                              opaque: false,
+                                              pageBuilder:
+                                                  (
+                                                    ctx,
+                                                    anim,
+                                                    secondary,
+                                                  ) => PhoneFramePreview(
+                                                    imageUrl:
+                                                        currentWallpaper.url,
+                                                    mediaType: currentWallpaper
+                                                        .mediaType,
+                                                    videoUrl:
+                                                        currentWallpaper.url,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

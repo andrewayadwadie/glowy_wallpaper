@@ -19,12 +19,23 @@ abstract class Env {
   @EnviedField(varName: 'ADMOB_APP_OPEN_ID')
   static const String adMobAppOpenId = _Env.adMobAppOpenId;
 
-  @EnviedField(varName: 'ADMOB_REWARDED_INTERSTITIAL_ID')
-  static const String adMobRewardedInterstitialId =
-      _Env.adMobRewardedInterstitialId;
-
   @EnviedField(varName: 'ADMOB_INTERSTITIAL_ID')
   static const String adMobInterstitialId = _Env.adMobInterstitialId;
+
+  @EnviedField(varName: 'ADMOB_REWARDED_ID')
+  static const String adMobRewardedId = _Env.adMobRewardedId;
+
+  @EnviedField(varName: 'ADMOB_REWARDED_IOS_ID')
+  static const String adMobRewardedIosId = _Env.adMobRewardedIosId;
+
+  @EnviedField(varName: 'ADMOB_APP_OPEN_IOS_ID')
+  static const String adMobAppOpenIosId = _Env.adMobAppOpenIosId;
+
+  @EnviedField(varName: 'ADMOB_BANNER_IOS_ID')
+  static const String adMobBannerIosId = _Env.adMobBannerIosId;
+
+  @EnviedField(varName: 'ADMOB_INTERSTITIAL_IOS_ID')
+  static const String adMobInterstitialIosId = _Env.adMobInterstitialIosId;
 
   @EnviedField(varName: 'IAP_MONTHLY_PRODUCT_ID')
   static const String iapMonthlyProductId = _Env.iapMonthlyProductId;

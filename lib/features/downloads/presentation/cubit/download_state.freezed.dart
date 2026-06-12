@@ -14,7 +14,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DownloadState {
 
- Status get historyStatus; List<DownloadRecordEntity> get history; bool get isDownloading; double get downloadProgress; String? get errorMessage; String? get successMessage;
+ Status get historyStatus; List<DownloadRecordEntity> get history; bool get isDownloading;/// True while the rewarded ad gate is resolving (cold-start load wait).
+/// Drives the loading overlay on the detail page (US1, R3).
+ bool get isAdGateActive; double get downloadProgress; String? get errorMessage; String? get successMessage;
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +27,16 @@ $DownloadStateCopyWith<DownloadState> get copyWith => _$DownloadStateCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DownloadState&&(identical(other.historyStatus, historyStatus) || other.historyStatus == historyStatus)&&const DeepCollectionEquality().equals(other.history, history)&&(identical(other.isDownloading, isDownloading) || other.isDownloading == isDownloading)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DownloadState&&(identical(other.historyStatus, historyStatus) || other.historyStatus == historyStatus)&&const DeepCollectionEquality().equals(other.history, history)&&(identical(other.isDownloading, isDownloading) || other.isDownloading == isDownloading)&&(identical(other.isAdGateActive, isAdGateActive) || other.isAdGateActive == isAdGateActive)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,historyStatus,const DeepCollectionEquality().hash(history),isDownloading,downloadProgress,errorMessage,successMessage);
+int get hashCode => Object.hash(runtimeType,historyStatus,const DeepCollectionEquality().hash(history),isDownloading,isAdGateActive,downloadProgress,errorMessage,successMessage);
 
 @override
 String toString() {
-  return 'DownloadState(historyStatus: $historyStatus, history: $history, isDownloading: $isDownloading, downloadProgress: $downloadProgress, errorMessage: $errorMessage, successMessage: $successMessage)';
+  return 'DownloadState(historyStatus: $historyStatus, history: $history, isDownloading: $isDownloading, isAdGateActive: $isAdGateActive, downloadProgress: $downloadProgress, errorMessage: $errorMessage, successMessage: $successMessage)';
 }
 
 
@@ -45,7 +47,7 @@ abstract mixin class $DownloadStateCopyWith<$Res>  {
   factory $DownloadStateCopyWith(DownloadState value, $Res Function(DownloadState) _then) = _$DownloadStateCopyWithImpl;
 @useResult
 $Res call({
- Status historyStatus, List<DownloadRecordEntity> history, bool isDownloading, double downloadProgress, String? errorMessage, String? successMessage
+ Status historyStatus, List<DownloadRecordEntity> history, bool isDownloading, bool isAdGateActive, double downloadProgress, String? errorMessage, String? successMessage
 });
 
 
@@ -62,11 +64,12 @@ class _$DownloadStateCopyWithImpl<$Res>
 
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? historyStatus = null,Object? history = null,Object? isDownloading = null,Object? downloadProgress = null,Object? errorMessage = freezed,Object? successMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? historyStatus = null,Object? history = null,Object? isDownloading = null,Object? isAdGateActive = null,Object? downloadProgress = null,Object? errorMessage = freezed,Object? successMessage = freezed,}) {
   return _then(_self.copyWith(
 historyStatus: null == historyStatus ? _self.historyStatus : historyStatus // ignore: cast_nullable_to_non_nullable
 as Status,history: null == history ? _self.history : history // ignore: cast_nullable_to_non_nullable
 as List<DownloadRecordEntity>,isDownloading: null == isDownloading ? _self.isDownloading : isDownloading // ignore: cast_nullable_to_non_nullable
+as bool,isAdGateActive: null == isAdGateActive ? _self.isAdGateActive : isAdGateActive // ignore: cast_nullable_to_non_nullable
 as bool,downloadProgress: null == downloadProgress ? _self.downloadProgress : downloadProgress // ignore: cast_nullable_to_non_nullable
 as double,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable
@@ -155,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Status historyStatus,  List<DownloadRecordEntity> history,  bool isDownloading,  double downloadProgress,  String? errorMessage,  String? successMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Status historyStatus,  List<DownloadRecordEntity> history,  bool isDownloading,  bool isAdGateActive,  double downloadProgress,  String? errorMessage,  String? successMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DownloadState() when $default != null:
-return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.downloadProgress,_that.errorMessage,_that.successMessage);case _:
+return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.isAdGateActive,_that.downloadProgress,_that.errorMessage,_that.successMessage);case _:
   return orElse();
 
 }
@@ -176,10 +179,10 @@ return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.down
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Status historyStatus,  List<DownloadRecordEntity> history,  bool isDownloading,  double downloadProgress,  String? errorMessage,  String? successMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Status historyStatus,  List<DownloadRecordEntity> history,  bool isDownloading,  bool isAdGateActive,  double downloadProgress,  String? errorMessage,  String? successMessage)  $default,) {final _that = this;
 switch (_that) {
 case _DownloadState():
-return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.downloadProgress,_that.errorMessage,_that.successMessage);case _:
+return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.isAdGateActive,_that.downloadProgress,_that.errorMessage,_that.successMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +199,10 @@ return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.down
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Status historyStatus,  List<DownloadRecordEntity> history,  bool isDownloading,  double downloadProgress,  String? errorMessage,  String? successMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Status historyStatus,  List<DownloadRecordEntity> history,  bool isDownloading,  bool isAdGateActive,  double downloadProgress,  String? errorMessage,  String? successMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _DownloadState() when $default != null:
-return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.downloadProgress,_that.errorMessage,_that.successMessage);case _:
+return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.isAdGateActive,_that.downloadProgress,_that.errorMessage,_that.successMessage);case _:
   return null;
 
 }
@@ -211,7 +214,7 @@ return $default(_that.historyStatus,_that.history,_that.isDownloading,_that.down
 
 
 class _DownloadState implements DownloadState {
-  const _DownloadState({this.historyStatus = Status.loading, final  List<DownloadRecordEntity> history = const [], this.isDownloading = false, this.downloadProgress = 0.0, this.errorMessage, this.successMessage}): _history = history;
+  const _DownloadState({this.historyStatus = Status.loading, final  List<DownloadRecordEntity> history = const [], this.isDownloading = false, this.isAdGateActive = false, this.downloadProgress = 0.0, this.errorMessage, this.successMessage}): _history = history;
   
 
 @override@JsonKey() final  Status historyStatus;
@@ -223,6 +226,9 @@ class _DownloadState implements DownloadState {
 }
 
 @override@JsonKey() final  bool isDownloading;
+/// True while the rewarded ad gate is resolving (cold-start load wait).
+/// Drives the loading overlay on the detail page (US1, R3).
+@override@JsonKey() final  bool isAdGateActive;
 @override@JsonKey() final  double downloadProgress;
 @override final  String? errorMessage;
 @override final  String? successMessage;
@@ -237,16 +243,16 @@ _$DownloadStateCopyWith<_DownloadState> get copyWith => __$DownloadStateCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DownloadState&&(identical(other.historyStatus, historyStatus) || other.historyStatus == historyStatus)&&const DeepCollectionEquality().equals(other._history, _history)&&(identical(other.isDownloading, isDownloading) || other.isDownloading == isDownloading)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DownloadState&&(identical(other.historyStatus, historyStatus) || other.historyStatus == historyStatus)&&const DeepCollectionEquality().equals(other._history, _history)&&(identical(other.isDownloading, isDownloading) || other.isDownloading == isDownloading)&&(identical(other.isAdGateActive, isAdGateActive) || other.isAdGateActive == isAdGateActive)&&(identical(other.downloadProgress, downloadProgress) || other.downloadProgress == downloadProgress)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.successMessage, successMessage) || other.successMessage == successMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,historyStatus,const DeepCollectionEquality().hash(_history),isDownloading,downloadProgress,errorMessage,successMessage);
+int get hashCode => Object.hash(runtimeType,historyStatus,const DeepCollectionEquality().hash(_history),isDownloading,isAdGateActive,downloadProgress,errorMessage,successMessage);
 
 @override
 String toString() {
-  return 'DownloadState(historyStatus: $historyStatus, history: $history, isDownloading: $isDownloading, downloadProgress: $downloadProgress, errorMessage: $errorMessage, successMessage: $successMessage)';
+  return 'DownloadState(historyStatus: $historyStatus, history: $history, isDownloading: $isDownloading, isAdGateActive: $isAdGateActive, downloadProgress: $downloadProgress, errorMessage: $errorMessage, successMessage: $successMessage)';
 }
 
 
@@ -257,7 +263,7 @@ abstract mixin class _$DownloadStateCopyWith<$Res> implements $DownloadStateCopy
   factory _$DownloadStateCopyWith(_DownloadState value, $Res Function(_DownloadState) _then) = __$DownloadStateCopyWithImpl;
 @override @useResult
 $Res call({
- Status historyStatus, List<DownloadRecordEntity> history, bool isDownloading, double downloadProgress, String? errorMessage, String? successMessage
+ Status historyStatus, List<DownloadRecordEntity> history, bool isDownloading, bool isAdGateActive, double downloadProgress, String? errorMessage, String? successMessage
 });
 
 
@@ -274,11 +280,12 @@ class __$DownloadStateCopyWithImpl<$Res>
 
 /// Create a copy of DownloadState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? historyStatus = null,Object? history = null,Object? isDownloading = null,Object? downloadProgress = null,Object? errorMessage = freezed,Object? successMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? historyStatus = null,Object? history = null,Object? isDownloading = null,Object? isAdGateActive = null,Object? downloadProgress = null,Object? errorMessage = freezed,Object? successMessage = freezed,}) {
   return _then(_DownloadState(
 historyStatus: null == historyStatus ? _self.historyStatus : historyStatus // ignore: cast_nullable_to_non_nullable
 as Status,history: null == history ? _self._history : history // ignore: cast_nullable_to_non_nullable
 as List<DownloadRecordEntity>,isDownloading: null == isDownloading ? _self.isDownloading : isDownloading // ignore: cast_nullable_to_non_nullable
+as bool,isAdGateActive: null == isAdGateActive ? _self.isAdGateActive : isAdGateActive // ignore: cast_nullable_to_non_nullable
 as bool,downloadProgress: null == downloadProgress ? _self.downloadProgress : downloadProgress // ignore: cast_nullable_to_non_nullable
 as double,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,successMessage: freezed == successMessage ? _self.successMessage : successMessage // ignore: cast_nullable_to_non_nullable

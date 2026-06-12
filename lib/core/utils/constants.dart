@@ -87,6 +87,17 @@ class AppConstants {
     r'^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$',
   );
 
+  // Ad Analytics — event names (FR-021, constitution VIII)
+  static const String adShownEvent = 'ad_shown';
+  static const String adFailedEvent = 'ad_failed';
+  static const String rewardEarnedEvent = 'reward_earned';
+  static const String adDismissedEvent = 'ad_dismissed';
+
+  // Ad Analytics — parameter names
+  static const String adTypeParam = 'ad_type';
+  static const String adPlacementParam = 'placement';
+  static const String adSourceParam = 'source';
+
   // Error Messages
   static const String genericErrorMessage =
       'Something went wrong. Please try again.';

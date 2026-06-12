@@ -30,6 +30,11 @@ abstract class AppDimens {
   static double get gridSpacing => 6.w;
   static double get paginationThreshold => 200.h;
 
+  /// Reserved height for the Home banner slot while the anchored adaptive
+  /// banner size is still resolving/loading, so layout doesn't jump.
+  /// Once loaded, the slot uses the SDK-resolved adaptive height instead.
+  static double get bannerSlotFallbackHeight => 56.h;
+
   /// Adaptive grid column count based on screen width.
   /// Used by content grids and loading skeletons alike.
   static int gridColumnCount(BuildContext context) {

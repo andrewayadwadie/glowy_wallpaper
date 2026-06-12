@@ -1,10 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:glowy_wallpaper/core/ads/managers/rewarded_ad_manager.dart';
 import 'package:glowy_wallpaper/core/errors/failure.dart';
 import 'package:glowy_wallpaper/core/network/network_info.dart';
-import 'package:glowy_wallpaper/core/services/ad_helper.dart';
 import 'package:glowy_wallpaper/core/usecases/usecase.dart';
 import 'package:glowy_wallpaper/core/utils/app_strings.dart';
 import 'package:glowy_wallpaper/features/downloads/domain/usecases/download_wallpaper.dart';
@@ -19,6 +20,8 @@ class MockGetDownloadHistory extends Mock implements GetDownloadHistory {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
+class MockRewardedAdManager extends Mock implements RewardedAdManager {}
+
 final _wallpaper = WallpaperEntity(
   id: 'test_id',
   url: 'https://example.com/image.jpg',
@@ -32,29 +35,56 @@ void main() {
   late MockDownloadWallpaper mockDownloadWallpaper;
   late MockGetDownloadHistory mockGetDownloadHistory;
   late MockNetworkInfo mockNetworkInfo;
+  late MockRewardedAdManager mockRewardedAdManager;
 
   setUp(() {
     mockDownloadWallpaper = MockDownloadWallpaper();
     mockGetDownloadHistory = MockGetDownloadHistory();
     mockNetworkInfo = MockNetworkInfo();
-
-    // Disable ads in tests so showRewardedInterstitialAd is a no-op.
-    AdHelper.resetInstance();
-    AdHelper.instance.shouldShowAds = false;
+    mockRewardedAdManager = MockRewardedAdManager();
 
     registerFallbackValue(NoParams());
     registerFallbackValue(DownloadWallpaperParams(wallpaper: _wallpaper));
   });
 
+  /// Stubs the rewarded gate to grant the reward immediately (ad watched,
+  /// premium, or network-degraded — all grant paths look the same here).
+  void stubAdGateGrants() {
+    when(
+      () => mockRewardedAdManager.showRewardedForDownload(
+        onRewardGranted: any(named: 'onRewardGranted'),
+        onDismissedWithoutReward: any(named: 'onDismissedWithoutReward'),
+      ),
+    ).thenAnswer((invocation) async {
+      final grant = invocation.namedArguments[#onRewardGranted] as VoidCallback;
+      grant();
+    });
+  }
+
+  /// Stubs the rewarded gate to report an early dismissal without reward.
+  void stubAdGateDismisses() {
+    when(
+      () => mockRewardedAdManager.showRewardedForDownload(
+        onRewardGranted: any(named: 'onRewardGranted'),
+        onDismissedWithoutReward: any(named: 'onDismissedWithoutReward'),
+      ),
+    ).thenAnswer((invocation) async {
+      final dismiss =
+          invocation.namedArguments[#onDismissedWithoutReward] as VoidCallback?;
+      dismiss?.call();
+    });
+  }
+
   DownloadCubit buildCubit() => DownloadCubit(
     downloadWallpaper: mockDownloadWallpaper,
     getDownloadHistory: mockGetDownloadHistory,
     networkInfo: mockNetworkInfo,
+    rewardedAdManager: mockRewardedAdManager,
   );
 
   group('connectivity guard', () {
     blocTest<DownloadCubit, DownloadState>(
-      'emits errorMessage when offline and does not start download',
+      'emits errorMessage when offline; ad gate never invoked',
       build: buildCubit,
       setUp: () {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
@@ -69,6 +99,12 @@ void main() {
       ],
       verify: (_) {
         verifyNever(() => mockDownloadWallpaper(any()));
+        verifyNever(
+          () => mockRewardedAdManager.showRewardedForDownload(
+            onRewardGranted: any(named: 'onRewardGranted'),
+            onDismissedWithoutReward: any(named: 'onDismissedWithoutReward'),
+          ),
+        );
       },
     );
 
@@ -77,12 +113,23 @@ void main() {
       build: buildCubit,
       setUp: () {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        stubAdGateGrants();
         when(
           () => mockDownloadWallpaper(any()),
         ).thenAnswer((_) async => const Right(null));
       },
       act: (cubit) => cubit.download(_wallpaper),
       expect: () => [
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          true,
+        ),
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          false,
+        ),
         isA<DownloadState>().having(
           (s) => s.isDownloading,
           'isDownloading',
@@ -111,21 +158,45 @@ void main() {
         verifyNever(() => mockNetworkInfo.isConnected);
       },
     );
+
+    blocTest<DownloadCubit, DownloadState>(
+      'ignores second download tap while the ad gate is resolving',
+      build: buildCubit,
+      seed: () => const DownloadState(isAdGateActive: true),
+      setUp: () {
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      },
+      act: (cubit) => cubit.download(_wallpaper),
+      expect: () => <DownloadState>[],
+      verify: (_) {
+        verifyNever(() => mockNetworkInfo.isConnected);
+      },
+    );
   });
 
-  group('ad gate fallback', () {
+  group('rewarded ad gate (US1)', () {
     blocTest<DownloadCubit, DownloadState>(
-      'download proceeds when ad is skipped (shouldShowAds=false)',
+      'reward granted: download runs',
       build: buildCubit,
       setUp: () {
-        // shouldShowAds=false set in setUp — showRewardedInterstitialAd returns true immediately.
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        stubAdGateGrants();
         when(
           () => mockDownloadWallpaper(any()),
         ).thenAnswer((_) async => const Right(null));
       },
       act: (cubit) => cubit.download(_wallpaper),
       expect: () => [
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          true,
+        ),
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          false,
+        ),
         isA<DownloadState>().having(
           (s) => s.isDownloading,
           'isDownloading',
@@ -139,6 +210,34 @@ void main() {
               AppStrings.wallpaperSaved,
             ),
       ],
+      verify: (_) {
+        verify(() => mockDownloadWallpaper(any())).called(1);
+      },
+    );
+
+    blocTest<DownloadCubit, DownloadState>(
+      'dismissed without reward: no download (FR-004)',
+      build: buildCubit,
+      setUp: () {
+        when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        stubAdGateDismisses();
+      },
+      act: (cubit) => cubit.download(_wallpaper),
+      expect: () => [
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          true,
+        ),
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          false,
+        ),
+      ],
+      verify: (_) {
+        verifyNever(() => mockDownloadWallpaper(any()));
+      },
     );
   });
 
@@ -148,12 +247,23 @@ void main() {
       build: buildCubit,
       setUp: () {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        stubAdGateGrants();
         when(
           () => mockDownloadWallpaper(any()),
         ).thenAnswer((_) async => Left(NetworkFailure('Download failed')));
       },
       act: (cubit) => cubit.download(_wallpaper),
       expect: () => [
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          true,
+        ),
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          false,
+        ),
         isA<DownloadState>().having(
           (s) => s.isDownloading,
           'isDownloading',
@@ -170,12 +280,23 @@ void main() {
       build: buildCubit,
       setUp: () {
         when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        stubAdGateGrants();
         when(() => mockDownloadWallpaper(any())).thenAnswer(
           (_) async => Left(CacheFailure('permission_permanently_denied')),
         );
       },
       act: (cubit) => cubit.download(_wallpaper),
       expect: () => [
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          true,
+        ),
+        isA<DownloadState>().having(
+          (s) => s.isAdGateActive,
+          'isAdGateActive',
+          false,
+        ),
         isA<DownloadState>().having(
           (s) => s.isDownloading,
           'isDownloading',
