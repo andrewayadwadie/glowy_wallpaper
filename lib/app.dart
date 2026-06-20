@@ -10,6 +10,7 @@ import 'package:glowy_wallpaper/core/routes/app_router.dart';
 import 'package:glowy_wallpaper/core/utils/app_strings.dart';
 import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_cubit.dart';
 import 'package:glowy_wallpaper/features/auth/presentation/cubit/subscription_state.dart';
+import 'package:glowy_wallpaper/features/notifications/presentation/cubit/notification_cubit.dart';
 
 class GlowyApp extends StatefulWidget {
   const GlowyApp({super.key});
@@ -48,8 +49,13 @@ class _GlowyAppState extends State<GlowyApp> with WidgetsBindingObserver {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (context, child) => BlocProvider(
-        create: (_) => sl<SubscriptionCubit>(),
+      builder: (context, child) => MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => sl<SubscriptionCubit>()),
+          BlocProvider(
+            create: (_) => sl<NotificationCubit>()..initNotifications(),
+          ),
+        ],
         child: BlocListener<SubscriptionCubit, SubscriptionState>(
           // Premium ⇒ zero ads: keep the context-free gatekeeper in sync
           // for managers that can't read the cubit (FR-018, R10).

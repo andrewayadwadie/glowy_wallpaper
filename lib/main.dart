@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:glowy_wallpaper/core/di/injection_container.dart';
 import 'package:glowy_wallpaper/features/notifications/domain/services/notification_service.dart';
+import 'package:glowy_wallpaper/firebase_options.dart';
 import 'package:glowy_wallpaper/core/ads/ads_initializer.dart';
 
 Future<void> main() async {
@@ -21,10 +22,15 @@ Future<void> main() async {
   await init();
 
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await sl<NotificationService>().initialize();
     // Consent → MobileAds init → preloads. Never throws (FR-026).
     await sl<AdsInitializer>().initialize();
+    // TODO: remove before release — temporary token diagnostic (FR-018).
+    final token = await sl<NotificationService>().getFcmToken();
+    debugPrint('FCM token: $token');
   } catch (e) {
     // Firebase/notification/ads initialization failed but don't block the app
   }
