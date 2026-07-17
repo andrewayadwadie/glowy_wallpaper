@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main, ui-design-overhaul]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Flutter Tests & Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.5'
+          channel: 'stable'
+
+      - name: Restore .env.prod
+        run: |
+          if [ -n "${{ secrets.ENV_PROD }}" ]; then
+            echo "${{ secrets.ENV_PROD }}" > .env.prod
+          else
+            echo "# Empty .env.prod for CI" > .env.prod
+          fi
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run code generator
+        run: dart run build_runner build --delete-conflicting-outputs
+        timeout-minutes: 15
+
+      - name: Flutter analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test

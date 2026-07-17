@@ -5,10 +5,14 @@ class AppConstants {
   AppConstants._();
 
   // API Configuration
-  static const String baseUrl = 'https://api.example.com';
+  static const String baseUrl = 'http://16.171.121.31:3000';
   static const String apiVersion = 'v1';
   static const Duration connectionTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
+
+  // Hive Box Names
+  static const String favoritesBoxName = 'favorites';
+  static const String downloadsBoxName = 'downloads';
 
   // Storage Keys
   static const String accessTokenKey = 'access_token';
@@ -82,6 +86,17 @@ class AppConstants {
   static final RegExp urlRegex = RegExp(
     r'^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$',
   );
+
+  // Ad Analytics — event names (FR-021, constitution VIII)
+  static const String adShownEvent = 'ad_shown';
+  static const String adFailedEvent = 'ad_failed';
+  static const String rewardEarnedEvent = 'reward_earned';
+  static const String adDismissedEvent = 'ad_dismissed';
+
+  // Ad Analytics — parameter names
+  static const String adTypeParam = 'ad_type';
+  static const String adPlacementParam = 'placement';
+  static const String adSourceParam = 'source';
 
   // Error Messages
   static const String genericErrorMessage =

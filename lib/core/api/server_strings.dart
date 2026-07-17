@@ -1,16 +1,18 @@
-/// API Endpoint Strings
-class ServerStrings {
-  ServerStrings._();
+import '../config/env.dart';
 
-  // Authentication Endpoints
+abstract class ServerStrings {
+  static String get baseUrl => Env.apiBaseUrl;
   static const String login = '/auth/login';
   static const String register = '/auth/register';
   static const String logout = '/auth/logout';
-  static const String refreshToken = '/auth/refresh';
-
-  // User Endpoints
-  static const String profile = '/user/profile';
-  static const String updateProfile = '/user/update';
-
-  // Add your custom endpoints here
+  static const String categories = '/categories';
+  static const String wallpapers = '/wallpapers';
+  static const String favorites = '/favorites';
+  static const String subscriptionStatus = '/subscription/status';
+  static const String unsubscribe = '/subscription/unsubscribe';
+  static const String categoryWallpapers = '/categories/{id}/wallpapers';
+  static const String categoryClassifications =
+      '/categories/{id}/classifications';
+  static const String classificationWallpapers =
+      '/classifications/{id}/wallpapers';
 }

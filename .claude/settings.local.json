@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" \"Phase 1 Foundation and Scaffolding\" -Json -ShortName \"phase1-foundation\")",
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"phase1-foundation\" \"Phase 1 Foundation and Scaffolding\")",
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"phase1-foundation\" -FeatureDescription \"Phase 1 Foundation and Scaffolding\")",
+      "Bash(flutter clean:*)",
+      "Bash(flutter run:*)",
+      "Bash(flutter build:*)",
+      "Bash(powershell.exe -NonInteractive -Command \".specify/scripts/powershell/create-new-feature.ps1 'استخدم flutter_staggered_grid_view: ^0.7.0 عشان تعمل الgridview اللى فى الابليكيشن كله بطريقة Pinterest' -Json -ShortName 'pinterest-staggered-grid' 'Pinterest-Style Staggered Grid'\")",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"pinterest-staggered-grid\" \"Pinterest-style staggered grid layout across the entire application\")",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/create-new-feature.ps1\" -Json -ShortName \"pinterest-staggered-grid\" -FeatureDescription \"Pinterest-style staggered grid layout across the entire application\")",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -PathsOnly)",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/setup-plan.ps1\" -Json)",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/update-agent-context.ps1\" -AgentType claude)",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json)",
+      "Bash(powershell.exe -NonInteractive -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)",
+      "WebSearch",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\create-new-feature.ps1 -Json -ShortName \"admob-ads-integration\" \"Implement Google AdMob ads \\(rewarded on download, app open after splash, home bottom banner, interstitial on category navigation\\) via core ads layer\")",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\create-new-feature.ps1 \"Implement Google AdMob ads: rewarded on download, app open after splash, home bottom banner, interstitial on category navigation, via core ads layer\" -Json -ShortName \"admob-ads-integration\")",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\create-new-feature.ps1 -Json -ShortName \"admob-ads-integration\" -FeatureDescription \"Implement Google AdMob ads: rewarded on download, app open after splash, home bottom banner, interstitial on category navigation, via core ads layer\")",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\check-prerequisites.ps1 -Json -PathsOnly)",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\setup-plan.ps1 -Json)",
+      "PowerShell(& .specify\\\\scripts\\\\powershell\\\\update-agent-context.ps1 -AgentType claude)",
+      "PowerShell(.specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks)",
+      "PowerShell(flutter *)",
+      "PowerShell(Get-ChildItem *)",
+      "PowerShell(Set-Content *)",
+      "PowerShell(Select-String *)",
+      "PowerShell(git worktree *)",
+      "PowerShell(.specify/scripts/powershell/check-prerequisites.ps1 -Json -PathsOnly)",
+      "PowerShell(.specify/scripts/powershell/setup-plan.ps1 -Json)",
+      "PowerShell(.specify/scripts/powershell/update-agent-context.ps1 -AgentType claude)"
+    ]
+  }
+}

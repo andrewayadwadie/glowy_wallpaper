@@ -16,7 +16,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.2+6
 
 environment:
   sdk: ^3.11.0
@@ -31,26 +31,14 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
-  # Firebase core
   firebase_core: ^3.13.0
-
-  # Firebase Analytics
   firebase_analytics: ^11.4.5
-
-  # Firebase Cloud Messaging (Push Notifications)
   firebase_messaging: ^15.2.5
-
-  # Flutter Local Notifications (for displaying foreground notifications)
   flutter_local_notifications: ^18.0.1
-
-  # Google Mobile Ads (AdMob)
   google_mobile_ads: ^5.3.0
-
-  # Firebase Crashlytics
+  in_app_purchase: ^3.2.0
   firebase_crashlytics: ^4.3.5
 
   dio: ^5.9.2
@@ -64,6 +52,7 @@ dependencies:
   flutter_svg: ^2.2.4
   shimmer: ^3.0.0
   url_launcher: ^6.3.2
+  share_plus: ^10.1.4
   path_provider: ^2.1.5
   connectivity_plus: ^6.1.5
   easy_localization: ^3.0.8
@@ -76,16 +65,39 @@ dependencies:
   go_router: ^17.1.0
   get_it: ^9.2.1
 
+  freezed_annotation: ^3.0.0
+  injectable: ^2.5.0
+  retrofit: ^4.4.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.2.4
+  auto_size_text: ^3.0.0
+  loader_overlay: ^4.0.3
+  flutter_spinkit: ^5.2.1
+  video_player: ^2.9.2
+  visibility_detector: ^0.4.0+2
+  permission_handler: ^11.3.1
+  gap: ^3.0.1
+  envied: ^1.1.1
+  flutter_native_splash: ^2.4.6
+  flutter_launcher_icons: ^0.14.3
+  json_annotation: ^4.11.0
+  gallery_saver_plus: ^3.2.9
+  flutter_staggered_grid_view: ^0.7.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  freezed: ^3.0.0
+  build_runner: ^2.4.15
+  injectable_generator: ^2.7.0
+  retrofit_generator: ^10.2.3
+  json_serializable: ^6.9.5
+  mocktail: ^1.0.4
+  bloc_test: ^10.0.0
+  envied_generator: ^1.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -99,6 +111,7 @@ flutter:
 
   assets:
     - assets/lang/
+    - assets/images/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -110,6 +123,18 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
+
+# Run after adding icon assets:
+#   dart run flutter_launcher_icons
+#   dart run flutter_native_splash:create
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+  adaptive_icon_background: "#0F172A"
+  adaptive_icon_foreground: "assets/images/app_icon_foreground.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
