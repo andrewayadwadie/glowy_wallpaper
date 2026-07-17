@@ -73,6 +73,11 @@ import '../../features/premium/domain/usecases/restore_purchases.dart';
 import '../../features/premium/presentation/cubit/premium_cubit.dart';
 import '../../features/notifications/domain/services/notification_service.dart';
 import '../../features/notifications/data/services/notification_service_impl.dart';
+import '../../features/notifications/domain/repositories/notification_repository.dart';
+import '../../features/notifications/data/repositories/notification_repository_impl.dart';
+import '../../features/notifications/domain/usecases/request_notification_permission.dart';
+import '../../features/notifications/domain/usecases/get_fcm_token.dart';
+import '../../features/notifications/presentation/cubit/notification_cubit.dart';
 import '../../features/app/data/datasources/bootstrap_remote_data_source.dart';
 import '../../features/app/data/datasources/bootstrap_local_data_source.dart';
 import '../../features/app/data/repositories/app_repository_impl.dart';
@@ -398,5 +403,18 @@ Future<void> init() async {
   //! Phase 6 — Notifications
   sl.registerLazySingleton<NotificationService>(
     () => NotificationServiceImpl(),
+  );
+  sl.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepositoryImpl(sl()),
+  );
+  sl.registerLazySingleton(() => RequestNotificationPermission(sl()));
+  sl.registerLazySingleton(() => GetFcmToken(sl()));
+  sl.registerFactory(
+    () => NotificationCubit(
+      requestPermission: sl(),
+      getFcmToken: sl(),
+      repository: sl(),
+      analytics: sl(),
+    ),
   );
 }

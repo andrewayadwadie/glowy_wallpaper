@@ -164,13 +164,13 @@ class _SplashPageState extends State<SplashPage>
 
       if (mounted) {
         final notificationService = sl<NotificationService>();
-        final pendingRoute = notificationService.pendingRoute;
+        final deeplink = notificationService.initialNotification?.deeplink;
 
-        // Only consume pending route if user is authenticated
+        // Only consume a terminated-launch deep link if user is authenticated
         final isAuthenticated = subscriptionCubit.state is! SubscriptionGuest;
-        if (pendingRoute != null && isAuthenticated) {
-          notificationService.clearPendingRoute();
-          context.go(pendingRoute);
+        if (deeplink != null && deeplink.startsWith('/') && isAuthenticated) {
+          notificationService.clearInitialNotification();
+          context.go(deeplink);
         } else {
           context.go(AppRoutes.home);
         }

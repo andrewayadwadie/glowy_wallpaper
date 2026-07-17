@@ -27,7 +27,10 @@
       "PowerShell(Get-ChildItem *)",
       "PowerShell(Set-Content *)",
       "PowerShell(Select-String *)",
-      "PowerShell(git worktree *)"
+      "PowerShell(git worktree *)",
+      "PowerShell(.specify/scripts/powershell/check-prerequisites.ps1 -Json -PathsOnly)",
+      "PowerShell(.specify/scripts/powershell/setup-plan.ps1 -Json)",
+      "PowerShell(.specify/scripts/powershell/update-agent-context.ps1 -AgentType claude)"
     ]
   }
 }
