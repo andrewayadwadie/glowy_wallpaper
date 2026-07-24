@@ -30,7 +30,28 @@
       "PowerShell(git worktree *)",
       "PowerShell(.specify/scripts/powershell/check-prerequisites.ps1 -Json -PathsOnly)",
       "PowerShell(.specify/scripts/powershell/setup-plan.ps1 -Json)",
-      "PowerShell(.specify/scripts/powershell/update-agent-context.ps1 -AgentType claude)"
+      "PowerShell(.specify/scripts/powershell/update-agent-context.ps1 -AgentType claude)",
+      "PowerShell(.\\\\.specify\\\\scripts\\\\powershell\\\\create-new-feature.ps1 -Json -ShortName \"disable-ads-isolate-downloads\" \"hash and comment all ads implementation across project with TODO markers for traceability, decouple image download from ads, and run heavy download work on a background isolate\")",
+      "PowerShell(.\\\\.specify\\\\scripts\\\\powershell\\\\create-new-feature.ps1 -Json -ShortName \"disable-ads-isolate-downloads\" -FeatureDescription \"hash and comment all ads implementation across project with TODO markers for traceability, decouple image download from ads, and run heavy download work on a background isolate\")",
+      "PowerShell(.\\\\.specify\\\\scripts\\\\powershell\\\\check-prerequisites.ps1 -Json -PathsOnly)",
+      "PowerShell(.\\\\.specify\\\\scripts\\\\powershell\\\\setup-plan.ps1 -Json)",
+      "PowerShell(.\\\\.specify\\\\scripts\\\\powershell\\\\update-agent-context.ps1 -AgentType claude)",
+      "PowerShell(.\\\\.specify\\\\scripts\\\\powershell\\\\check-prerequisites.ps1 -Json)",
+      "Bash(pwsh -NoProfile -File .specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks)",
+      "PowerShell(& \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)",
+      "Bash(flutter --version)",
+      "Bash(cp lib/core/ads/ad_network_error.dart /tmp/ad_network_error.dart.bak)",
+      "Bash(cp lib/core/ads/ad_network_error.dart \"C:/Users/Dell/AppData/Local/Temp/claude/C--Users-Dell-Documents-claude-glowy-wallpaper/b6033818-b743-44cd-a760-2d84ffe8ab43/scratchpad/ad_network_error.dart.bak\")",
+      "Bash(grep -v \"^[^:]*:[0-9]*: *//\")",
+      "Bash(grep -v \"^\\\\s*//\")",
+      "Bash(cp lib/core/ads/ad_gatekeeper.dart __TRACKED_VAR__/rehearsal_ad_gatekeeper.dart.disabled)",
+      "Bash(cp lib/main.dart __TRACKED_VAR__/rehearsal_main.dart.disabled)",
+      "Bash(cp lib/core/ads/ad_gatekeeper.dart __TRACKED_VAR__/rehearsal2_ad_gatekeeper.dart.disabled)",
+      "Bash(cp lib/main.dart __TRACKED_VAR__/rehearsal2_main.dart.disabled)",
+      "Bash(cp __TRACKED_VAR__/rehearsal2_ad_gatekeeper.dart.disabled lib/core/ads/ad_gatekeeper.dart)",
+      "Bash(cp __TRACKED_VAR__/rehearsal2_main.dart.disabled lib/main.dart)",
+      "Bash(rm -f __TRACKED_VAR__/rehearsal2_ad_gatekeeper.dart.disabled __TRACKED_VAR__/rehearsal2_main.dart.disabled)",
+      "Bash(git checkout *)"
     ]
   }
 }

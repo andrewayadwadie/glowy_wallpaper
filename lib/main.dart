@@ -6,7 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:glowy_wallpaper/core/di/injection_container.dart';
 import 'package:glowy_wallpaper/features/notifications/domain/services/notification_service.dart';
 import 'package:glowy_wallpaper/firebase_options.dart';
-import 'package:glowy_wallpaper/core/ads/ads_initializer.dart';
+// TODO(ads-disabled-018): ad init removed — startup no longer waits on ads
+// import 'package:glowy_wallpaper/core/ads/ads_initializer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +27,9 @@ Future<void> main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await sl<NotificationService>().initialize();
-    // Consent → MobileAds init → preloads. Never throws (FR-026).
-    await sl<AdsInitializer>().initialize();
+    // TODO(ads-disabled-018): ad init removed — startup no longer waits on ads
+    // // Consent → MobileAds init → preloads. Never throws (FR-026).
+    // await sl<AdsInitializer>().initialize();
     // TODO: remove before release — temporary token diagnostic (FR-018).
     final token = await sl<NotificationService>().getFcmToken();
     debugPrint('FCM token: $token');

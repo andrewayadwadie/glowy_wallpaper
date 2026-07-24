@@ -1,3 +1,6 @@
+// TODO(ads-disabled-018): entire ad layer paused — restore by removing this
+// header and the closing block comment below. See specs/018-disable-ads-isolate-downloads/.
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -154,3 +157,4 @@ class _AnchoredAdaptiveBannerState extends State<AnchoredAdaptiveBanner> {
     );
   }
 }
+*/

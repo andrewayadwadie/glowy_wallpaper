@@ -1,6 +1,6 @@
 ﻿# glowy_wallpaper Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-06-20
+Auto-generated from all feature plans. Last updated: 2026-07-24
 
 ## Active Technologies
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, flutter_secure_storage, auto_size_text, flutter_screenutil, dartz, equatable (002-auth-user-profile)
@@ -29,6 +29,8 @@ Auto-generated from all feature plans. Last updated: 2026-06-20
 - None new. Interstitial frequency/cooldown state is **in-memory per session** (Clarification Q1). Existing `ad_frequency` Hive box is NOT used by the new managers. Consent state is persisted by the UMP SDK itself. (016-admob-ads-integration)
 - Dart 3.11.3 / Flutter 3.41.5 + firebase_core, firebase_messaging, flutter_local_notifications, (017-fcm-notifications)
 - Hive box `notification_prefs` (existing — stores `permission_requested` flag). No new box. (017-fcm-notifications)
+- Dart 3.11.3 / Flutter 3.41.5 + `dio` (isolate-side transfer), `dart:isolate` (new usage, stdlib), (018-disable-ads-isolate-downloads)
+- Hive `downloads` box (unchanged schema); `flutter_secure_storage` for tokens (untouched) (018-disable-ads-isolate-downloads)
 
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, hive + flutter_secure_storage, flutter_screenutil, envied, dartz, google_fonts (Poppins), cached_network_image, auto_size_text, loader_overlay + flutter_spinkit, easy_localization (001-phase1-foundation)
 
@@ -48,9 +50,9 @@ tests/
 Dart 3.11.3 / Flutter 3.41.5: Follow standard conventions
 
 ## Recent Changes
+- 018-disable-ads-isolate-downloads: Added Dart 3.11.3 / Flutter 3.41.5 + `dio` (isolate-side transfer), `dart:isolate` (new usage, stdlib),
 - 017-fcm-notifications: Added Dart 3.11.3 / Flutter 3.41.5 + firebase_core, firebase_messaging, flutter_local_notifications,
 - 016-admob-ads-integration: Added Dart 3.11.3 / Flutter 3.41.5 + `google_mobile_ads ^5.3.0` (already present; includes UMP `ConsentInformation`/`ConsentForm`), `flutter_bloc`, `get_it` (manual registration — no injectable codegen in this repo), `firebase_analytics`, `flutter_screenutil`, `loader_overlay` + `flutter_spinkit` (loading overlays), `auto_size_text`, `envied` (prod config)
-- 015-pinterest-staggered-grid: Added Dart 3.11.3 / Flutter 3.41.5 + `flutter_staggered_grid_view ^0.7.0` (new), `cached_network_image` (existing), `shimmer` (existing), `flutter_screenutil` (existing), `flutter_bloc` (existing)
 
 
 <!-- MANUAL ADDITIONS START -->

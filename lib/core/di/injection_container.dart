@@ -4,7 +4,8 @@ import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// TODO(ads-disabled-018): ad layer registrations removed
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../network/network_info.dart';
 import '../api/api_interceptors.dart';
@@ -39,9 +40,12 @@ import '../../features/wallpaper_detail/presentation/cubit/wallpaper_detail_cubi
 import '../../features/downloads/data/datasources/download_local_data_source.dart';
 import '../../features/downloads/data/datasources/gallery_data_source.dart';
 import '../../features/downloads/data/repositories/download_repository_impl.dart';
+import '../../features/downloads/data/services/download_engine.dart';
+import '../../features/downloads/data/services/download_runner.dart';
 import '../../features/downloads/domain/repositories/download_repository.dart';
 import '../../features/downloads/domain/usecases/download_wallpaper.dart';
 import '../../features/downloads/domain/usecases/get_download_history.dart';
+import '../../features/downloads/domain/usecases/watch_download_events.dart';
 import '../../features/downloads/presentation/cubit/download_cubit.dart';
 import '../../features/favorites/data/datasources/favorite_local_data_source.dart';
 import '../../features/favorites/data/datasources/favorite_remote_data_source.dart';
@@ -57,13 +61,14 @@ import '../../features/premium/data/datasources/premium_local_source.dart';
 import '../../features/premium/data/datasources/premium_remote_source.dart';
 import '../../features/premium/data/repositories/premium_repository_impl.dart';
 import '../../features/premium/domain/repositories/premium_repository.dart';
-import '../ads/ad_gatekeeper.dart';
-import '../ads/ad_ids.dart';
-import '../ads/ads_initializer.dart';
-import '../ads/consent_manager.dart';
-import '../ads/managers/app_open_ad_manager.dart';
-import '../ads/managers/interstitial_ad_manager.dart';
-import '../ads/managers/rewarded_ad_manager.dart';
+// TODO(ads-disabled-018): ad layer registrations removed
+// import '../ads/ad_gatekeeper.dart';
+// import '../ads/ad_ids.dart';
+// import '../ads/ads_initializer.dart';
+// import '../ads/consent_manager.dart';
+// import '../ads/managers/app_open_ad_manager.dart';
+// import '../ads/managers/interstitial_ad_manager.dart';
+// import '../ads/managers/rewarded_ad_manager.dart';
 import '../services/device_id_service.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../../features/premium/domain/usecases/get_products.dart';
@@ -163,24 +168,25 @@ Future<void> init() async {
 
   //! Firebase & Ads
   sl.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
-  sl.registerLazySingleton<MobileAds>(() => MobileAds.instance);
+  // TODO(ads-disabled-018): ad layer registrations removed
+  // sl.registerLazySingleton<MobileAds>(() => MobileAds.instance);
 
-  //! Ads layer (016) — cross-cutting core/ads, replaces AdHelper
-  sl.registerLazySingleton<AdIds>(() => AdIds());
-  sl.registerLazySingleton<AdGatekeeper>(() => AdGatekeeper());
-  sl.registerLazySingleton<ConsentManager>(() => ConsentManager());
-  sl.registerLazySingleton<AdsInitializer>(
-    () => AdsInitializer(sl(), sl<MobileAds>()),
-  );
-  sl.registerLazySingleton<RewardedAdManager>(
-    () => RewardedAdManager(sl(), sl(), analytics: sl()),
-  );
-  sl.registerLazySingleton<AppOpenAdManager>(
-    () => AppOpenAdManager(sl(), sl(), analytics: sl()),
-  );
-  sl.registerLazySingleton<InterstitialAdManager>(
-    () => InterstitialAdManager(sl(), sl(), analytics: sl()),
-  );
+  // //! Ads layer (016) — cross-cutting core/ads, replaces AdHelper
+  // sl.registerLazySingleton<AdIds>(() => AdIds());
+  // sl.registerLazySingleton<AdGatekeeper>(() => AdGatekeeper());
+  // sl.registerLazySingleton<ConsentManager>(() => ConsentManager());
+  // sl.registerLazySingleton<AdsInitializer>(
+  //   () => AdsInitializer(sl(), sl<MobileAds>()),
+  // );
+  // sl.registerLazySingleton<RewardedAdManager>(
+  //   () => RewardedAdManager(sl(), sl(), analytics: sl()),
+  // );
+  // sl.registerLazySingleton<AppOpenAdManager>(
+  //   () => AppOpenAdManager(sl(), sl(), analytics: sl()),
+  // );
+  // sl.registerLazySingleton<InterstitialAdManager>(
+  //   () => InterstitialAdManager(sl(), sl(), analytics: sl()),
+  // );
 
   // Auth Data Sources
   sl.registerLazySingleton(() => Hive.box('user_cache'));
@@ -281,6 +287,13 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<GalleryDataSource>(() => GalleryDataSourceImpl());
 
+  // Download Engine (018) — session-scoped singleton; owns the isolate job
+  // so it outlives any per-route DownloadCubit (FR-018).
+  sl.registerLazySingleton<DownloadRunner>(() => IsolateDownloadRunner());
+  sl.registerLazySingleton<DownloadEngine>(
+    () => DownloadEngine(sl(), sl(), sl()),
+  );
+
   // Download Repository
   sl.registerLazySingleton<DownloadRepository>(
     () => DownloadRepositoryImpl(sl(), sl(), sl()),
@@ -289,14 +302,17 @@ Future<void> init() async {
   // Download Use Cases
   sl.registerLazySingleton(() => DownloadWallpaper(sl()));
   sl.registerLazySingleton(() => GetDownloadHistory(sl()));
+  sl.registerLazySingleton(() => WatchDownloadEvents(sl()));
 
   // Download Cubit
   sl.registerFactory(
     () => DownloadCubit(
       downloadWallpaper: sl(),
       getDownloadHistory: sl(),
+      watchDownloadEvents: sl(),
       networkInfo: sl(),
-      rewardedAdManager: sl(),
+      // TODO(ads-disabled-018): rewarded gate removed — download no longer ad-dependent
+      // rewardedAdManager: sl(),
       analytics: sl(),
       notificationService: sl(),
     ),

@@ -11,6 +11,11 @@ abstract class GalleryDataSource {
   Future<void> openAppSettings();
   Future<void> putImageBytes(Uint8List bytes, {String? name});
   Future<void> putVideoBytes(Uint8List bytes, {String? name});
+
+  /// Saves a file already written to disk at [path] into the system
+  /// gallery. Used by the isolate-backed download path, which streams
+  /// straight to disk instead of buffering bytes in memory.
+  Future<void> saveFile(String path, {required bool isVideo});
 }
 
 class GalleryDataSourceImpl implements GalleryDataSource {
@@ -69,6 +74,15 @@ class GalleryDataSourceImpl implements GalleryDataSource {
       await GallerySaver.saveVideo(tmpFile.path);
     } finally {
       await tmpFile.delete();
+    }
+  }
+
+  @override
+  Future<void> saveFile(String path, {required bool isVideo}) async {
+    if (isVideo) {
+      await GallerySaver.saveVideo(path);
+    } else {
+      await GallerySaver.saveImage(path);
     }
   }
 }

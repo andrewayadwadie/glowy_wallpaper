@@ -1,3 +1,6 @@
+// TODO(ads-disabled-018): entire ad layer paused — restore by removing this
+// header and the closing block comment below. See specs/018-disable-ads-isolate-downloads/.
+/*
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 /// Pure classifier for network-related ad failures (research R2).
@@ -25,3 +28,4 @@ abstract final class AdNetworkError {
     return _networkKeywords.any(haystack.contains);
   }
 }
+*/

@@ -1,3 +1,6 @@
+// TODO(ads-disabled-018): entire ad layer paused — restore by removing this
+// header and the closing block comment below. See specs/018-disable-ads-isolate-downloads/.
+/*
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,3 +142,9 @@ void main() {
     expect(tester.getSize(find.byType(AnchoredAdaptiveBanner)), Size.zero);
   });
 }
+*/
+
+// TODO(ads-disabled-018): stub retained so the test runner can load this
+// file (flutter test requires a main() entry point); the real tests above
+// are fully paused inside the block comment.
+void main() {}

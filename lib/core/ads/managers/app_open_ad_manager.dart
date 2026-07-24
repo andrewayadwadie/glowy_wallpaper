@@ -1,3 +1,6 @@
+// TODO(ads-disabled-018): entire ad layer paused — restore by removing this
+// header and the closing block comment below. See specs/018-disable-ads-isolate-downloads/.
+/*
 import 'dart:async';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -175,3 +178,4 @@ class AppOpenAdManager {
     _loadTime = null;
   }
 }
+*/

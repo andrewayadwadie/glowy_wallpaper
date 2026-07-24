@@ -13,9 +13,11 @@ abstract class DownloadState with _$DownloadState {
     @Default([]) List<DownloadRecordEntity> history,
     @Default(false) bool isDownloading,
 
-    /// True while the rewarded ad gate is resolving (cold-start load wait).
-    /// Drives the loading overlay on the detail page (US1, R3).
-    @Default(false) bool isAdGateActive,
+    // TODO(ads-disabled-018): rewarded gate removed — ad-gate overlay no
+    // longer needed on the detail page.
+    // /// True while the rewarded ad gate is resolving (cold-start load wait).
+    // /// Drives the loading overlay on the detail page (US1, R3).
+    // @Default(false) bool isAdGateActive,
     @Default(0.0) double downloadProgress,
     String? errorMessage,
     String? successMessage,
