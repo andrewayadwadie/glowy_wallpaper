@@ -1,8 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:glowy_wallpaper/core/utils/app_strings.dart';
 import 'package:glowy_wallpaper/features/categories/domain/entities/category_entity.dart';
@@ -24,6 +26,11 @@ class MockDownloadCubit extends MockCubit<DownloadState>
 class MockFavoriteCubit extends MockCubit<FavoriteState>
     implements FavoriteCubit {}
 
+class _StubCacheManager implements CacheManager {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 final _wallpaper = WallpaperEntity(
   id: 'w1',
   url: 'https://example.com/image.jpg',
@@ -34,6 +41,19 @@ final _wallpaper = WallpaperEntity(
 );
 
 void main() {
+  setUp(() {
+    GetIt.I.registerSingleton<CacheManager>(
+      _StubCacheManager(),
+      instanceName: 'wallpaperThumbnailCacheManager',
+    );
+  });
+
+  tearDown(() {
+    GetIt.I.unregister<CacheManager>(
+      instanceName: 'wallpaperThumbnailCacheManager',
+    );
+  });
+
   testWidgets(
     'US1: renders no ad-gate overlay and the download control is actionable on first frame',
     (WidgetTester tester) async {

@@ -116,6 +116,7 @@ class SimilarWallpapersSheet extends StatelessWidget {
       itemBuilder: (context, index) {
         final wallpaper = wallpapers[index];
         return StaggeredWallpaperCard(
+          key: ValueKey(wallpaper.id),
           imageUrl: wallpaper.thumbUrl,
           onTap: () => onTap(wallpaper),
           heroTag: 'similar_${wallpaper.id}',

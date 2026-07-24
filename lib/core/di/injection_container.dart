@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -70,6 +71,7 @@ import '../../features/premium/domain/repositories/premium_repository.dart';
 // import '../ads/managers/interstitial_ad_manager.dart';
 // import '../ads/managers/rewarded_ad_manager.dart';
 import '../services/device_id_service.dart';
+import '../services/wallpaper_cache_manager.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../../features/premium/domain/usecases/get_products.dart';
 import '../../features/premium/domain/usecases/purchase_premium.dart';
@@ -108,6 +110,13 @@ Future<void> init() async {
     ),
   );
   sl.registerLazySingleton(() => const FlutterSecureStorage());
+
+  // Shared thumbnail CacheManager (019) — used by AppCachedImage and the
+  // StaggeredWallpaperCard aspect-ratio probe so both resolve one on-disk entry.
+  sl.registerLazySingleton<CacheManager>(
+    () => buildWallpaperThumbnailCacheManager(),
+    instanceName: 'wallpaperThumbnailCacheManager',
+  );
 
   // Authenticated Dio (with AuthInterceptor) — for protected endpoints
   sl.registerLazySingleton(() {

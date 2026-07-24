@@ -32,6 +32,7 @@ class WallpaperGrid extends StatelessWidget {
       hasReachedEnd: hasReachedEnd,
       onLoadMore: onLoadMore,
       itemBuilder: (context, wallpaper, index) => StaggeredWallpaperCard(
+        key: ValueKey(wallpaper.id),
         imageUrl: wallpaper.thumbUrl,
         onTap: () => onWallpaperTapped(wallpaper),
         heroTag: 'wallpaper_${wallpaper.id}',

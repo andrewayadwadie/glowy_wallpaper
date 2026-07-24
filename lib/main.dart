@@ -4,6 +4,7 @@ import 'package:glowy_wallpaper/app.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:glowy_wallpaper/core/di/injection_container.dart';
+import 'package:glowy_wallpaper/core/utils/image_cache_bootstrap.dart';
 import 'package:glowy_wallpaper/features/notifications/domain/services/notification_service.dart';
 import 'package:glowy_wallpaper/firebase_options.dart';
 // TODO(ads-disabled-018): ad init removed — startup no longer waits on ads
@@ -11,6 +12,7 @@ import 'package:glowy_wallpaper/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  configureImageCache();
   await EasyLocalization.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox('user_cache');

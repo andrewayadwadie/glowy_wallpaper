@@ -98,6 +98,13 @@ class AppConstants {
   static const String adPlacementParam = 'placement';
   static const String adSourceParam = 'source';
 
+  // Thumbnail Cache (019-fix-thumbnail-cache-eviction)
+  static const String thumbnailCacheKey = 'glowyWallpaperThumbnailCache';
+  static const Duration thumbnailCacheStalePeriod = Duration(days: 30);
+  static const int thumbnailCacheMaxObjects = 1000;
+  static const int imageCacheMaxImages = 400;
+  static const int imageCacheMaxSizeBytes = 200 << 20; // 200 MB
+
   // Error Messages
   static const String genericErrorMessage =
       'Something went wrong. Please try again.';
