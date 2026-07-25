@@ -17,10 +17,12 @@ import '../../../downloads/presentation/cubit/download_state.dart';
 import '../../../favorites/presentation/cubit/favorite_cubit.dart';
 import '../../../favorites/presentation/cubit/favorite_state.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:permission_handler/permission_handler.dart' as ph;
-import '../../../../core/ads/managers/interstitial_ad_manager.dart';
-import '../../../../core/di/injection_container.dart';
-import '../../../../core/widgets/app_loading.dart';
+// TODO(ads-disabled-018): interstitial-on-favorite removed
+// import '../../../../core/ads/managers/interstitial_ad_manager.dart';
+// import '../../../../core/di/injection_container.dart';
+// TODO(ads-disabled-018): ad-gate loading overlay removed — AppLoading no
+// longer used in this file.
+// import '../../../../core/widgets/app_loading.dart';
 
 class WallpaperDetailPage extends StatefulWidget {
   final List<WallpaperEntity> wallpapers;
@@ -198,13 +200,16 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                       child: SafeArea(
                         child: BlocConsumer<DownloadCubit, DownloadState>(
                           listener: (context, downloadState) {
-                            // Cold-start rewarded-ad wait (~5s max): spinkit
-                            // overlay while the gate resolves (US1, R3).
-                            if (downloadState.isAdGateActive) {
-                              AppLoading.show(context);
-                            } else if (context.loaderOverlay.visible) {
-                              AppLoading.hide(context);
-                            }
+                            // TODO(ads-disabled-018): ad-gate loading overlay
+                            // removed — download no longer waits on a
+                            // rewarded ad, so there is nothing to spin on.
+                            // // Cold-start rewarded-ad wait (~5s max): spinkit
+                            // // overlay while the gate resolves (US1, R3).
+                            // if (downloadState.isAdGateActive) {
+                            //   AppLoading.show(context);
+                            // } else if (context.loaderOverlay.visible) {
+                            //   AppLoading.hide(context);
+                            // }
                             if (downloadState.successMessage != null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
@@ -215,8 +220,10 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                               context.read<DownloadCubit>().clearMessages();
                             } else if (downloadState.errorMessage != null) {
                               if (downloadState.errorMessage ==
-                                  'permission_permanently_denied') {
-                                context.read<DownloadCubit>().clearMessages();
+                                  AppStrings.permissionPermanentlyDeniedCode) {
+                                final downloadCubit = context
+                                    .read<DownloadCubit>();
+                                downloadCubit.clearMessages();
                                 showDialog<void>(
                                   context: context,
                                   builder: (_) => AlertDialog(
@@ -230,14 +237,16 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(),
-                                        child: const Text('Cancel'),
+                                        child: const Text(AppStrings.cancel),
                                       ),
                                       TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
-                                          ph.openAppSettings();
+                                          downloadCubit.openAppSettings();
                                         },
-                                        child: const Text('Open Settings'),
+                                        child: const Text(
+                                          AppStrings.openSettings,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -277,24 +286,32 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                       ? () {}
                                       : () {
                                           if (favState.isToggling) return;
-                                          if (favState.isFavorite) {
-                                            // Removing favorite — no ad
-                                            context
-                                                .read<FavoriteCubit>()
-                                                .toggle(currentWallpaper);
-                                          } else {
-                                            // Adding favorite — show interstitial
-                                            sl<InterstitialAdManager>()
-                                                .showOnAction(
-                                                  onComplete: () {
-                                                    context
-                                                        .read<FavoriteCubit>()
-                                                        .toggle(
-                                                          currentWallpaper,
-                                                        );
-                                                  },
-                                                );
-                                          }
+                                          // TODO(ads-disabled-018): interstitial
+                                          // on add-favorite removed — both
+                                          // branches now toggle directly. The
+                                          // original branching, preserved for
+                                          // reference:
+                                          // if (favState.isFavorite) {
+                                          //   // Removing favorite — no ad
+                                          //   context
+                                          //       .read<FavoriteCubit>()
+                                          //       .toggle(currentWallpaper);
+                                          // } else {
+                                          //   // Adding favorite — show interstitial
+                                          //   sl<InterstitialAdManager>()
+                                          //       .showOnAction(
+                                          //         onComplete: () {
+                                          //           context
+                                          //               .read<FavoriteCubit>()
+                                          //               .toggle(
+                                          //                 currentWallpaper,
+                                          //               );
+                                          //         },
+                                          //       );
+                                          // }
+                                          context.read<FavoriteCubit>().toggle(
+                                            currentWallpaper,
+                                          );
                                         },
                                   onPreview: currentWallpaper == null
                                       ? () {}

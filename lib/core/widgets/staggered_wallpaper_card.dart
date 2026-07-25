@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 
+import '../services/aspect_ratio_cache.dart';
 import '../utils/app_dimens.dart';
 import 'app_cached_image.dart';
 import 'app_shimmer_widget.dart';
@@ -63,6 +66,11 @@ class _StaggeredWallpaperCardState extends State<StaggeredWallpaperCard> {
   ImageStream? _imageStream;
   late ImageStreamListener _listener;
 
+  /// True when [_aspectRatio] came from [AspectRatioCache] (already decoded this
+  /// session), so the card renders its final layout on the first frame with no
+  /// resize animation — killing the shimmer/resize replay on scroll-back.
+  bool _skipResizeAnim = false;
+
   @override
   void initState() {
     super.initState();
@@ -80,18 +88,35 @@ class _StaggeredWallpaperCardState extends State<StaggeredWallpaperCard> {
   }
 
   void _resolveAspectRatio() {
+    // Fast path: ratio already decoded this session. Render the final layout on
+    // the first frame — no stream re-probe, no shimmer skeleton, no resize tween.
+    final cached = AspectRatioCache.get(widget.imageUrl);
+    if (cached != null) {
+      _aspectRatio = cached;
+      _skipResizeAnim = true;
+      return;
+    }
+    _skipResizeAnim = false;
+
     _listener = ImageStreamListener(
       (ImageInfo info, bool _) {
         final w = info.image.width;
         final h = info.image.height;
         if (!mounted || h <= 0) return;
-        setState(() => _aspectRatio = w / h);
+        final ratio = w / h;
+        AspectRatioCache.put(widget.imageUrl, ratio);
+        setState(() => _aspectRatio = ratio);
       },
       onError: (Object e, StackTrace? st) {
         // Silently keep fallback ratio; AppCachedImage shows its own error state.
       },
     );
-    final provider = CachedNetworkImageProvider(widget.imageUrl);
+    final provider = CachedNetworkImageProvider(
+      widget.imageUrl,
+      cacheManager: GetIt.I<CacheManager>(
+        instanceName: 'wallpaperThumbnailCacheManager',
+      ),
+    );
     _imageStream = provider.resolve(const ImageConfiguration());
     _imageStream!.addListener(_listener);
   }
@@ -115,7 +140,9 @@ class _StaggeredWallpaperCardState extends State<StaggeredWallpaperCard> {
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: _fallbackRatio, end: targetRatio),
-      duration: const Duration(milliseconds: 300),
+      duration: _skipResizeAnim
+          ? Duration.zero
+          : const Duration(milliseconds: 300),
       curve: Curves.easeOutCubic,
       builder: (context, ratio, _) {
         if (widget.child != null) {
@@ -168,6 +195,9 @@ class _StaggeredWallpaperCardState extends State<StaggeredWallpaperCard> {
                       width: constraints.maxWidth,
                       height: constraints.maxHeight,
                       fit: BoxFit.cover,
+                      // No fade on rebuild — a warm cache hit must swap in
+                      // instantly, not fade over 500 ms (reads as a flash).
+                      fadeInDuration: Duration.zero,
                     ),
                   )
                 : AppShimmerWidget(

@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/ads/managers/interstitial_ad_manager.dart';
-import '../../../../core/ads/widgets/anchored_adaptive_banner.dart';
-import '../../../../core/di/injection_container.dart';
+// TODO(ads-disabled-018): category-switch interstitial + banner removed
+// import '../../../../core/ads/managers/interstitial_ad_manager.dart';
+// import '../../../../core/ads/widgets/anchored_adaptive_banner.dart';
+// import '../../../../core/di/injection_container.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/widgets/neon_text.dart';
@@ -25,12 +26,15 @@ class HomePage extends StatelessWidget {
     final isPremium = context.watch<SubscriptionCubit>().isPremium;
 
     return BlocListener<HomeCubit, HomeState>(
-      // Category-switch interstitial trigger (US4, R8). Cap + cooldown live
-      // in the manager — HomeCubit stays ad-free.
+      // TODO(ads-disabled-018): category-switch interstitial trigger removed
+      // // Category-switch interstitial trigger (US4, R8). Cap + cooldown live
+      // // in the manager — HomeCubit stays ad-free.
       listenWhen: (prev, curr) =>
           prev.selectedCategoryIndex != curr.selectedCategoryIndex &&
           curr.categoriesStatus == Status.success,
-      listener: (_, _) => sl<InterstitialAdManager>().onCategorySwitched(),
+      listener: (_, _) {
+        // sl<InterstitialAdManager>().onCategorySwitched();
+      },
       child: Scaffold(
         appBar: AppBar(
           title: NeonText(AppStrings.appNameHome),
@@ -96,7 +100,9 @@ class HomePage extends StatelessWidget {
             );
           },
         ),
-        bottomNavigationBar: isPremium ? null : const AnchoredAdaptiveBanner(),
+        // TODO(ads-disabled-018): banner removed — restore
+        // `isPremium ? null : const AnchoredAdaptiveBanner()`
+        bottomNavigationBar: null,
       ),
     );
   }

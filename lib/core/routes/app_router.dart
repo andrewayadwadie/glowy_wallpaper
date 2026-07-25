@@ -19,10 +19,11 @@ import '../../features/downloads/presentation/cubit/download_cubit.dart';
 import '../../features/favorites/presentation/cubit/favorite_cubit.dart';
 import '../../features/favorites/presentation/pages/favorites_page.dart';
 import '../../features/downloads/presentation/pages/downloads_page.dart';
-import '../../features/auth/presentation/cubit/subscription_cubit.dart';
 import '../../features/home/presentation/pages/content_page.dart';
-import '../../features/premium/presentation/cubit/premium_cubit.dart';
-import '../../features/premium/presentation/pages/get_premium_page.dart';
+// TODO(ads-disabled-018): purchase entry point hidden — /premium route closed
+// import '../../features/auth/presentation/cubit/subscription_cubit.dart';
+// import '../../features/premium/presentation/cubit/premium_cubit.dart';
+// import '../../features/premium/presentation/pages/get_premium_page.dart';
 import '../../core/enums/content_type.dart';
 
 abstract class AppRouter {
@@ -140,16 +141,18 @@ abstract class AppRouter {
           );
         },
       ),
-      GoRoute(
-        path: AppRoutes.premium,
-        builder: (context, state) {
-          final subscriptionCubit = context.read<SubscriptionCubit>();
-          return BlocProvider(
-            create: (_) => sl<PremiumCubit>(param1: subscriptionCubit),
-            child: const GetPremiumPage(),
-          );
-        },
-      ),
+      // TODO(ads-disabled-018): purchase entry point hidden — /premium route
+      // closed so no deep link or notification payload can reach it.
+      // GoRoute(
+      //   path: AppRoutes.premium,
+      //   builder: (context, state) {
+      //     final subscriptionCubit = context.read<SubscriptionCubit>();
+      //     return BlocProvider(
+      //       create: (_) => sl<PremiumCubit>(param1: subscriptionCubit),
+      //       child: const GetPremiumPage(),
+      //     );
+      //   },
+      // ),
       GoRoute(
         path: AppRoutes.about,
         builder: (context, state) => ContentPage(

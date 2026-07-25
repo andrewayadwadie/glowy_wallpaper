@@ -112,6 +112,13 @@ abstract class AppStrings {
   static const String openSettings = 'Open Settings';
   static const String cancel = 'Cancel';
 
+  /// Sentinel failure message the data layer returns when the legacy
+  /// (API < 29) storage permission is permanently denied. The presentation
+  /// layer matches on it to show the "Open Settings" dialog instead of a
+  /// plain snackbar, so both sides must read the same constant.
+  static const String permissionPermanentlyDeniedCode =
+      'permission_permanently_denied';
+
   // Phone Frame Preview
   static const String phoneFramePreview = 'Preview';
   static const String closePreview = 'Close';

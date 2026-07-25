@@ -52,7 +52,7 @@ A cross-platform mobile wallpaper application built with Flutter, featuring imag
 | **Loading**          | loader_overlay 4.0.3, flutter_spinkit 5.2.1, shimmer 3.0.0                  |
 | **Animation**        | lottie 3.3.2, animate_do 4.2.0                                              |
 | **Media**            | video_player 2.9.2, visibility_detector 0.4.0+2                             |
-| **Downloads**        | gal 2.3.0, permission_handler 11.3.1, path_provider 2.1.5                   |
+| **Downloads**        | gal 2.3.2, permission_handler 11.3.1, path_provider 2.1.5                   |
 | **Firebase**         | firebase_core, firebase_analytics, firebase_messaging, firebase_crashlytics |
 | **Monetization**     | google_mobile_ads 5.3.0, in_app_purchase 3.2.0                              |
 | **Notifications**    | flutter_local_notifications 18.0.1                                          |
@@ -239,7 +239,7 @@ Full-screen wallpaper preview with `PageView` swipe navigation. Features video p
 
 ### Downloads (`features/downloads/`)
 
-Downloads wallpapers to the device gallery using the `gal` package. Manages download history via Hive local storage. Handles storage permissions through `permission_handler`. Tracks download progress with real-time UI updates.
+Downloads wallpapers to the device gallery using the `gal` package, which writes new media through MediaStore. No READ_MEDIA_* permission is requested or declared — the app only writes files it downloaded and never reads the user's existing media. Only Android 9 and below (API 24-28) still require a WRITE_EXTERNAL_STORAGE grant, which `gal` handles natively; `permission_handler` is used solely for the app-settings deep link on that legacy denial path. Manages download history via Hive local storage. Tracks download progress with real-time UI updates.
 
 ### Favorites (`features/favorites/`)
 

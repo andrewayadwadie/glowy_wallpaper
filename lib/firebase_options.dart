@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     projectId: 'glowywallpaper',
     storageBucket: 'glowywallpaper.firebasestorage.app',
   );
-
 }

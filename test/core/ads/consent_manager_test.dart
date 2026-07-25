@@ -1,3 +1,6 @@
+// TODO(ads-disabled-018): entire ad layer paused — restore by removing this
+// header and the closing block comment below. See specs/018-disable-ads-isolate-downloads/.
+/*
 import 'package:flutter_test/flutter_test.dart';
 import 'package:glowy_wallpaper/core/ads/consent_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -152,3 +155,9 @@ void main() {
     });
   });
 }
+*/
+
+// TODO(ads-disabled-018): stub retained so the test runner can load this
+// file (flutter test requires a main() entry point); the real tests above
+// are fully paused inside the block comment.
+void main() {}

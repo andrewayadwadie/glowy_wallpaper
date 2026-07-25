@@ -10,12 +10,16 @@ import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/config/app_config.dart';
+import '../../../../core/di/injection_container.dart';
 import '../../../../core/routes/routes.dart';
 import '../../../../core/utils/app_assets.dart';
 import '../../../../core/utils/app_dimens.dart';
 import '../../../../core/utils/app_strings.dart';
 import '../../../../core/widgets/neon_text.dart';
 import '../../../app/domain/entities/app_metadata_entity.dart';
+import '../../../auth/presentation/cubit/subscription_cubit.dart';
+import '../../../premium/presentation/cubit/premium_cubit.dart';
+import '../../../premium/presentation/cubit/premium_state.dart';
 
 import '../cubit/home_cubit.dart';
 
@@ -87,6 +91,10 @@ class HomeDrawer extends StatelessWidget {
                   context.push(AppRoutes.downloads);
                 },
               ),
+              // TODO(ads-disabled-018): purchase entry point hidden — this
+              // block was already commented out before this feature; the
+              // marker makes it traceable and reversible with everything
+              // else. Restore Purchases now has its own tile below instead.
               /*/
               if (!context.watch<SubscriptionCubit>().isPremium)
                 _buildMenuItem(
@@ -114,6 +122,10 @@ class HomeDrawer extends StatelessWidget {
               SizedBox(height: AppDimens.paddingS),
 
               // Info section
+              // TODO(ads-disabled-018): standalone restore tile added — the
+              // purchase entry point is hidden, so existing subscribers need
+              // a way to recover entitlements without the purchase page.
+              _RestorePurchasesTile(buildMenuItem: _buildMenuItem),
               _buildMenuItem(context, Icons.info_outline, AppStrings.about, () {
                 Navigator.pop(context);
                 context.push(AppRoutes.about, extra: appMetadata?.about ?? '');
@@ -258,6 +270,46 @@ class HomeDrawer extends StatelessWidget {
       leading: Icon(icon),
       title: AutoSizeText(title, maxLines: 1),
       onTap: onTap,
+    );
+  }
+}
+
+/// Standalone restore-purchases entry point (FR-021, FR-022): recovers an
+/// existing subscriber's entitlement without ever opening the purchase page.
+/// Owns a local, short-lived [PremiumCubit] — the drawer has no app-wide
+/// provider for it.
+class _RestorePurchasesTile extends StatelessWidget {
+  const _RestorePurchasesTile({required this.buildMenuItem});
+
+  final ListTile Function(
+    BuildContext context,
+    IconData icon,
+    String title,
+    VoidCallback onTap,
+  )
+  buildMenuItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<PremiumCubit>(
+      create: (_) =>
+          sl<PremiumCubit>(param1: context.read<SubscriptionCubit>()),
+      child: BlocConsumer<PremiumCubit, PremiumState>(
+        listener: (context, state) {
+          final message = state.successMessage ?? state.errorMessage;
+          if (message != null) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
+          }
+        },
+        builder: (context, state) => buildMenuItem(
+          context,
+          Icons.restore_outlined,
+          AppStrings.restorePurchase,
+          () => context.read<PremiumCubit>().restore(),
+        ),
+      ),
     );
   }
 }
