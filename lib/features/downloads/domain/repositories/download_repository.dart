@@ -21,4 +21,9 @@ abstract class DownloadRepository {
   Future<Either<Failure, List<DownloadRecordEntity>>> getDownloadHistory();
 
   Future<Either<Failure, bool>> isDownloaded(String wallpaperId);
+
+  /// Opens the OS app-settings page so the user can grant a permanently
+  /// denied permission. Only reachable on the legacy (API < 29) save path —
+  /// API 29+ requests no permission, so it can never be denied there.
+  Future<Either<Failure, void>> openGallerySettings();
 }

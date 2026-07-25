@@ -13,6 +13,7 @@ import 'package:glowy_wallpaper/features/downloads/domain/entities/download_even
 import 'package:glowy_wallpaper/features/downloads/domain/repositories/download_repository.dart';
 import 'package:glowy_wallpaper/features/downloads/domain/usecases/download_wallpaper.dart';
 import 'package:glowy_wallpaper/features/downloads/domain/usecases/get_download_history.dart';
+import 'package:glowy_wallpaper/features/downloads/domain/usecases/open_gallery_settings.dart';
 import 'package:glowy_wallpaper/features/downloads/domain/usecases/watch_download_events.dart';
 import 'package:glowy_wallpaper/features/downloads/presentation/cubit/download_cubit.dart';
 import 'package:glowy_wallpaper/features/downloads/presentation/cubit/download_state.dart';
@@ -21,6 +22,8 @@ import 'package:glowy_wallpaper/features/wallpapers/domain/entities/wallpaper_en
 class MockDownloadWallpaper extends Mock implements DownloadWallpaper {}
 
 class MockGetDownloadHistory extends Mock implements GetDownloadHistory {}
+
+class MockOpenGallerySettings extends Mock implements OpenGallerySettings {}
 
 class MockNetworkInfo extends Mock implements NetworkInfo {}
 
@@ -40,6 +43,7 @@ final _wallpaper = WallpaperEntity(
 void main() {
   late MockDownloadWallpaper mockDownloadWallpaper;
   late MockGetDownloadHistory mockGetDownloadHistory;
+  late MockOpenGallerySettings mockOpenGallerySettings;
   late MockNetworkInfo mockNetworkInfo;
   late MockFirebaseAnalytics mockAnalytics;
   late MockDownloadRepository mockRepository;
@@ -49,6 +53,7 @@ void main() {
   setUp(() {
     mockDownloadWallpaper = MockDownloadWallpaper();
     mockGetDownloadHistory = MockGetDownloadHistory();
+    mockOpenGallerySettings = MockOpenGallerySettings();
     mockNetworkInfo = MockNetworkInfo();
     mockAnalytics = MockFirebaseAnalytics();
     mockRepository = MockDownloadRepository();
@@ -78,9 +83,28 @@ void main() {
     downloadWallpaper: mockDownloadWallpaper,
     getDownloadHistory: mockGetDownloadHistory,
     watchDownloadEvents: watchDownloadEvents,
+    openGallerySettings: mockOpenGallerySettings,
     networkInfo: mockNetworkInfo,
     analytics: mockAnalytics,
   );
+
+  group('open app settings', () {
+    blocTest<DownloadCubit, DownloadState>(
+      'routes the settings deep link through the use case, so the '
+      'presentation layer never touches the permission plugin',
+      build: buildCubit,
+      setUp: () {
+        when(
+          () => mockOpenGallerySettings(any()),
+        ).thenAnswer((_) async => const Right(null));
+      },
+      act: (cubit) => cubit.openAppSettings(),
+      expect: () => <DownloadState>[],
+      verify: (_) {
+        verify(() => mockOpenGallerySettings(any())).called(1);
+      },
+    );
+  });
 
   group('connectivity guard', () {
     blocTest<DownloadCubit, DownloadState>(

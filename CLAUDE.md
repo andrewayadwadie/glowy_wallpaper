@@ -1,6 +1,6 @@
 ﻿# glowy_wallpaper Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-07-24
+Auto-generated from all feature plans. Last updated: 2026-07-25
 
 ## Active Technologies
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, flutter_secure_storage, auto_size_text, flutter_screenutil, dartz, equatable (002-auth-user-profile)
@@ -33,6 +33,8 @@ Auto-generated from all feature plans. Last updated: 2026-07-24
 - Hive `downloads` box (unchanged schema); `flutter_secure_storage` for tokens (untouched) (018-disable-ads-isolate-downloads)
 - Dart 3.11.3 / Flutter 3.41.5 + `cached_network_image ^3.4.1` (existing), `flutter_cache_manager` (already a transitive dependency of `cached_network_image`; made an explicit direct dependency), `get_it` (manual registration — no injectable codegen in this repo), `hive`/`hive_flutter` (existing boxes, unchanged), `path_provider` (existing) (019-fix-thumbnail-cache-eviction)
 - On-device file cache via a dedicated `flutter_cache_manager` `CacheManager` (new cache-folder key, isolated from the package's `DefaultCacheManager`), plus Flutter's in-memory `PaintingBinding.instance.imageCache`. No Hive schema changes; no new persisted entities. (019-fix-thumbnail-cache-eviction)
+- Dart 3.11.3 / Flutter 3.41.5 + `gal ^2.3.2` (replaces `gallery_saver_plus ^3.2.9`), `permission_handler ^11.3.1` (retained — app-settings deep link only), `dio`, `flutter_bloc`, `dartz`, `get_it` (020-remove-media-read-permissions)
+- Hive `downloads` box (unchanged schema); no new persistence. Gallery writes go through Android `MediaStore` via `gal` (020-remove-media-read-permissions)
 
 - Dart 3.11.3 / Flutter 3.41.5 + flutter_bloc, freezed, injectable + get_it, dio + retrofit, go_router, hive + flutter_secure_storage, flutter_screenutil, envied, dartz, google_fonts (Poppins), cached_network_image, auto_size_text, loader_overlay + flutter_spinkit, easy_localization (001-phase1-foundation)
 
@@ -52,9 +54,9 @@ tests/
 Dart 3.11.3 / Flutter 3.41.5: Follow standard conventions
 
 ## Recent Changes
+- 020-remove-media-read-permissions: Added Dart 3.11.3 / Flutter 3.41.5 + `gal ^2.3.2` (replaces `gallery_saver_plus ^3.2.9`), `permission_handler ^11.3.1` (retained — app-settings deep link only), `dio`, `flutter_bloc`, `dartz`, `get_it`
 - 019-fix-thumbnail-cache-eviction: Added Dart 3.11.3 / Flutter 3.41.5 + `cached_network_image ^3.4.1` (existing), `flutter_cache_manager` (already a transitive dependency of `cached_network_image`; made an explicit direct dependency), `get_it` (manual registration — no injectable codegen in this repo), `hive`/`hive_flutter` (existing boxes, unchanged), `path_provider` (existing)
 - 018-disable-ads-isolate-downloads: Added Dart 3.11.3 / Flutter 3.41.5 + `dio` (isolate-side transfer), `dart:isolate` (new usage, stdlib),
-- 017-fcm-notifications: Added Dart 3.11.3 / Flutter 3.41.5 + firebase_core, firebase_messaging, flutter_local_notifications,
 
 
 <!-- MANUAL ADDITIONS START -->

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:gallery_saver_plus/gallery_saver.dart';
+import 'package:gal/gal.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart' as ph;
 
@@ -18,30 +18,28 @@ abstract class GalleryDataSource {
   Future<void> saveFile(String path, {required bool isVideo});
 }
 
+/// Writes downloaded wallpapers into the system gallery via MediaStore.
+///
+/// The app only ever writes files it downloaded itself; it never reads the
+/// user's existing media. Saving new media through MediaStore needs no
+/// runtime permission on API 29+, so no READ_MEDIA_* permission is requested
+/// or declared. Only API 24-28 still needs WRITE_EXTERNAL_STORAGE, and `gal`
+/// resolves that split natively — its `hasAccess` returns true above API 29
+/// and short-circuits `requestAccess`, so no prompt is reachable there.
 class GalleryDataSourceImpl implements GalleryDataSource {
-  @override
-  Future<bool> requestPermission() async {
-    // On Android 13+ (API 33+), photos permission is used; on older versions
-    // it's storage. permission_handler resolves the correct permission per SDK.
-    final status = await ph.Permission.photos.request();
-    if (status.isGranted || status.isLimited) return true;
-    // Fallback for Android < 13
-    final storage = await ph.Permission.storage.request();
-    return storage.isGranted;
-  }
+  static const String _defaultName = 'wallpaper';
 
   @override
-  Future<bool> checkPermission() async {
-    final photos = await ph.Permission.photos.status;
-    if (photos.isGranted || photos.isLimited) return true;
-    final storage = await ph.Permission.storage.status;
-    return storage.isGranted;
-  }
+  Future<bool> requestPermission() => Gal.requestAccess();
+
+  @override
+  Future<bool> checkPermission() => Gal.hasAccess();
 
   @override
   Future<bool> isPermanentlyDenied() async {
-    final photos = await ph.Permission.photos.status;
-    if (photos.isPermanentlyDenied) return true;
+    // Only reachable on API < 29, where requestPermission delegates to the
+    // WRITE_EXTERNAL_STORAGE grant. Above that nothing is requested, so the
+    // status stays denied-but-not-permanently and this returns false.
     final storage = await ph.Permission.storage.status;
     return storage.isPermanentlyDenied;
   }
@@ -53,25 +51,18 @@ class GalleryDataSourceImpl implements GalleryDataSource {
 
   @override
   Future<void> putImageBytes(Uint8List bytes, {String? name}) async {
-    final tmpDir = await getTemporaryDirectory();
-    final fileName = '${name ?? 'wallpaper'}.jpg';
-    final tmpFile = File('${tmpDir.path}/$fileName');
-    await tmpFile.writeAsBytes(bytes);
-    try {
-      await GallerySaver.saveImage(tmpFile.path);
-    } finally {
-      await tmpFile.delete();
-    }
+    await Gal.putImageBytes(bytes, name: name ?? _defaultName);
   }
 
   @override
   Future<void> putVideoBytes(Uint8List bytes, {String? name}) async {
+    // `gal` has no putVideoBytes — its bytes API sniffs an image format and
+    // is image-only. Video bytes go to a temp file and take the path API.
     final tmpDir = await getTemporaryDirectory();
-    final fileName = '${name ?? 'wallpaper'}.mp4';
-    final tmpFile = File('${tmpDir.path}/$fileName');
+    final tmpFile = File('${tmpDir.path}/${name ?? _defaultName}.mp4');
     await tmpFile.writeAsBytes(bytes);
     try {
-      await GallerySaver.saveVideo(tmpFile.path);
+      await Gal.putVideo(tmpFile.path);
     } finally {
       await tmpFile.delete();
     }
@@ -79,10 +70,13 @@ class GalleryDataSourceImpl implements GalleryDataSource {
 
   @override
   Future<void> saveFile(String path, {required bool isVideo}) async {
+    // No album argument: naming an album makes gal require
+    // WRITE_EXTERNAL_STORAGE on API 29, which would force the manifest
+    // declaration back up to maxSdkVersion 29.
     if (isVideo) {
-      await GallerySaver.saveVideo(path);
+      await Gal.putVideo(path);
     } else {
-      await GallerySaver.saveImage(path);
+      await Gal.putImage(path);
     }
   }
 }

@@ -17,7 +17,6 @@ import '../../../downloads/presentation/cubit/download_state.dart';
 import '../../../favorites/presentation/cubit/favorite_cubit.dart';
 import '../../../favorites/presentation/cubit/favorite_state.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:permission_handler/permission_handler.dart' as ph;
 // TODO(ads-disabled-018): interstitial-on-favorite removed
 // import '../../../../core/ads/managers/interstitial_ad_manager.dart';
 // import '../../../../core/di/injection_container.dart';
@@ -221,8 +220,10 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                               context.read<DownloadCubit>().clearMessages();
                             } else if (downloadState.errorMessage != null) {
                               if (downloadState.errorMessage ==
-                                  'permission_permanently_denied') {
-                                context.read<DownloadCubit>().clearMessages();
+                                  AppStrings.permissionPermanentlyDeniedCode) {
+                                final downloadCubit = context
+                                    .read<DownloadCubit>();
+                                downloadCubit.clearMessages();
                                 showDialog<void>(
                                   context: context,
                                   builder: (_) => AlertDialog(
@@ -236,14 +237,16 @@ class _WallpaperDetailPageState extends State<WallpaperDetailPage> {
                                       TextButton(
                                         onPressed: () =>
                                             Navigator.of(context).pop(),
-                                        child: const Text('Cancel'),
+                                        child: const Text(AppStrings.cancel),
                                       ),
                                       TextButton(
                                         onPressed: () {
                                           Navigator.of(context).pop();
-                                          ph.openAppSettings();
+                                          downloadCubit.openAppSettings();
                                         },
-                                        child: const Text('Open Settings'),
+                                        child: const Text(
+                                          AppStrings.openSettings,
+                                        ),
                                       ),
                                     ],
                                   ),

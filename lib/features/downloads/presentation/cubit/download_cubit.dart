@@ -12,12 +12,14 @@ import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../domain/entities/download_event.dart';
 import '../../domain/usecases/download_wallpaper.dart';
 import '../../domain/usecases/get_download_history.dart';
+import '../../domain/usecases/open_gallery_settings.dart';
 import '../../domain/usecases/watch_download_events.dart';
 import 'download_state.dart';
 
 class DownloadCubit extends Cubit<DownloadState> {
   final DownloadWallpaper _downloadWallpaper;
   final GetDownloadHistory _getDownloadHistory;
+  final OpenGallerySettings _openGallerySettings;
   final NetworkInfo _networkInfo;
   // TODO(ads-disabled-018): rewarded gate removed — download no longer ad-dependent
   // final RewardedAdManager _rewardedAdManager;
@@ -35,6 +37,7 @@ class DownloadCubit extends Cubit<DownloadState> {
     required DownloadWallpaper downloadWallpaper,
     required GetDownloadHistory getDownloadHistory,
     required WatchDownloadEvents watchDownloadEvents,
+    required OpenGallerySettings openGallerySettings,
     required NetworkInfo networkInfo,
     // TODO(ads-disabled-018): rewarded gate removed — download no longer ad-dependent
     // required RewardedAdManager rewardedAdManager,
@@ -42,6 +45,7 @@ class DownloadCubit extends Cubit<DownloadState> {
     NotificationService? notificationService,
   }) : _downloadWallpaper = downloadWallpaper,
        _getDownloadHistory = getDownloadHistory,
+       _openGallerySettings = openGallerySettings,
        _networkInfo = networkInfo,
        // TODO(ads-disabled-018): rewarded gate removed — download no longer ad-dependent
        // _rewardedAdManager = rewardedAdManager,
@@ -68,6 +72,13 @@ class DownloadCubit extends Cubit<DownloadState> {
         ),
       ),
     );
+  }
+
+  /// Routes the "Open Settings" action from the permanently-denied dialog
+  /// through the domain layer, so the presentation layer never touches the
+  /// permission plugin directly.
+  Future<void> openAppSettings() async {
+    await _openGallerySettings(NoParams());
   }
 
   Future<void> download(WallpaperEntity wallpaper) async {

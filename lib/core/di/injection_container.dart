@@ -46,6 +46,7 @@ import '../../features/downloads/data/services/download_runner.dart';
 import '../../features/downloads/domain/repositories/download_repository.dart';
 import '../../features/downloads/domain/usecases/download_wallpaper.dart';
 import '../../features/downloads/domain/usecases/get_download_history.dart';
+import '../../features/downloads/domain/usecases/open_gallery_settings.dart';
 import '../../features/downloads/domain/usecases/watch_download_events.dart';
 import '../../features/downloads/presentation/cubit/download_cubit.dart';
 import '../../features/favorites/data/datasources/favorite_local_data_source.dart';
@@ -312,6 +313,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => DownloadWallpaper(sl()));
   sl.registerLazySingleton(() => GetDownloadHistory(sl()));
   sl.registerLazySingleton(() => WatchDownloadEvents(sl()));
+  sl.registerLazySingleton(() => OpenGallerySettings(sl()));
 
   // Download Cubit
   sl.registerFactory(
@@ -319,6 +321,7 @@ Future<void> init() async {
       downloadWallpaper: sl(),
       getDownloadHistory: sl(),
       watchDownloadEvents: sl(),
+      openGallerySettings: sl(),
       networkInfo: sl(),
       // TODO(ads-disabled-018): rewarded gate removed — download no longer ad-dependent
       // rewardedAdManager: sl(),

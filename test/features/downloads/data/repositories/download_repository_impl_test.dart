@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:glowy_wallpaper/core/errors/failure.dart';
+import 'package:glowy_wallpaper/core/utils/app_strings.dart';
 import 'package:glowy_wallpaper/features/downloads/data/datasources/download_local_data_source.dart';
 import 'package:glowy_wallpaper/features/downloads/data/datasources/gallery_data_source.dart';
 import 'package:glowy_wallpaper/features/downloads/data/repositories/download_repository_impl.dart';
@@ -71,7 +72,9 @@ void main() {
 
     expect(
       result,
-      Left<Failure, void>(CacheFailure('permission_permanently_denied')),
+      Left<Failure, void>(
+        CacheFailure(AppStrings.permissionPermanentlyDeniedCode),
+      ),
     );
     verifyNever(
       () => engine.start(
@@ -91,8 +94,18 @@ void main() {
 
     expect(
       result,
-      Left<Failure, void>(CacheFailure('Storage permission denied')),
+      Left<Failure, void>(CacheFailure(AppStrings.permissionDenied)),
     );
+  });
+
+  test('openGallerySettings delegates to the gallery data source, keeping the '
+      'permission plugin out of the presentation layer (FR-011)', () async {
+    when(() => gallery.openAppSettings()).thenAnswer((_) async {});
+
+    final result = await repository.openGallerySettings();
+
+    expect(result, isA<Right<Failure, void>>());
+    verify(() => gallery.openAppSettings()).called(1);
   });
 
   test('permission granted: resolves paths and delegates to the engine, '

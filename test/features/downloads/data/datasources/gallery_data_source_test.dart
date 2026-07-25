@@ -3,12 +3,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:glowy_wallpaper/features/downloads/data/datasources/gallery_data_source.dart';
 
-// GalleryDataSourceImpl calls into native plugins (image_gallery_saver_plus,
-// permission_handler) which are unavailable in the Flutter unit test
-// environment.  These tests verify the contract of the abstract interface
-// and document the expected delegation behaviour; they rely on a
-// MockGalleryDataSource to verify interactions rather than hitting the
-// real native implementation.
+// GalleryDataSourceImpl calls into native plugins (gal for the MediaStore
+// write, permission_handler for the legacy app-settings deep link) which are
+// unavailable in the Flutter unit test environment.  These tests verify the
+// contract of the abstract interface and document the expected delegation
+// behaviour; they rely on a MockGalleryDataSource to verify interactions
+// rather than hitting the real native implementation.
 
 class MockGalleryDataSource extends Mock implements GalleryDataSource {}
 

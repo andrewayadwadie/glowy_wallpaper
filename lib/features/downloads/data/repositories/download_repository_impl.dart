@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../core/errors/failure.dart';
+import '../../../../core/utils/app_strings.dart';
 import '../../../wallpapers/domain/entities/wallpaper_entity.dart';
 import '../../domain/entities/download_event.dart';
 import '../../domain/entities/download_record_entity.dart';
@@ -36,9 +37,9 @@ class DownloadRepositoryImpl implements DownloadRepository {
         if (isPermanentlyDenied) {
           // Return a sentinel message the presentation layer detects to show
           // the "Open Settings" dialog instead of a plain snackbar.
-          return Left(CacheFailure('permission_permanently_denied'));
+          return Left(CacheFailure(AppStrings.permissionPermanentlyDeniedCode));
         }
-        return Left(CacheFailure('Storage permission denied'));
+        return Left(CacheFailure(AppStrings.permissionDenied));
       }
 
       final isVideo = wallpaper.mediaType == MediaType.video;
@@ -73,6 +74,16 @@ class DownloadRepositoryImpl implements DownloadRepository {
     try {
       final result = await _localDataSource.isDownloaded(wallpaperId);
       return Right(result);
+    } catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> openGallerySettings() async {
+    try {
+      await _galleryDataSource.openAppSettings();
+      return const Right(null);
     } catch (e) {
       return Left(CacheFailure(e.toString()));
     }
